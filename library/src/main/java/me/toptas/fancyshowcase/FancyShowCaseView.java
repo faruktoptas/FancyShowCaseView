@@ -108,8 +108,8 @@ public class FancyShowCaseView {
      * Calculates and set initial parameters
      */
     private void initializeParameters() {
-        mBackgroundColor = mBackgroundColor != 0 ? mBackgroundColor : ContextCompat.getColor(mActivity,
-                R.color.fancy_showcase_view_default_background_color);
+        mBackgroundColor = mBackgroundColor != 0 ? mBackgroundColor :
+                mActivity.getResources().getColor(R.color.fancy_showcase_view_default_background_color);
         mTitleGravity = mTitleGravity >= 0 ? mTitleGravity : Gravity.CENTER;
         mTitleStyle = mTitleStyle != 0 ? mTitleStyle : R.style.FancyShowCaseDefaultTitleStyle;
 
@@ -324,6 +324,7 @@ public class FancyShowCaseView {
 
     /**
      * Returns if FancyShowCaseView with given id is shown before
+     *
      * @return true if show before
      */
     public boolean isShownBefore() {
@@ -368,6 +369,7 @@ public class FancyShowCaseView {
 
         /**
          * Constructor for Builder class
+         *
          * @param activity Activity to show FancyShowCaseView in
          */
         public Builder(Activity activity) {
@@ -479,6 +481,7 @@ public class FancyShowCaseView {
 
         /**
          * builds the builder
+         *
          * @return {@link FancyShowCaseView} with given parameters
          */
         public FancyShowCaseView build() {
