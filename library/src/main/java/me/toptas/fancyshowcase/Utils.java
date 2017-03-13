@@ -14,30 +14,33 @@ import android.view.View;
  * Util class for {@link FancyShowCaseView}
  */
 
-public class FancyShowCaseUtils {
+class Utils {
 
     /**
      * Circular reveal animation condition
+     *
      * @return true if enabled
      */
-    public static boolean shouldShowCircularAnimation() {
+    static boolean shouldShowCircularAnimation() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
     }
 
     /**
      * Calculates focus point values
-     * @param view view to focus
+     *
+     * @param view               view to focus
      * @param circleRadiusFactor radius factor of circle
      * @return x, y, radius values for the circle
      */
-    public static int[] calculateFocusPointValues(View view, double circleRadiusFactor) {
+    static int[] calculateFocusPointValues(View view, double circleRadiusFactor, boolean fitSystemWindows) {
         int[] point = new int[3];
         if (view != null) {
             int[] viewPoint = new int[2];
             view.getLocationInWindow(viewPoint);
 
             point[0] = viewPoint[0] + view.getWidth() / 2;
-            point[1] = viewPoint[1] + view.getHeight() / 2 - getStatusBarHeight(view.getContext());
+            point[1] = viewPoint[1] + view.getHeight() / 2 -
+                    (fitSystemWindows ? 0 : getStatusBarHeight(view.getContext()));
             int radius = (int) ((int) (Math.hypot(view.getWidth(), view.getHeight()) / 2) * circleRadiusFactor);
             point[2] = radius;
             return point;
@@ -47,11 +50,12 @@ public class FancyShowCaseUtils {
 
     /**
      * Draws focus circle
+     *
      * @param bitmap bitmap to draw
-     * @param point circle point
+     * @param point  circle point
      * @param radius circle radius
      */
-    public static void drawFocusCircle(Bitmap bitmap, int[] point, int radius){
+    static void drawFocusCircle(Bitmap bitmap, int[] point, int radius) {
         Paint p = new Paint();
         p.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
         Canvas c = new Canvas(bitmap);
@@ -60,10 +64,11 @@ public class FancyShowCaseUtils {
 
     /**
      * Returns statusBar height
+     *
      * @param context context to access resources
      * @return statusBar height
      */
-    public static int getStatusBarHeight(Context context) {
+    static int getStatusBarHeight(Context context) {
         int result = 0;
         int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) {

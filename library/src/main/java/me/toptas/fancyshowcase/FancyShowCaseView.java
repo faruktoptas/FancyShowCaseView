@@ -12,7 +12,6 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.annotation.StyleRes;
-import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
@@ -44,7 +43,6 @@ public class FancyShowCaseView {
     private final Activity mActivity;
     private String mTitle;
     private String mId;
-    private boolean mShowOnce;
     private double mFocusCircleRadiusFactor;
     private View mView;
     private int mBackgroundColor;
@@ -54,6 +52,7 @@ public class FancyShowCaseView {
     private OnViewInflateListener mViewInflateListener;
     private Animation mEnterAnimation, mExitAnimation;
     private boolean mCloseOnTouch;
+    private boolean mFitSystemWindows;
 
 
     private int mAnimationDuration = 400;
@@ -72,7 +71,6 @@ public class FancyShowCaseView {
      * @param title                   title text
      * @param titleGravity            title gravity
      * @param titleStyle              title text style
-     * @param showOnce                FancyShowCaseView shows once if true
      * @param focusCircleRadiusFactor focus circle radius factor (default value = 1)
      * @param backgroundColor         background color of FancyShowCaseView
      * @param customViewRes           custom view layout resource
@@ -80,17 +78,17 @@ public class FancyShowCaseView {
      * @param enterAnimation          enter animation for FancyShowCaseView
      * @param exitAnimation           exit animation for FancyShowCaseView
      * @param closeOnTouch            closes on touch if enabled
+     * @param fitSystemWindows        should be the same value of root view's fitSystemWindows value
      */
     private FancyShowCaseView(Activity activity, View view, String id, String title,
-                              int titleGravity, int titleStyle, boolean showOnce,
-                              double focusCircleRadiusFactor, int backgroundColor, int customViewRes,
+                              int titleGravity, int titleStyle, double focusCircleRadiusFactor,
+                              int backgroundColor, int customViewRes,
                               OnViewInflateListener viewInflateListener, Animation enterAnimation,
-                              Animation exitAnimation, boolean closeOnTouch) {
+                              Animation exitAnimation, boolean closeOnTouch, boolean fitSystemWindows) {
         mId = id;
         mActivity = activity;
         mView = view;
         mTitle = title;
-        mShowOnce = showOnce;
         mFocusCircleRadiusFactor = focusCircleRadiusFactor;
         mBackgroundColor = backgroundColor;
         mTitleGravity = titleGravity;
@@ -100,6 +98,7 @@ public class FancyShowCaseView {
         mEnterAnimation = enterAnimation;
         mExitAnimation = exitAnimation;
         mCloseOnTouch = closeOnTouch;
+        mFitSystemWindows = fitSystemWindows;
 
         initializeParameters();
     }
@@ -126,17 +125,18 @@ public class FancyShowCaseView {
      * Shows FancyShowCaseView
      */
     public void show() {
-        if (mActivity == null || (mShowOnce && isShownBefore())) {
+        if (mActivity == null || (mId != null && isShownBefore())) {
             return;
         }
 
-        Bitmap bitmap = Bitmap.createBitmap(mDeviceWidth, mDeviceHeight - FancyShowCaseUtils.getStatusBarHeight(mActivity),
-                Bitmap.Config.ARGB_8888);
+        final int bitmapHeight = mDeviceHeight - (mFitSystemWindows ? 0 : Utils.getStatusBarHeight(mActivity));
+        Bitmap bitmap = Bitmap.createBitmap(mDeviceWidth, bitmapHeight, Bitmap.Config.ARGB_8888);
         bitmap.eraseColor(mBackgroundColor);
 
-        int[] focusPoint = FancyShowCaseUtils.calculateFocusPointValues(mView, mFocusCircleRadiusFactor);
+        int[] focusPoint = Utils.calculateFocusPointValues(mView,
+                mFocusCircleRadiusFactor, mFitSystemWindows);
         if (focusPoint != null) {
-            FancyShowCaseUtils.drawFocusCircle(bitmap, focusPoint, focusPoint[2]);
+            Utils.drawFocusCircle(bitmap, focusPoint, focusPoint[2]);
             mCenterX = focusPoint[0];
             mCenterY = focusPoint[1];
         }
@@ -186,7 +186,7 @@ public class FancyShowCaseView {
     private void startEnterAnimation() {
         if (mEnterAnimation != null) {
             mContainer.startAnimation(mEnterAnimation);
-        } else if (FancyShowCaseUtils.shouldShowCircularAnimation()) {
+        } else if (Utils.shouldShowCircularAnimation()) {
             doCircularEnterAnimation();
         } else {
             Animation fadeInAnimation = AnimationUtils.loadAnimation(mActivity, R.anim.fscv_fade_in);
@@ -201,7 +201,7 @@ public class FancyShowCaseView {
     public void hide() {
         if (mExitAnimation != null) {
             mContainer.startAnimation(mExitAnimation);
-        } else if (FancyShowCaseUtils.shouldShowCircularAnimation()) {
+        } else if (Utils.shouldShowCircularAnimation()) {
             doCircularExitAnimation();
         } else {
             Animation fadeOut = AnimationUtils.loadAnimation(mActivity, R.anim.fscv_fade_out);
@@ -357,7 +357,6 @@ public class FancyShowCaseView {
         private View mView;
         private String mId;
         private String mTitle;
-        private boolean mShowOnce;
         private double mFocusCircleRadiusFactor = 1;
         private int mBackgroundColor;
         private int mTitleGravity = -1;
@@ -366,6 +365,7 @@ public class FancyShowCaseView {
         private OnViewInflateListener mViewInflateListener;
         private Animation mEnterAnimation, mExitAnimation;
         private boolean mCloseOnTouch = true;
+        private boolean mFitSystemWindows;
 
         /**
          * Constructor for Builder class
@@ -376,14 +376,6 @@ public class FancyShowCaseView {
             mActivity = activity;
         }
 
-        /**
-         * @param id unique identifier for FancyShowCaseView
-         * @return Builder
-         */
-        public Builder id(String id) {
-            mId = id;
-            return this;
-        }
 
         /**
          * @param title title text
@@ -406,11 +398,11 @@ public class FancyShowCaseView {
         }
 
         /**
-         * @param showOnce FancyShowCaseView shows once if true
+         * @param id unique identifier for FancyShowCaseView
          * @return Builder
          */
-        public Builder showOnce(boolean showOnce) {
-            mShowOnce = showOnce;
+        public Builder showOnce(String id) {
+            mId = id;
             return this;
         }
 
@@ -480,14 +472,24 @@ public class FancyShowCaseView {
         }
 
         /**
+         * This should be the same as root view's fitSystemWindows value
+         * @param fitSystemWindows fitSystemWindows value
+         * @return Builder
+         */
+        public Builder fitSystemWindows(boolean fitSystemWindows) {
+            mFitSystemWindows = fitSystemWindows;
+            return this;
+        }
+
+        /**
          * builds the builder
          *
          * @return {@link FancyShowCaseView} with given parameters
          */
         public FancyShowCaseView build() {
             return new FancyShowCaseView(mActivity, mView, mId, mTitle, mTitleGravity, mTitleStyle,
-                    mShowOnce, mFocusCircleRadiusFactor, mBackgroundColor, mCustomViewRes,
-                    mViewInflateListener, mEnterAnimation, mExitAnimation, mCloseOnTouch);
+                    mFocusCircleRadiusFactor, mBackgroundColor, mCustomViewRes, mViewInflateListener,
+                    mEnterAnimation, mExitAnimation, mCloseOnTouch, mFitSystemWindows);
         }
     }
 }

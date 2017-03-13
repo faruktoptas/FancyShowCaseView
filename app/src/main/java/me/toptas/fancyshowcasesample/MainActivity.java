@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
     @OnClick(R.id.btn_simple)
     public void simple() {
         new FancyShowCaseView.Builder(this)
-                .id("fancy1")
                 .title("Simple title")
                 .build()
                 .show();
@@ -48,9 +47,9 @@ public class MainActivity extends AppCompatActivity {
     @OnClick(R.id.btn_focus)
     public void focusView(View view) {
         new FancyShowCaseView.Builder(this)
-                .id("fancy2")
                 .focusOn(view)
                 .title("Focus on View")
+                .showOnce("fancy1")
                 .build()
                 .show();
     }
@@ -63,7 +62,6 @@ public class MainActivity extends AppCompatActivity {
     @OnClick(R.id.btn_focus2)
     public void focusWithLargerCircle(View view) {
         new FancyShowCaseView.Builder(this)
-                .id("fancy3")
                 .focusOn(view)
                 .focusCircleRadiusFactor(1.5)
                 .title("Focus on View with larger circle")
@@ -80,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
     @OnClick(R.id.btn_longer)
     public void longerText(View view) {
         new FancyShowCaseView.Builder(this)
-                .id("fancy4")
                 .focusOn(view)
                 .title("Focus on larger view")
                 .titleStyle(0, Gravity.TOP)
@@ -96,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
     @OnClick(R.id.btn_color)
     public void focusWithBackgroundColor(View view) {
         new FancyShowCaseView.Builder(this)
-                .id("fancy5")
                 .focusOn(view)
                 .backgroundColor(Color.parseColor("#AAff0000"))
                 .title("Background color and title style can be changed")
@@ -120,7 +116,6 @@ public class MainActivity extends AppCompatActivity {
         exitAnim.setDuration(500);
 
         final FancyShowCaseView fancyShowCaseView = new FancyShowCaseView.Builder(this)
-                .id("fancy5")
                 .focusOn(view)
                 .title("Custom enter and exit animations.")
                 .enterAnimation(animation)

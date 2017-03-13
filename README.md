@@ -34,7 +34,6 @@ dependencies {
 ## Sample Usage
 ```
 new FancyShowCaseView.Builder(this)
-        .id("fancy1")
         .focusOn(view)
         .title("Focus on View")
         .build()
@@ -43,7 +42,6 @@ new FancyShowCaseView.Builder(this)
 ## Customize
 ```
 new FancyShowCaseView.Builder(this)
-        .id("fancy2")
         .focusOn(view)
         .focusCircleRadiusFactor(1.5)
         .title("Focus on View with larger circle")
@@ -58,7 +56,6 @@ new FancyShowCaseView.Builder(this)
 ## Inflating Custom View
 ```
 new FancyShowCaseView.Builder(this)
-        .id("fancy3")
         .customView(R.layout.layout_my_custom_view, null)
         .build()
         .show();
