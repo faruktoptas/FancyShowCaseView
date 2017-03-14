@@ -21,7 +21,6 @@ import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -56,7 +55,7 @@ public class FancyShowCaseView {
 
 
     private int mAnimationDuration = 400;
-    private int mCenterX, mCenterY;
+    private int mCenterX, mCenterY, mRadius;
     private int mDeviceWidth, mDeviceHeight;
     private FrameLayout mContainer;
     private ViewGroup mRoot;
@@ -135,11 +134,6 @@ public class FancyShowCaseView {
 
         int[] focusPoint = Utils.calculateFocusPointValues(mView,
                 mFocusCircleRadiusFactor, mFitSystemWindows);
-        if (focusPoint != null) {
-            Utils.drawFocusCircle(bitmap, focusPoint, focusPoint[2]);
-            mCenterX = focusPoint[0];
-            mCenterY = focusPoint[1];
-        }
 
         ViewGroup androidContent = (ViewGroup) mActivity.findViewById(android.R.id.content);
         mRoot = (ViewGroup) androidContent.getParent().getParent();
@@ -161,11 +155,18 @@ public class FancyShowCaseView {
             mRoot.addView(mContainer);
 
 
-            ImageView imageView = new ImageView(mActivity);
+            FancyImageView imageView = new FancyImageView(mActivity);
+            if (focusPoint != null) {
+                //Utils.drawFocusCircle(bitmap, focusPoint, focusPoint[2]);
+                mCenterX = focusPoint[0];
+                mCenterY = focusPoint[1];
+                mRadius = focusPoint[2];
+            }
+            imageView.setParameters(mBackgroundColor, mCenterX, mCenterY, mRadius, 1);
             imageView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT));
 
-            imageView.setImageBitmap(bitmap);
+            //imageView.setImageBitmap(bitmap);
             mContainer.addView(imageView);
 
             if (mCustomViewRes == 0) {
@@ -280,9 +281,9 @@ public class FancyShowCaseView {
                         }
                         Animator enterAnimator = ViewAnimationUtils.createCircularReveal(mContainer,
                                 mCenterX, mCenterY, startRadius, revealRadius);
-                        enterAnimator.setDuration(mAnimationDuration * 2);
+                        enterAnimator.setDuration(mAnimationDuration);
                         enterAnimator.setInterpolator(AnimationUtils.loadInterpolator(mActivity,
-                                android.R.interpolator.fast_out_slow_in));
+                                android.R.interpolator.accelerate_cubic));
                         enterAnimator.start();
                         return false;
                     }
@@ -300,7 +301,7 @@ public class FancyShowCaseView {
                 mCenterX, mCenterY, revealRadius, 0f);
         exitAnimator.setDuration(mAnimationDuration);
         exitAnimator.setInterpolator(AnimationUtils.loadInterpolator(mActivity,
-                android.R.interpolator.fast_out_slow_in));
+                android.R.interpolator.decelerate_cubic));
         exitAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
@@ -473,6 +474,7 @@ public class FancyShowCaseView {
 
         /**
          * This should be the same as root view's fitSystemWindows value
+         *
          * @param fitSystemWindows fitSystemWindows value
          * @return Builder
          */

@@ -8,8 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
-import android.view.animation.RotateAnimation;
-import android.view.animation.TranslateAnimation;
+import android.view.animation.AnimationUtils;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -49,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
         new FancyShowCaseView.Builder(this)
                 .focusOn(view)
                 .title("Focus on View")
-                .showOnce("fancy1")
                 .build()
                 .show();
     }
@@ -108,21 +106,17 @@ public class MainActivity extends AppCompatActivity {
      */
     @OnClick(R.id.btn_anim)
     public void focusWithCustomAnimation(View view) {
-        Animation animation = new TranslateAnimation(0, 0, -1920, 0);//new RotateAnimation(180, 0);
-        animation.setDuration(500);
-
-        Animation exitAnim = new RotateAnimation(0, 180);
-        exitAnim.setFillAfter(true);
-        exitAnim.setDuration(500);
+        Animation enterAnimation = AnimationUtils.loadAnimation(this, R.anim.slide_in_top);
+        Animation exitAnimation = AnimationUtils.loadAnimation(this, R.anim.slide_out_bottom);
 
         final FancyShowCaseView fancyShowCaseView = new FancyShowCaseView.Builder(this)
                 .focusOn(view)
                 .title("Custom enter and exit animations.")
-                .enterAnimation(animation)
-                .exitAnimation(exitAnim)
+                .enterAnimation(enterAnimation)
+                .exitAnimation(exitAnimation)
                 .build();
         fancyShowCaseView.show();
-        exitAnim.setAnimationListener(new Animation.AnimationListener() {
+        exitAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
 
