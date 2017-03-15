@@ -48,7 +48,7 @@ new FancyShowCaseView.Builder(this)
         .titleStyle(0, Gravity.BOTTOM | Gravity.CENTER)
         .enterAnimation(enterAnimation)
         .exitAnimation(exitAnimation)
-        .showOnce(false)
+        .showOnce("fancy1")
         .backgroundColor(Color.parseColor("#CC00FF00"))
         .build()
         .show();
