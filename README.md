@@ -9,7 +9,7 @@ An easy-to-use customizable show case view with circular reveal animation.
 - Custom view inflation
 - Custom enter/exit animations
 
-![!gif](https://github.com/faruktoptas/FancyShowCaseView/blob/master/art/fancyshowcase.gif?raw=true)
+![!gif](https://cloud.githubusercontent.com/assets/8283200/23941893/8fb92934-097b-11e7-9626-2c4b2d15b8ca.gif)
 
 # Gradle Dependency
 
@@ -32,7 +32,7 @@ dependencies {
 ```
 
 ## Sample Usage
-```
+```java
 new FancyShowCaseView.Builder(this)
         .focusOn(view)
         .title("Focus on View")
@@ -40,7 +40,7 @@ new FancyShowCaseView.Builder(this)
         .show();
 ```
 ## Customize
-```
+```java
 new FancyShowCaseView.Builder(this)
         .focusOn(view)
         .focusCircleRadiusFactor(1.5)
@@ -54,7 +54,7 @@ new FancyShowCaseView.Builder(this)
         .show();
 ```
 ## Inflating Custom View
-```
+```java
 new FancyShowCaseView.Builder(this)
         .customView(R.layout.layout_my_custom_view, null)
         .build()
