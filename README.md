@@ -1,4 +1,4 @@
-# FancyShowCaseView [![Status](https://travis-ci.org/faruktoptas/FancyShowCaseView.svg?branch=master)](https://travis-ci.org/faruktoptas/FancyShowCaseView) [![](https://jitpack.io/v/faruktoptas/FancyShowCaseView.svg)](https://jitpack.io/#faruktoptas/FancyShowCaseView)
+# FancyShowCaseView [![Status](https://travis-ci.org/faruktoptas/FancyShowCaseView.svg?branch=master)](https://travis-ci.org/faruktoptas/FancyShowCaseView) [![](https://jitpack.io/v/faruktoptas/FancyShowCaseView.svg)](https://jitpack.io/#faruktoptas/FancyShowCaseView)  [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-FancyShowCaseView-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/5440) [![API](https://img.shields.io/badge/API-10%2B-blue.svg?style=flat)](https://android-arsenal.com/api?level=10)
 An easy-to-use customizable show case view with circular reveal animation.
 
 
@@ -60,6 +60,10 @@ new FancyShowCaseView.Builder(this)
         .build()
         .show();
 ```
+## Already in use in following apps
+(feel free to send me new projects)
+* [News - Newspaper & Magazine](https://play.google.com/store/apps/details?id=com.moblino.countrynews)
+
 License
 =======
 
