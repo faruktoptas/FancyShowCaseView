@@ -348,6 +348,15 @@ public class FancyShowCaseView {
         return mContainer.isShown();
     }
 
+    /**
+     * Returns FrameLayout
+     *
+     * @return FrameLayout used to display {@link FancyShowCaseView}
+     */
+    public FrameLayout getContainerView() {
+        return mContainer;
+    }
+
 
     /**
      * Builder class for {@link FancyShowCaseView}
