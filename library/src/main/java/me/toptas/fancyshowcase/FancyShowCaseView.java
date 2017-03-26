@@ -365,8 +365,9 @@ public class FancyShowCaseView {
      */
     public void removeView() {
         mRoot.removeView(mContainer);
-        if (mDismissListener != null)
+        if (mDismissListener != null) {
             mDismissListener.onDismiss(mId);
+        }
     }
 
     /**
