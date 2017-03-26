@@ -37,6 +37,29 @@ public class FancyShowCaseView {
     private static final String PREF_NAME = "PrefShowCaseView";
 
     /**
+     * resets the show once flag
+     *
+     * @param context context that should be used to create the shared preference instance
+     * @param id id of the show once flag that should be reset
+     */
+    public static void resetShowOnce(Context context, String id) {
+        SharedPreferences sharedPrefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        sharedPrefs.edit().remove(id).commit();
+        return;
+    }
+
+    /**
+     * resets all show once flags
+     *
+     * @param context context that should be used to create the shared preference instance
+     */
+    public static void resetAllShowOnce(Context context, String id) {
+        SharedPreferences sharedPrefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        sharedPrefs.edit().clear().commit();
+        return;
+    }
+
+    /**
      * Builder parameters
      */
     private final Activity mActivity;
