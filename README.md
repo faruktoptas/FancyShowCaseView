@@ -5,11 +5,14 @@ An easy-to-use customizable show case view with circular reveal animation.
 ## Features
 - Circular reveal animation (API Level 21+)
 - Background color
+- Circle and Rounded Rectangle focus shapes
 - Title style and position 
 - Custom view inflation
 - Custom enter/exit animations
 
-![!gif](https://cloud.githubusercontent.com/assets/8283200/23941893/8fb92934-097b-11e7-9626-2c4b2d15b8ca.gif)
+![!gif](https://cloud.githubusercontent.com/assets/1595227/24331187/ad143b80-1237-11e7-919c-36111c1ce559.gif)
+
+![!gif](https://cloud.githubusercontent.com/assets/1595227/24331189/afec8d9e-1237-11e7-986d-0ab7c44db7c7.gif)
 
 # Gradle Dependency
 
@@ -36,6 +39,15 @@ dependencies {
 new FancyShowCaseView.Builder(this)
         .focusOn(view)
         .title("Focus on View")
+        .build()
+        .show();
+```
+## Rounded Rectangle
+```java
+new FancyShowCaseView.Builder(this)
+        .focusOn(view)
+        .title("Focus on View")
+        .focusShape(FocusShape.ROUNDED_RECTANGLE)
         .build()
         .show();
 ```
