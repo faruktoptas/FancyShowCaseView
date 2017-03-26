@@ -32,15 +32,14 @@ class Utils {
      * @param circleRadiusFactor radius factor of circle
      * @return x, y, radius values for the circle
      */
-    static int[] calculateFocusPointValues(View view, double circleRadiusFactor, boolean fitSystemWindows) {
+    static int[] calculateFocusPointValues(View view, double circleRadiusFactor, int adjustHeight) {
         int[] point = new int[3];
         if (view != null) {
             int[] viewPoint = new int[2];
             view.getLocationInWindow(viewPoint);
 
             point[0] = viewPoint[0] + view.getWidth() / 2;
-            point[1] = viewPoint[1] + view.getHeight() / 2 -
-                    (fitSystemWindows ? 0 : getStatusBarHeight(view.getContext()));
+            point[1] = viewPoint[1] + view.getHeight() / 2 - adjustHeight;
             int radius = (int) ((int) (Math.hypot(view.getWidth(), view.getHeight()) / 2) * circleRadiusFactor);
             point[2] = radius;
             return point;

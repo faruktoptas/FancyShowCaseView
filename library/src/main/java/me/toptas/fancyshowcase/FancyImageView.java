@@ -23,7 +23,7 @@ class FancyImageView extends ImageView {
     private Bitmap mBitmap;
     private Paint mBackgroundPaint, mErasePaint;
     private int mBackgroundColor = Color.TRANSPARENT;
-    private int mRadius, mLeft, mTop;
+    private Calculator mCalculator;
     private int mAnimCounter = 0;
     private int mStep = 1;
     private double mAnimMoveFactor = 1;
@@ -71,22 +71,19 @@ class FancyImageView extends ImageView {
 
     /**
      * Setting parameters for background an animation
+     *
      * @param backgroundColor background color
-     * @param left focus animation left
-     * @param top focus animation top
-     * @param radius focus animation radius
-     * @param animMoveFactor focus animation move factor
+     * @param calculator      calculator object for calculations
      */
-    public void setParameters(int backgroundColor, int left, int top, int radius, int animMoveFactor) {
+    public void setParameters(int backgroundColor, Calculator calculator) {
         mBackgroundColor = backgroundColor;
-        mLeft = left;
-        mTop = top;
-        mRadius = radius;
-        mAnimMoveFactor = animMoveFactor;
+        mAnimMoveFactor = 1;
+        mCalculator = calculator;
     }
 
     /**
      * Draws background and moving focus area
+     *
      * @param canvas draw canvas
      */
     @Override
@@ -98,10 +95,13 @@ class FancyImageView extends ImageView {
 
         }
         canvas.drawBitmap(mBitmap, 0, 0, mBackgroundPaint);
-        if (mRadius > 0) {
+        if (mCalculator.hasFocus()) {
             mAnimCounter = mAnimCounter + mStep;
-            canvas.drawCircle(mLeft, mTop, (float) (mRadius + mAnimCounter * mAnimMoveFactor), mErasePaint);
-
+            if (mCalculator.getFocusShape().equals(FocusShape.CIRCLE)) {
+                drawCircle(canvas);
+            } else {
+                drawRoundedRectangle(canvas);
+            }
             if (mAnimCounter == ANIM_COUNTER_MAX) {
                 mStep = -1;
             } else if (mAnimCounter == 0) {
@@ -109,6 +109,33 @@ class FancyImageView extends ImageView {
             }
             postInvalidate();
         }
+    }
 
+    /**
+     * Draws focus circle
+     *
+     * @param canvas canvas to draw
+     */
+    private void drawCircle(Canvas canvas) {
+        canvas.drawCircle(mCalculator.getCircleCenterX(), mCalculator.getCircleCenterY(),
+                mCalculator.circleRadius(mAnimCounter, mAnimMoveFactor), mErasePaint);
+    }
+
+    /**
+     * Draws focus rounded rectangle
+     *
+     * @param canvas canvas to draw
+     */
+    private void drawRoundedRectangle(Canvas canvas) {
+        float width = mCalculator.roundRectWidth();
+        float left = mCalculator.roundRectLeft();
+        float top = mCalculator.roundRectTop(mAnimCounter, mAnimMoveFactor);
+        float right = mCalculator.roundRectRight();
+        float bottom = mCalculator.roundRectBottom(mAnimCounter, mAnimMoveFactor);
+        canvas.drawRect(left, top, right, bottom, mErasePaint);
+        canvas.drawCircle(left, mCalculator.getCircleCenterY(),
+                mCalculator.roundRectLeftCircleRadius(mAnimCounter, mAnimMoveFactor), mErasePaint);
+        canvas.drawCircle(left + width, mCalculator.getCircleCenterY(),
+                mCalculator.roundRectLeftCircleRadius(mAnimCounter, mAnimMoveFactor), mErasePaint);
     }
 }

@@ -1,5 +1,6 @@
 package me.toptas.fancyshowcasesample;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import android.view.animation.AnimationUtils;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.toptas.fancyshowcase.FancyShowCaseView;
+import me.toptas.fancyshowcase.FocusShape;
 import me.toptas.fancyshowcase.OnViewInflateListener;
 
 public class MainActivity extends AppCompatActivity {
@@ -33,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     @OnClick(R.id.btn_simple)
     public void simple() {
         new FancyShowCaseView.Builder(this)
-                .title("Simple title")
+                .title("No Focus")
                 .build()
                 .show();
     }
@@ -41,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Shows a FancyShowCaseView that focus on a view
      *
-     * @param view view to focus
+     * @param view View to focus
      */
     @OnClick(R.id.btn_focus)
     public void focusView(View view) {
@@ -53,9 +55,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
+     * Shows a FancyShowCaseView with rounded rect focus shape
+     * @param view View to focus
+     */
+    @OnClick(R.id.btn_rounded_rect)
+    public void focusRoundedRect(View view){
+        new FancyShowCaseView.Builder(this)
+                .focusOn(view)
+                .focusShape(FocusShape.ROUNDED_RECTANGLE)
+                .title("Focus on View")
+                .build()
+                .show();
+    }
+
+    /**
      * Shows FancyShowCaseView with focusCircleRadiusFactor 1.5 and title gravity
      *
-     * @param view view to focus
+     * @param view View to focus
      */
     @OnClick(R.id.btn_focus2)
     public void focusWithLargerCircle(View view) {
@@ -71,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Shows a FancyShowCaseView that focuses on a larger view
      *
-     * @param view view to focus
+     * @param view View to focus
      */
     @OnClick(R.id.btn_longer)
     public void longerText(View view) {
@@ -86,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Shows a FancyShowCaseView with background color and title style
      *
-     * @param view view to focus
+     * @param view View to focus
      */
     @OnClick(R.id.btn_color)
     public void focusWithBackgroundColor(View view) {
@@ -102,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Shows a FancyShowCaseView with custom enter, exit animations
      *
-     * @param view view to focus
+     * @param view View to focus
      */
     @OnClick(R.id.btn_anim)
     public void focusWithCustomAnimation(View view) {
@@ -138,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Shows a FancyShowCaseView view custom view inflation
      *
-     * @param view view to focus
+     * @param view View to focus
      */
     @OnClick(R.id.btn_custom_view)
     public void focusWithCustomView(View view) {
@@ -163,6 +179,11 @@ public class MainActivity extends AppCompatActivity {
             mFancyShowCaseView.hide();
         }
     };
+
+    @OnClick(R.id.btn_another_activity)
+    public void anotherActivity(){
+        startActivity(new Intent(this, SecondActivity.class));
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

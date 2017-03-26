@@ -52,14 +52,15 @@ public class FancyShowCaseView {
     private Animation mEnterAnimation, mExitAnimation;
     private boolean mCloseOnTouch;
     private boolean mFitSystemWindows;
+    private FocusShape mFocusShape;
 
 
     private int mAnimationDuration = 400;
     private int mCenterX, mCenterY, mRadius;
-    private int mDeviceWidth, mDeviceHeight;
     private FrameLayout mContainer;
     private ViewGroup mRoot;
     private SharedPreferences mSharedPreferences;
+    private Calculator mCalculator;
 
     /**
      * Constructor for FancyShowCaseView
@@ -78,12 +79,14 @@ public class FancyShowCaseView {
      * @param exitAnimation           exit animation for FancyShowCaseView
      * @param closeOnTouch            closes on touch if enabled
      * @param fitSystemWindows        should be the same value of root view's fitSystemWindows value
+     * @param focusShape              shape of focus, can be circle or rounded rectangle
      */
     private FancyShowCaseView(Activity activity, View view, String id, String title,
                               int titleGravity, int titleStyle, double focusCircleRadiusFactor,
                               int backgroundColor, int customViewRes,
                               OnViewInflateListener viewInflateListener, Animation enterAnimation,
-                              Animation exitAnimation, boolean closeOnTouch, boolean fitSystemWindows) {
+                              Animation exitAnimation, boolean closeOnTouch, boolean fitSystemWindows,
+                              FocusShape focusShape) {
         mId = id;
         mActivity = activity;
         mView = view;
@@ -98,6 +101,7 @@ public class FancyShowCaseView {
         mExitAnimation = exitAnimation;
         mCloseOnTouch = closeOnTouch;
         mFitSystemWindows = fitSystemWindows;
+        mFocusShape = focusShape;
 
         initializeParameters();
     }
@@ -113,10 +117,10 @@ public class FancyShowCaseView {
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         mActivity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        mDeviceWidth = displayMetrics.widthPixels;
-        mDeviceHeight = displayMetrics.heightPixels;
-        mCenterX = mDeviceWidth / 2;
-        mCenterY = mDeviceHeight / 2;
+        int deviceWidth = displayMetrics.widthPixels;
+        int deviceHeight = displayMetrics.heightPixels;
+        mCenterX = deviceWidth / 2;
+        mCenterY = deviceHeight / 2;
         mSharedPreferences = mActivity.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
     }
 
@@ -128,12 +132,11 @@ public class FancyShowCaseView {
             return;
         }
 
-        final int bitmapHeight = mDeviceHeight - (mFitSystemWindows ? 0 : Utils.getStatusBarHeight(mActivity));
-        Bitmap bitmap = Bitmap.createBitmap(mDeviceWidth, bitmapHeight, Bitmap.Config.ARGB_8888);
+        mCalculator = new Calculator(mActivity, mFocusShape, mView, mFocusCircleRadiusFactor,
+                mFitSystemWindows);
+        Bitmap bitmap = Bitmap.createBitmap(mCalculator.getBitmapWidth(), mCalculator.getBitmapHeight(),
+                Bitmap.Config.ARGB_8888);
         bitmap.eraseColor(mBackgroundColor);
-
-        int[] focusPoint = Utils.calculateFocusPointValues(mView,
-                mFocusCircleRadiusFactor, mFitSystemWindows);
 
         ViewGroup androidContent = (ViewGroup) mActivity.findViewById(android.R.id.content);
         mRoot = (ViewGroup) androidContent.getParent().getParent();
@@ -156,13 +159,13 @@ public class FancyShowCaseView {
 
 
             FancyImageView imageView = new FancyImageView(mActivity);
-            if (focusPoint != null) {
+            if (mCalculator.hasFocus()) {
                 //Utils.drawFocusCircle(bitmap, focusPoint, focusPoint[2]);
-                mCenterX = focusPoint[0];
-                mCenterY = focusPoint[1];
-                mRadius = focusPoint[2];
+                mCenterX = mCalculator.getCircleCenterX();
+                mCenterY = mCalculator.getCircleCenterY();
+                mRadius = mCalculator.getViewRadius();
             }
-            imageView.setParameters(mBackgroundColor, mCenterX, mCenterY, mRadius, 1);
+            imageView.setParameters(mBackgroundColor, mCalculator);
             imageView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT));
 
@@ -174,7 +177,6 @@ public class FancyShowCaseView {
             } else {
                 inflateCustomView(mCustomViewRes, mViewInflateListener);
             }
-
 
             startEnterAnimation();
             writeShown();
@@ -376,6 +378,7 @@ public class FancyShowCaseView {
         private Animation mEnterAnimation, mExitAnimation;
         private boolean mCloseOnTouch = true;
         private boolean mFitSystemWindows;
+        private FocusShape mFocusShape = FocusShape.CIRCLE;
 
         /**
          * Constructor for Builder class
@@ -492,6 +495,11 @@ public class FancyShowCaseView {
             return this;
         }
 
+        public Builder focusShape(FocusShape focusShape) {
+            mFocusShape = focusShape;
+            return this;
+        }
+
         /**
          * builds the builder
          *
@@ -500,7 +508,7 @@ public class FancyShowCaseView {
         public FancyShowCaseView build() {
             return new FancyShowCaseView(mActivity, mView, mId, mTitle, mTitleGravity, mTitleStyle,
                     mFocusCircleRadiusFactor, mBackgroundColor, mCustomViewRes, mViewInflateListener,
-                    mEnterAnimation, mExitAnimation, mCloseOnTouch, mFitSystemWindows);
+                    mEnterAnimation, mExitAnimation, mCloseOnTouch, mFitSystemWindows, mFocusShape);
         }
     }
 }
