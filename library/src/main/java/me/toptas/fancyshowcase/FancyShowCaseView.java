@@ -76,6 +76,7 @@ public class FancyShowCaseView {
     private boolean mCloseOnTouch;
     private boolean mFitSystemWindows;
     private FocusShape mFocusShape;
+    private DismissListener mDismissListener;
 
 
     private int mAnimationDuration = 400;
@@ -103,13 +104,14 @@ public class FancyShowCaseView {
      * @param closeOnTouch            closes on touch if enabled
      * @param fitSystemWindows        should be the same value of root view's fitSystemWindows value
      * @param focusShape              shape of focus, can be circle or rounded rectangle
+     * @param dismissListener         listener that gets notified when showcase is dismissed
      */
     private FancyShowCaseView(Activity activity, View view, String id, String title,
                               int titleGravity, int titleStyle, double focusCircleRadiusFactor,
                               int backgroundColor, int customViewRes,
                               OnViewInflateListener viewInflateListener, Animation enterAnimation,
                               Animation exitAnimation, boolean closeOnTouch, boolean fitSystemWindows,
-                              FocusShape focusShape) {
+                              FocusShape focusShape, DismissListener dismissListener) {
         mId = id;
         mActivity = activity;
         mView = view;
@@ -125,6 +127,7 @@ public class FancyShowCaseView {
         mCloseOnTouch = closeOnTouch;
         mFitSystemWindows = fitSystemWindows;
         mFocusShape = focusShape;
+        mDismissListener = dismissListener;
 
         initializeParameters();
     }
@@ -362,6 +365,8 @@ public class FancyShowCaseView {
      */
     public void removeView() {
         mRoot.removeView(mContainer);
+        if (mDismissListener != null)
+            mDismissListener.onDismiss(mId);
     }
 
     /**
@@ -402,6 +407,7 @@ public class FancyShowCaseView {
         private boolean mCloseOnTouch = true;
         private boolean mFitSystemWindows;
         private FocusShape mFocusShape = FocusShape.CIRCLE;
+        private DismissListener mDismissListener = null;
 
         /**
          * Constructor for Builder class
@@ -524,6 +530,15 @@ public class FancyShowCaseView {
         }
 
         /**
+         * @param dismissListener the dismiss listener
+         * @return Builder
+         */
+        public Builder dismissListener(DismissListener dismissListener) {
+            mDismissListener = dismissListener;
+            return this;
+        }
+
+        /**
          * builds the builder
          *
          * @return {@link FancyShowCaseView} with given parameters
@@ -531,7 +546,7 @@ public class FancyShowCaseView {
         public FancyShowCaseView build() {
             return new FancyShowCaseView(mActivity, mView, mId, mTitle, mTitleGravity, mTitleStyle,
                     mFocusCircleRadiusFactor, mBackgroundColor, mCustomViewRes, mViewInflateListener,
-                    mEnterAnimation, mExitAnimation, mCloseOnTouch, mFitSystemWindows, mFocusShape);
+                    mEnterAnimation, mExitAnimation, mCloseOnTouch, mFitSystemWindows, mFocusShape, mDismissListener);
         }
     }
 }
