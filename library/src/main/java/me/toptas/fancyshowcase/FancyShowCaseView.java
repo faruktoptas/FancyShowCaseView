@@ -473,22 +473,14 @@ public class FancyShowCaseView {
         }
 
         /**
-         * @param titleSize title size, overrides any defined size in the default or provided style
+         * the defined text size overrides any defined size in the default or provided style
+         * @param titleSize title size
+         * @param unit title text unit
          * @return Builder
          */
-        public Builder titleSizePx(int titleSize) {
+        public Builder titleSize(int titleSize, int unit) {
             mTitleSize = titleSize;
-            mTitleSizeUnit = TypedValue.COMPLEX_UNIT_PX;
-            return this;
-        }
-
-        /**
-         * @param titleSize title size, overrides any defined size in the default or provided style
-         * @return Builder
-         */
-        public Builder titleSizeSp(int titleSize) {
-            mTitleSize = titleSize;
-            mTitleSizeUnit = TypedValue.COMPLEX_UNIT_SP;
+            mTitleSizeUnit = unit;
             return this;
         }
 
