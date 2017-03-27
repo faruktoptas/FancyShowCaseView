@@ -11,7 +11,7 @@ public interface DismissListener {
      */
     void onDismiss(String id);
     /**
-     * is called when a {@link FancyShowCaseView} is skipped because of it's one shot id
+     * is called when a {@link FancyShowCaseView} is skipped because of it's show once id
      *
      * @param id the show once id of the dismissed view
      */
