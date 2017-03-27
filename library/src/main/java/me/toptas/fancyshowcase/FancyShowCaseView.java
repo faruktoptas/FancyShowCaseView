@@ -54,7 +54,7 @@ public class FancyShowCaseView {
      *
      * @param context context that should be used to create the shared preference instance
      */
-    public static void resetAllShowOnce(Context context, String id) {
+    public static void resetAllShowOnce(Context context) {
         SharedPreferences sharedPrefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         sharedPrefs.edit().clear().commit();
         return;
