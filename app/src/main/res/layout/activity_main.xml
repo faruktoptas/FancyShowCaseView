@@ -93,5 +93,12 @@
             android:layout_marginTop="@dimen/default_margin"
             android:text="Another Activity" />
 
+        <Button
+            android:id="@+id/btn_queue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_margin"
+            android:text="queuing Multiple Instances" />
+
     </LinearLayout>
 </ScrollView>

@@ -9,6 +9,8 @@ An easy-to-use customizable show case view with circular reveal animation.
 - Title style and position 
 - Custom view inflation
 - Custom enter/exit animations
+- Chaining multiple FancyShowCaseView instances
+- Showing only one time
 
 ![!gif](https://cloud.githubusercontent.com/assets/1595227/24331187/ad143b80-1237-11e7-919c-36111c1ce559.gif)
 
@@ -72,9 +74,21 @@ new FancyShowCaseView.Builder(this)
         .build()
         .show();
 ```
+## Queuing multiple instances
+```java
+new FancyShowCaseQueue()
+	    .add(fancyShowCaseView1)
+	    .add(fancyShowCaseView2)
+	    .add(fancyShowCaseView3)
+	    .show();
+```
 ## Already in use in following apps
 (feel free to send me new projects)
 * [News - Newspaper & Magazine](https://play.google.com/store/apps/details?id=com.moblino.countrynews)
+
+## Contribute
+You can contribute by opening a pull request to **dev** branch.
+Please try to push one feature in one commit for a clean commit history.
 
 License
 =======

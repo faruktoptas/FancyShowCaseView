@@ -17,6 +17,8 @@
         </activity>
 
         <activity android:theme="@style/NoActionBar" android:name=".SecondActivity"/>
+
+        <activity android:name=".QueueActivity"/>
     </application>
 
 </manifest>

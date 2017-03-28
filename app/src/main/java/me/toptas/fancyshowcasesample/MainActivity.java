@@ -56,10 +56,11 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Shows a FancyShowCaseView with rounded rect focus shape
+     *
      * @param view View to focus
      */
     @OnClick(R.id.btn_rounded_rect)
-    public void focusRoundedRect(View view){
+    public void focusRoundedRect(View view) {
         new FancyShowCaseView.Builder(this)
                 .focusOn(view)
                 .focusShape(FocusShape.ROUNDED_RECTANGLE)
@@ -173,6 +174,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @OnClick(R.id.btn_queue)
+    public void queueMultipleInstances() {
+        startActivity(new Intent(this, QueueActivity.class));
+    }
+
     View.OnClickListener mClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -181,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
     };
 
     @OnClick(R.id.btn_another_activity)
-    public void anotherActivity(){
+    public void anotherActivity() {
         startActivity(new Intent(this, SecondActivity.class));
     }
 
