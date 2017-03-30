@@ -2,7 +2,6 @@ package me.toptas.fancyshowcasesample;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 
 import butterknife.BindView;
@@ -14,7 +13,7 @@ import me.toptas.fancyshowcase.FancyShowCaseView;
  * Created by ftoptas on 27/03/17.
  */
 
-public class QueueActivity extends AppCompatActivity {
+public class QueueActivity extends BaseActivity {
 
 
     @BindView(R.id.btn_queue_1)
