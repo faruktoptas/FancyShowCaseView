@@ -12,6 +12,7 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.annotation.StyleRes;
+import android.text.Spanned;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
@@ -64,6 +65,7 @@ public class FancyShowCaseView {
      */
     private final Activity mActivity;
     private String mTitle;
+    private Spanned mSpannedTitle;
     private String mId;
     private double mFocusCircleRadiusFactor;
     private View mView;
@@ -95,6 +97,7 @@ public class FancyShowCaseView {
      * @param view                    view to focus
      * @param id                      unique identifier for FancyShowCaseView
      * @param title                   title text
+     * @param spannedTitle            title text if spanned text should be used
      * @param titleGravity            title gravity
      * @param titleStyle              title text style
      * @param titleSize               title text size
@@ -110,7 +113,7 @@ public class FancyShowCaseView {
      * @param focusShape              shape of focus, can be circle or rounded rectangle
      * @param dismissListener         listener that gets notified when showcase is dismissed
      */
-    private FancyShowCaseView(Activity activity, View view, String id, String title,
+    private FancyShowCaseView(Activity activity, View view, String id, String title, Spanned spannedTitle,
                               int titleGravity, int titleStyle, int titleSize, int titleSizeUnit, double focusCircleRadiusFactor,
                               int backgroundColor, int customViewRes,
                               OnViewInflateListener viewInflateListener, Animation enterAnimation,
@@ -120,6 +123,7 @@ public class FancyShowCaseView {
         mActivity = activity;
         mView = view;
         mTitle = title;
+        mSpannedTitle = spannedTitle;
         mFocusCircleRadiusFactor = focusCircleRadiusFactor;
         mBackgroundColor = backgroundColor;
         mTitleGravity = titleGravity;
@@ -319,7 +323,11 @@ public class FancyShowCaseView {
                     textView.setTextSize(mTitleSizeUnit, mTitleSize);
                 }
                 textView.setGravity(mTitleGravity);
-                textView.setText(mTitle);
+                if (mSpannedTitle != null) {
+                    textView.setText(mSpannedTitle);
+                } else {
+                    textView.setText(mTitle);
+                }
             }
         });
 
@@ -441,6 +449,7 @@ public class FancyShowCaseView {
         private View mView;
         private String mId;
         private String mTitle;
+        private Spanned mSpannedTitle;
         private double mFocusCircleRadiusFactor = 1;
         private int mBackgroundColor;
         private int mTitleGravity = -1;
@@ -471,6 +480,17 @@ public class FancyShowCaseView {
          */
         public Builder title(String title) {
             mTitle = title;
+            mSpannedTitle = null;
+            return this;
+        }
+
+        /**
+         * @param title title text
+         * @return Builder
+         */
+        public Builder title(Spanned title) {
+            mSpannedTitle = title;
+            mTitle = null;
             return this;
         }
 
@@ -612,7 +632,7 @@ public class FancyShowCaseView {
          * @return {@link FancyShowCaseView} with given parameters
          */
         public FancyShowCaseView build() {
-            return new FancyShowCaseView(mActivity, mView, mId, mTitle, mTitleGravity, mTitleStyle, mTitleSize, mTitleSizeUnit,
+            return new FancyShowCaseView(mActivity, mView, mId, mTitle, mSpannedTitle, mTitleGravity, mTitleStyle, mTitleSize, mTitleSizeUnit,
                     mFocusCircleRadiusFactor, mBackgroundColor, mCustomViewRes, mViewInflateListener,
                     mEnterAnimation, mExitAnimation, mCloseOnTouch, mFitSystemWindows, mFocusShape, mDismissListener);
         }
