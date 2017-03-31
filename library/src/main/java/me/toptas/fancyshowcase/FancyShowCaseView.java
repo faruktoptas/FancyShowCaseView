@@ -69,10 +69,12 @@ public class FancyShowCaseView {
     private double mFocusCircleRadiusFactor;
     private View mView;
     private int mBackgroundColor;
+    private int mFocusBorderColor;
     private int mTitleGravity;
     private int mTitleStyle;
     private int mTitleSize;
     private int mTitleSizeUnit;
+    private int mFocusBorderSize;
     private int mCustomViewRes;
     private OnViewInflateListener mViewInflateListener;
     private Animation mEnterAnimation, mExitAnimation;
@@ -113,7 +115,7 @@ public class FancyShowCaseView {
      */
     private FancyShowCaseView(Activity activity, View view, String id, String title,
                               int titleGravity, int titleStyle, int titleSize, int titleSizeUnit, double focusCircleRadiusFactor,
-                              int backgroundColor, int customViewRes,
+                              int backgroundColor, int focusBorderColor, int focusBorderSize, int customViewRes,
                               OnViewInflateListener viewInflateListener, Animation enterAnimation,
                               Animation exitAnimation, boolean closeOnTouch, boolean fitSystemWindows,
                               FocusShape focusShape, DismissListener dismissListener) {
@@ -123,6 +125,8 @@ public class FancyShowCaseView {
         mTitle = title;
         mFocusCircleRadiusFactor = focusCircleRadiusFactor;
         mBackgroundColor = backgroundColor;
+        mFocusBorderColor = focusBorderColor;
+        mFocusBorderSize = focusBorderSize;
         mTitleGravity = titleGravity;
         mTitleStyle = titleStyle;
         mTitleSize = titleSize;
@@ -202,6 +206,7 @@ public class FancyShowCaseView {
                 mRadius = mCalculator.getViewRadius();
             }
             imageView.setParameters(mBackgroundColor, mCalculator);
+            imageView.setBorderParameters(mFocusBorderColor,mFocusBorderSize);
             imageView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT));
 
@@ -421,6 +426,7 @@ public class FancyShowCaseView {
         private String mTitle;
         private double mFocusCircleRadiusFactor = 1;
         private int mBackgroundColor;
+        private int mFocusBorderColor;
         private int mTitleGravity = -1;
         private int mTitleSize = -1;
         private int mTitleSizeUnit = -1;
@@ -432,6 +438,7 @@ public class FancyShowCaseView {
         private boolean mFitSystemWindows;
         private FocusShape mFocusShape = FocusShape.CIRCLE;
         private DismissListener mDismissListener = null;
+        private int mFocusBorderSize;
 
         /**
          * Constructor for Builder class
@@ -460,6 +467,26 @@ public class FancyShowCaseView {
         public Builder titleStyle(@StyleRes int style, int titleGravity) {
             mTitleGravity = titleGravity;
             mTitleStyle = style;
+            return this;
+        }
+
+        /**
+         *
+         * @param focusBorderColor
+         * @return Builder
+         */
+        public Builder focusBorderColor(int focusBorderColor) {
+            mFocusBorderColor = focusBorderColor;
+            return this;
+        }
+
+        /**
+         *
+         * @param focusBorderSize
+         * @return Builder
+         */
+        public Builder focusBorderSize(int focusBorderSize) {
+            mFocusBorderSize = focusBorderSize;
             return this;
         }
 
@@ -590,7 +617,7 @@ public class FancyShowCaseView {
          */
         public FancyShowCaseView build() {
             return new FancyShowCaseView(mActivity, mView, mId, mTitle, mTitleGravity, mTitleStyle, mTitleSize, mTitleSizeUnit,
-                    mFocusCircleRadiusFactor, mBackgroundColor, mCustomViewRes, mViewInflateListener,
+                    mFocusCircleRadiusFactor, mBackgroundColor, mFocusBorderColor, mFocusBorderSize, mCustomViewRes, mViewInflateListener,
                     mEnterAnimation, mExitAnimation, mCloseOnTouch, mFitSystemWindows, mFocusShape, mDismissListener);
         }
     }
