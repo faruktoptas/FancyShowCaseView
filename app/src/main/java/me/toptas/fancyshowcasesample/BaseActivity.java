@@ -13,7 +13,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (FancyShowCaseView.isVisible(this)) {
-            FancyShowCaseView.hidePlease(this);
+            FancyShowCaseView.hideCurrent(this);
         } else {
             super.onBackPressed();
         }

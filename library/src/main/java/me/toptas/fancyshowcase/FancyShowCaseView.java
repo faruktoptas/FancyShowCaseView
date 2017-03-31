@@ -218,16 +218,24 @@ public class FancyShowCaseView {
         }
     }
 
-
-    public static Boolean isVisible(Activity mActivity) {
-        ViewGroup androidContent = (ViewGroup) mActivity.findViewById(android.R.id.content);
+/**
+* Check is FancyShowCaseView visible
+*@param activity should be used to find FancyShowCaseView inside it
+*
+* */
+    public static Boolean isVisible(Activity activity) {
+        ViewGroup androidContent = (ViewGroup) activity.findViewById(android.R.id.content);
         ViewGroup mRoot = (ViewGroup) androidContent.getParent().getParent();
         FrameLayout mContainer = (FrameLayout) mRoot.findViewWithTag(CONTAINER_TAG);
         return mContainer != null;
     }
-
-    public static void hidePlease(Activity mActivity){
-        ViewGroup androidContent = (ViewGroup) mActivity.findViewById(android.R.id.content);
+    /**
+     * Hide  FancyShowCaseView
+     *@param activity should be used to hide FancyShowCaseView inside it
+     *
+     * */
+    public static void hideCurrent(Activity activity){
+        ViewGroup androidContent = (ViewGroup) activity.findViewById(android.R.id.content);
         ViewGroup mRoot = (ViewGroup) androidContent.getParent().getParent();
         FrameLayout mContainer = (FrameLayout) mRoot.findViewWithTag(CONTAINER_TAG);
         mRoot.removeView(mContainer);
