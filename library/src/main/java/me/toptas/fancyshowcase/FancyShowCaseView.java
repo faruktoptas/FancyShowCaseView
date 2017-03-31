@@ -13,7 +13,6 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.annotation.StyleRes;
 import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewAnimationUtils;
@@ -217,6 +216,29 @@ public class FancyShowCaseView {
             startEnterAnimation();
             writeShown();
         }
+    }
+
+/**
+* Check is FancyShowCaseView visible
+*@param activity should be used to find FancyShowCaseView inside it
+*
+* */
+    public static Boolean isVisible(Activity activity) {
+        ViewGroup androidContent = (ViewGroup) activity.findViewById(android.R.id.content);
+        ViewGroup mRoot = (ViewGroup) androidContent.getParent().getParent();
+        FrameLayout mContainer = (FrameLayout) mRoot.findViewWithTag(CONTAINER_TAG);
+        return mContainer != null;
+    }
+    /**
+     * Hide  FancyShowCaseView
+     *@param activity should be used to hide FancyShowCaseView inside it
+     *
+     * */
+    public static void hideCurrent(Activity activity){
+        ViewGroup androidContent = (ViewGroup) activity.findViewById(android.R.id.content);
+        ViewGroup mRoot = (ViewGroup) androidContent.getParent().getParent();
+        FrameLayout mContainer = (FrameLayout) mRoot.findViewWithTag(CONTAINER_TAG);
+        mRoot.removeView(mContainer);
     }
 
     /**
@@ -474,6 +496,7 @@ public class FancyShowCaseView {
 
         /**
          * the defined text size overrides any defined size in the default or provided style
+         *
          * @param titleSize title size
          * @param unit title text unit
          * @return Builder
