@@ -101,6 +101,15 @@ class FancyImageView extends ImageView {
     }
 
     /**
+     * Setting round rectangle radius
+     *
+     * @param roundRectRadius
+     */
+    public void setRoundRectRadius(int roundRectRadius) {
+        mRoundRectRadius = roundRectRadius;
+    }
+
+    /**
      * Draws background and moving focus area
      *
      * @param canvas draw canvas

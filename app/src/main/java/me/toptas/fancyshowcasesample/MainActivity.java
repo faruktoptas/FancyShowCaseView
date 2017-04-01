@@ -96,6 +96,7 @@ public class MainActivity extends BaseActivity {
                 .focusOn(view)
                 .title("Focus on larger view")
                 .focusShape(FocusShape.ROUNDED_RECTANGLE)
+                .roundRectRadius(50)
                 .focusBorderSize(5)
                 .focusBorderColor(Color.RED)
                 .titleStyle(0, Gravity.TOP)

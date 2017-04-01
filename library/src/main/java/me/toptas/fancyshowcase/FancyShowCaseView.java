@@ -77,6 +77,7 @@ public class FancyShowCaseView {
     private int mTitleSizeUnit;
     private int mCustomViewRes;
     private int mFocusBorderSize;
+    private int mRoundRectRadius;
     private OnViewInflateListener mViewInflateListener;
     private Animation mEnterAnimation, mExitAnimation;
     private boolean mCloseOnTouch;
@@ -122,7 +123,7 @@ public class FancyShowCaseView {
                               int backgroundColor, int focusBorderColor, int focusBorderSize, int customViewRes,
                               OnViewInflateListener viewInflateListener, Animation enterAnimation,
                               Animation exitAnimation, boolean closeOnTouch, boolean fitSystemWindows,
-                              FocusShape focusShape, DismissListener dismissListener) {
+                              FocusShape focusShape, DismissListener dismissListener, int roundRectRadius) {
         mId = id;
         mActivity = activity;
         mView = view;
@@ -136,6 +137,7 @@ public class FancyShowCaseView {
         mTitleStyle = titleStyle;
         mTitleSize = titleSize;
         mTitleSizeUnit = titleSizeUnit;
+        mRoundRectRadius = roundRectRadius;
         mCustomViewRes = customViewRes;
         mViewInflateListener = viewInflateListener;
         mEnterAnimation = enterAnimation;
@@ -210,11 +212,16 @@ public class FancyShowCaseView {
                 mCenterY = mCalculator.getCircleCenterY();
                 mRadius = mCalculator.getViewRadius();
             }
+
             imageView.setParameters(mBackgroundColor, mCalculator);
-            imageView.setBorderParameters(mFocusBorderColor,mFocusBorderSize);
             imageView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT));
-
+            if (mFocusBorderColor != 0 && mFocusBorderSize > 0) {
+                imageView.setBorderParameters(mFocusBorderColor, mFocusBorderSize);
+            }
+            if (mRoundRectRadius > 0) {
+                imageView.setRoundRectRadius(mRoundRectRadius);
+            }
             //imageView.setImageBitmap(bitmap);
             mContainer.addView(imageView);
 
@@ -465,6 +472,7 @@ public class FancyShowCaseView {
         private int mTitleSizeUnit = -1;
         private int mTitleStyle;
         private int mCustomViewRes;
+        private int mRoundRectRadius;
         private OnViewInflateListener mViewInflateListener;
         private Animation mEnterAnimation, mExitAnimation;
         private boolean mCloseOnTouch = true;
@@ -655,6 +663,11 @@ public class FancyShowCaseView {
             return this;
         }
 
+        public Builder roundRectRadius(int roundRectRadius) {
+            mRoundRectRadius = roundRectRadius;
+            return this;
+        }
+
         /**
          * builds the builder
          *
@@ -663,7 +676,7 @@ public class FancyShowCaseView {
         public FancyShowCaseView build() {
             return new FancyShowCaseView(mActivity, mView, mId, mTitle, mSpannedTitle, mTitleGravity, mTitleStyle, mTitleSize, mTitleSizeUnit,
                     mFocusCircleRadiusFactor, mBackgroundColor, mFocusBorderColor, mFocusBorderSize, mCustomViewRes, mViewInflateListener,
-                    mEnterAnimation, mExitAnimation, mCloseOnTouch, mFitSystemWindows, mFocusShape, mDismissListener);
+                    mEnterAnimation, mExitAnimation, mCloseOnTouch, mFitSystemWindows, mFocusShape, mDismissListener, mRoundRectRadius);
         }
     }
 }
