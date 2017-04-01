@@ -1,7 +1,6 @@
 package me.toptas.fancyshowcasesample;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
@@ -10,7 +9,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.toptas.fancyshowcase.FancyShowCaseView;
 
-public class SecondActivity extends AppCompatActivity {
+public class SecondActivity extends BaseActivity {
 
     @BindView(R.id.button1)
     Button mButton;
