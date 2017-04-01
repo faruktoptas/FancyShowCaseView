@@ -64,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
         new FancyShowCaseView.Builder(this)
                 .focusOn(view)
                 .focusShape(FocusShape.ROUNDED_RECTANGLE)
+                .focusBorderSize(5)
+                .focusBorderColor(Color.RED)
                 .title("Focus on View")
                 .build()
                 .show();
@@ -95,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
         new FancyShowCaseView.Builder(this)
                 .focusOn(view)
                 .title("Focus on larger view")
+                .focusShape(FocusShape.ROUNDED_RECTANGLE)
                 .titleStyle(0, Gravity.TOP)
                 .build()
                 .show();
