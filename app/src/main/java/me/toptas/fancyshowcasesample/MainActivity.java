@@ -63,6 +63,8 @@ public class MainActivity extends BaseActivity {
         new FancyShowCaseView.Builder(this)
                 .focusOn(view)
                 .focusShape(FocusShape.ROUNDED_RECTANGLE)
+                .focusBorderSize(5)
+                .focusBorderColor(Color.RED)
                 .title("Focus on View")
                 .build()
                 .show();
@@ -94,6 +96,7 @@ public class MainActivity extends BaseActivity {
         new FancyShowCaseView.Builder(this)
                 .focusOn(view)
                 .title("Focus on larger view")
+                .focusShape(FocusShape.ROUNDED_RECTANGLE)
                 .titleStyle(0, Gravity.TOP)
                 .build()
                 .show();
@@ -104,13 +107,30 @@ public class MainActivity extends BaseActivity {
      *
      * @param view View to focus
      */
-    @OnClick(R.id.btn_color)
+    @OnClick(R.id.btn_background_color)
     public void focusWithBackgroundColor(View view) {
         new FancyShowCaseView.Builder(this)
                 .focusOn(view)
                 .backgroundColor(Color.parseColor("#AAff0000"))
                 .title("Background color and title style can be changed")
                 .titleStyle(R.style.MyTitleStyle, Gravity.TOP | Gravity.CENTER)
+                .build()
+                .show();
+    }
+
+    /**
+     * Shows a FancyShowCaseView with border color
+     *
+     * @param view View to focus
+     */
+    @OnClick(R.id.btn_focus_color)
+    public void focusWithBorderColor(View view) {
+        new FancyShowCaseView.Builder(this)
+                .focusOn(view)
+                .title("Focus border color can be changed")
+                .titleStyle(R.style.MyTitleStyle, Gravity.TOP | Gravity.CENTER)
+                .focusBorderColor(Color.GREEN)
+                .focusBorderSize(10)
                 .build()
                 .show();
     }

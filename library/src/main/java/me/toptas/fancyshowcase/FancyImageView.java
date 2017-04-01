@@ -1,12 +1,7 @@
 package me.toptas.fancyshowcase;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
+import android.graphics.*;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
@@ -21,12 +16,16 @@ class FancyImageView extends ImageView {
 
     private static final int ANIM_COUNTER_MAX = 20;
     private Bitmap mBitmap;
-    private Paint mBackgroundPaint, mErasePaint;
+    private Paint mBackgroundPaint, mErasePaint, mCircleBorderPaint;
     private int mBackgroundColor = Color.TRANSPARENT;
+    public int mFocusBorderColor = Color.TRANSPARENT;
+    public int mFocusBorderSize = 5;
+    public int mRoundRectRadius = 20;
     private Calculator mCalculator;
     private int mAnimCounter = 0;
     private int mStep = 1;
     private double mAnimMoveFactor = 1;
+    private Path mPath;
 
     public FancyImageView(Context context) {
         super(context);
@@ -67,6 +66,11 @@ class FancyImageView extends ImageView {
         mErasePaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
         mErasePaint.setAlpha(0xFF);
 
+        mPath = new Path();
+        mCircleBorderPaint = new Paint();
+        mCircleBorderPaint.setColor(mFocusBorderColor);
+        mCircleBorderPaint.setStrokeWidth(mFocusBorderSize);
+        mCircleBorderPaint.setStyle(Paint.Style.STROKE);
     }
 
     /**
@@ -79,6 +83,17 @@ class FancyImageView extends ImageView {
         mBackgroundColor = backgroundColor;
         mAnimMoveFactor = 1;
         mCalculator = calculator;
+    }
+
+    /**
+     * Setting parameters for focus border
+     *
+     * @param focusBorderColor
+     * @param focusBorderSize
+     */
+    public void setBorderParameters(int focusBorderColor, int focusBorderSize) {
+        mCircleBorderPaint.setColor(focusBorderColor);
+        mCircleBorderPaint.setStrokeWidth(focusBorderSize);
     }
 
     /**
@@ -119,6 +134,12 @@ class FancyImageView extends ImageView {
     private void drawCircle(Canvas canvas) {
         canvas.drawCircle(mCalculator.getCircleCenterX(), mCalculator.getCircleCenterY(),
                 mCalculator.circleRadius(mAnimCounter, mAnimMoveFactor), mErasePaint);
+
+        mPath.reset();
+        mPath.moveTo(mCalculator.getCircleCenterX(), mCalculator.getCircleCenterY());
+        mPath.addCircle(mCalculator.getCircleCenterX(), mCalculator.getCircleCenterY(),
+                mCalculator.circleRadius(mAnimCounter, mAnimMoveFactor), Path.Direction.CW);
+        canvas.drawPath(mPath, mCircleBorderPaint);
     }
 
     /**
@@ -127,15 +148,17 @@ class FancyImageView extends ImageView {
      * @param canvas canvas to draw
      */
     private void drawRoundedRectangle(Canvas canvas) {
-        float width = mCalculator.roundRectWidth();
         float left = mCalculator.roundRectLeft();
         float top = mCalculator.roundRectTop(mAnimCounter, mAnimMoveFactor);
         float right = mCalculator.roundRectRight();
         float bottom = mCalculator.roundRectBottom(mAnimCounter, mAnimMoveFactor);
-        canvas.drawRect(left, top, right, bottom, mErasePaint);
-        canvas.drawCircle(left, mCalculator.getCircleCenterY(),
-                mCalculator.roundRectLeftCircleRadius(mAnimCounter, mAnimMoveFactor), mErasePaint);
-        canvas.drawCircle(left + width, mCalculator.getCircleCenterY(),
-                mCalculator.roundRectLeftCircleRadius(mAnimCounter, mAnimMoveFactor), mErasePaint);
+
+        RectF rectf = new RectF(left, top, right, bottom);
+        canvas.drawRoundRect(rectf, mRoundRectRadius, mRoundRectRadius, mErasePaint);
+
+        mPath.reset();
+        mPath.moveTo(mCalculator.getCircleCenterX(), mCalculator.getCircleCenterY());
+        mPath.addRoundRect(left, top, right, bottom, mRoundRectRadius,mRoundRectRadius, Path.Direction.CW);
+        canvas.drawPath(mPath, mCircleBorderPaint);
     }
 }

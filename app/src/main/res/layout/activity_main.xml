@@ -50,12 +50,26 @@
             android:layout_marginTop="@dimen/default_margin"
             android:text="Larger" />
 
-        <Button
-            android:id="@+id/btn_color"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/default_margin"
-            android:text="Color" />
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_background_color"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_margin"
+                android:text="Color" />
+
+            <Button
+                android:id="@+id/btn_focus_color"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_margin"
+                android:text="Focus Color" />
+        </LinearLayout>
 
         <Button
             android:id="@+id/btn_longer"

@@ -117,17 +117,10 @@ class Calculator {
     }
 
     /**
-     * @return Width for focus round rect
-     */
-    float roundRectWidth() {
-        return mFocusWidth - mFocusHeight;
-    }
-
-    /**
      * @return Left position of focus round rect
      */
     float roundRectLeft() {
-        return mCircleCenterX - roundRectWidth() / 2;
+        return mCircleCenterX - mFocusWidth / 2;
     }
 
     /**
@@ -143,7 +136,7 @@ class Calculator {
      * @return Right position of round rect
      */
     float roundRectRight() {
-        return mCircleCenterX + roundRectWidth() / 2;
+        return mCircleCenterX + mFocusWidth / 2;
     }
 
     /**
