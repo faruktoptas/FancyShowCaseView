@@ -159,10 +159,10 @@ class FancyImageView extends ImageView {
         float right = mCalculator.roundRectRight(mAnimCounter, mAnimMoveFactor);
         float bottom = mCalculator.roundRectBottom(mAnimCounter, mAnimMoveFactor);
 
+        rectF.set(left, top, right, bottom);
         canvas.drawRoundRect(rectF, mRoundRectRadius, mRoundRectRadius, mErasePaint);
 
         if (mFocusBorderSize > 0) {
-            rectF.set(left, top, right, bottom);
             mPath.reset();
             mPath.moveTo(mCalculator.getCircleCenterX(), mCalculator.getCircleCenterY());
             mPath.addRoundRect(rectF, mRoundRectRadius,mRoundRectRadius, Path.Direction.CW);
