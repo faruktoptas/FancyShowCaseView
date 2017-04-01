@@ -116,18 +116,14 @@ class Calculator {
         return (float) (mViewRadius + animCounter * animMoveFactor);
     }
 
-    /**
-     * @return Width for focus round rect
-     */
-    float roundRectWidth() {
-        return mFocusWidth - mFocusHeight;
-    }
 
     /**
-     * @return Left position of focus round rect
+     * @param animCounter    Counter for round rect animation
+     * @param animMoveFactor Move factor for round rect animation (Bigger value makes bigger animation)
+     * @return Bottom position of round rect
      */
-    float roundRectLeft() {
-        return mCircleCenterX - roundRectWidth() / 2;
+    float roundRectLeft(int animCounter, double animMoveFactor) {
+        return (float) (mCircleCenterX - mFocusWidth / 2 - animCounter * animMoveFactor );
     }
 
     /**
@@ -140,10 +136,12 @@ class Calculator {
     }
 
     /**
-     * @return Right position of round rect
+     * @param animCounter    Counter for round rect animation
+     * @param animMoveFactor Move factor for round rect animation (Bigger value makes bigger animation)
+     * @return Bottom position of round rect
      */
-    float roundRectRight() {
-        return mCircleCenterX + roundRectWidth() / 2;
+    float roundRectRight(int animCounter, double animMoveFactor) {
+        return (float) (mCircleCenterX + mFocusWidth / 2 + animCounter * animMoveFactor);
     }
 
     /**

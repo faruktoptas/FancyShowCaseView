@@ -79,6 +79,7 @@ public class MainActivity extends BaseActivity {
                 .focusOn(view)
                 .focusCircleRadiusFactor(1.5)
                 .title("Focus on View with larger circle")
+                .focusBorderColor(Color.GREEN)
                 .titleStyle(0, Gravity.BOTTOM | Gravity.CENTER)
                 .build()
                 .show();
@@ -89,11 +90,15 @@ public class MainActivity extends BaseActivity {
      *
      * @param view View to focus
      */
-    @OnClick(R.id.btn_longer)
-    public void longerText(View view) {
+    @OnClick(R.id.btn_focus_rect_color)
+    public void focusRectWithBorderColor(View view) {
         new FancyShowCaseView.Builder(this)
                 .focusOn(view)
                 .title("Focus on larger view")
+                .focusShape(FocusShape.ROUNDED_RECTANGLE)
+                .roundRectRadius(50)
+                .focusBorderSize(5)
+                .focusBorderColor(Color.RED)
                 .titleStyle(0, Gravity.TOP)
                 .build()
                 .show();
@@ -104,13 +109,30 @@ public class MainActivity extends BaseActivity {
      *
      * @param view View to focus
      */
-    @OnClick(R.id.btn_color)
+    @OnClick(R.id.btn_background_color)
     public void focusWithBackgroundColor(View view) {
         new FancyShowCaseView.Builder(this)
                 .focusOn(view)
                 .backgroundColor(Color.parseColor("#AAff0000"))
                 .title("Background color and title style can be changed")
                 .titleStyle(R.style.MyTitleStyle, Gravity.TOP | Gravity.CENTER)
+                .build()
+                .show();
+    }
+
+    /**
+     * Shows a FancyShowCaseView with border color
+     *
+     * @param view View to focus
+     */
+    @OnClick(R.id.btn_border_color)
+    public void focusWithBorderColor(View view) {
+        new FancyShowCaseView.Builder(this)
+                .focusOn(view)
+                .title("Focus border color can be changed")
+                .titleStyle(R.style.MyTitleStyle, Gravity.TOP | Gravity.CENTER)
+                .focusBorderColor(Color.GREEN)
+                .focusBorderSize(10)
                 .build()
                 .show();
     }

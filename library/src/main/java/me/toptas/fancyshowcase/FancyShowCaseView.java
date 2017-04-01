@@ -70,11 +70,14 @@ public class FancyShowCaseView {
     private double mFocusCircleRadiusFactor;
     private View mView;
     private int mBackgroundColor;
+    private int mFocusBorderColor;
     private int mTitleGravity;
     private int mTitleStyle;
     private int mTitleSize;
     private int mTitleSizeUnit;
     private int mCustomViewRes;
+    private int mFocusBorderSize;
+    private int mRoundRectRadius;
     private OnViewInflateListener mViewInflateListener;
     private Animation mEnterAnimation, mExitAnimation;
     private boolean mCloseOnTouch;
@@ -104,6 +107,8 @@ public class FancyShowCaseView {
      * @param titleSizeUnit           title text size unit
      * @param focusCircleRadiusFactor focus circle radius factor (default value = 1)
      * @param backgroundColor         background color of FancyShowCaseView
+     * @param focusBorderColor        focus border color of FancyShowCaseView
+     * @param focusBorderSize         focus border size of FancyShowCaseView
      * @param customViewRes           custom view layout resource
      * @param viewInflateListener     inflate listener for custom view
      * @param enterAnimation          enter animation for FancyShowCaseView
@@ -115,10 +120,10 @@ public class FancyShowCaseView {
      */
     private FancyShowCaseView(Activity activity, View view, String id, String title, Spanned spannedTitle,
                               int titleGravity, int titleStyle, int titleSize, int titleSizeUnit, double focusCircleRadiusFactor,
-                              int backgroundColor, int customViewRes,
+                              int backgroundColor, int focusBorderColor, int focusBorderSize, int customViewRes,
                               OnViewInflateListener viewInflateListener, Animation enterAnimation,
                               Animation exitAnimation, boolean closeOnTouch, boolean fitSystemWindows,
-                              FocusShape focusShape, DismissListener dismissListener) {
+                              FocusShape focusShape, DismissListener dismissListener, int roundRectRadius) {
         mId = id;
         mActivity = activity;
         mView = view;
@@ -126,10 +131,13 @@ public class FancyShowCaseView {
         mSpannedTitle = spannedTitle;
         mFocusCircleRadiusFactor = focusCircleRadiusFactor;
         mBackgroundColor = backgroundColor;
+        mFocusBorderColor = focusBorderColor;
+        mFocusBorderSize = focusBorderSize;
         mTitleGravity = titleGravity;
         mTitleStyle = titleStyle;
         mTitleSize = titleSize;
         mTitleSizeUnit = titleSizeUnit;
+        mRoundRectRadius = roundRectRadius;
         mCustomViewRes = customViewRes;
         mViewInflateListener = viewInflateListener;
         mEnterAnimation = enterAnimation;
@@ -204,10 +212,16 @@ public class FancyShowCaseView {
                 mCenterY = mCalculator.getCircleCenterY();
                 mRadius = mCalculator.getViewRadius();
             }
+
             imageView.setParameters(mBackgroundColor, mCalculator);
             imageView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT));
-
+            if (mFocusBorderColor != 0 && mFocusBorderSize > 0) {
+                imageView.setBorderParameters(mFocusBorderColor, mFocusBorderSize);
+            }
+            if (mRoundRectRadius > 0) {
+                imageView.setRoundRectRadius(mRoundRectRadius);
+            }
             //imageView.setImageBitmap(bitmap);
             mContainer.addView(imageView);
 
@@ -452,17 +466,20 @@ public class FancyShowCaseView {
         private Spanned mSpannedTitle;
         private double mFocusCircleRadiusFactor = 1;
         private int mBackgroundColor;
+        private int mFocusBorderColor;
         private int mTitleGravity = -1;
         private int mTitleSize = -1;
         private int mTitleSizeUnit = -1;
         private int mTitleStyle;
         private int mCustomViewRes;
+        private int mRoundRectRadius;
         private OnViewInflateListener mViewInflateListener;
         private Animation mEnterAnimation, mExitAnimation;
         private boolean mCloseOnTouch = true;
         private boolean mFitSystemWindows;
         private FocusShape mFocusShape = FocusShape.CIRCLE;
         private DismissListener mDismissListener = null;
+        private int mFocusBorderSize;
 
         /**
          * Constructor for Builder class
@@ -502,6 +519,26 @@ public class FancyShowCaseView {
         public Builder titleStyle(@StyleRes int style, int titleGravity) {
             mTitleGravity = titleGravity;
             mTitleStyle = style;
+            return this;
+        }
+
+        /**
+         *
+         * @param focusBorderColor
+         * @return Builder
+         */
+        public Builder focusBorderColor(int focusBorderColor) {
+            mFocusBorderColor = focusBorderColor;
+            return this;
+        }
+
+        /**
+         *
+         * @param focusBorderSize
+         * @return Builder
+         */
+        public Builder focusBorderSize(int focusBorderSize) {
+            mFocusBorderSize = focusBorderSize;
             return this;
         }
 
@@ -626,6 +663,11 @@ public class FancyShowCaseView {
             return this;
         }
 
+        public Builder roundRectRadius(int roundRectRadius) {
+            mRoundRectRadius = roundRectRadius;
+            return this;
+        }
+
         /**
          * builds the builder
          *
@@ -633,8 +675,8 @@ public class FancyShowCaseView {
          */
         public FancyShowCaseView build() {
             return new FancyShowCaseView(mActivity, mView, mId, mTitle, mSpannedTitle, mTitleGravity, mTitleStyle, mTitleSize, mTitleSizeUnit,
-                    mFocusCircleRadiusFactor, mBackgroundColor, mCustomViewRes, mViewInflateListener,
-                    mEnterAnimation, mExitAnimation, mCloseOnTouch, mFitSystemWindows, mFocusShape, mDismissListener);
+                    mFocusCircleRadiusFactor, mBackgroundColor, mFocusBorderColor, mFocusBorderSize, mCustomViewRes, mViewInflateListener,
+                    mEnterAnimation, mExitAnimation, mCloseOnTouch, mFitSystemWindows, mFocusShape, mDismissListener, mRoundRectRadius);
         }
     }
 }
