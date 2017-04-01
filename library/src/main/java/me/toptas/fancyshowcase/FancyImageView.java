@@ -26,6 +26,7 @@ class FancyImageView extends ImageView {
     private int mStep = 1;
     private double mAnimMoveFactor = 1;
     private Path mPath;
+    private RectF rectF;
 
     public FancyImageView(Context context) {
         super(context);
@@ -71,6 +72,8 @@ class FancyImageView extends ImageView {
         mCircleBorderPaint.setColor(mFocusBorderColor);
         mCircleBorderPaint.setStrokeWidth(mFocusBorderSize);
         mCircleBorderPaint.setStyle(Paint.Style.STROKE);
+
+        rectF = new RectF();
     }
 
     /**
@@ -153,8 +156,8 @@ class FancyImageView extends ImageView {
         float right = mCalculator.roundRectRight();
         float bottom = mCalculator.roundRectBottom(mAnimCounter, mAnimMoveFactor);
 
-        RectF rectf = new RectF(left, top, right, bottom);
-        canvas.drawRoundRect(rectf, mRoundRectRadius, mRoundRectRadius, mErasePaint);
+        rectF.set(left, top, right, bottom);
+        canvas.drawRoundRect(rectF, mRoundRectRadius, mRoundRectRadius, mErasePaint);
 
         mPath.reset();
         mPath.moveTo(mCalculator.getCircleCenterX(), mCalculator.getCircleCenterY());
