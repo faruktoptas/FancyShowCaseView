@@ -19,7 +19,7 @@ class FancyImageView extends ImageView {
     private Paint mBackgroundPaint, mErasePaint, mCircleBorderPaint;
     private int mBackgroundColor = Color.TRANSPARENT;
     public int mFocusBorderColor = Color.TRANSPARENT;
-    public int mFocusBorderSize = 5;
+    public int mFocusBorderSize;
     public int mRoundRectRadius = 20;
     private Calculator mCalculator;
     private int mAnimCounter = 0;
@@ -95,6 +95,7 @@ class FancyImageView extends ImageView {
      * @param focusBorderSize
      */
     public void setBorderParameters(int focusBorderColor, int focusBorderSize) {
+        mFocusBorderSize = focusBorderSize;
         mCircleBorderPaint.setColor(focusBorderColor);
         mCircleBorderPaint.setStrokeWidth(focusBorderSize);
     }
@@ -138,11 +139,13 @@ class FancyImageView extends ImageView {
         canvas.drawCircle(mCalculator.getCircleCenterX(), mCalculator.getCircleCenterY(),
                 mCalculator.circleRadius(mAnimCounter, mAnimMoveFactor), mErasePaint);
 
-        mPath.reset();
-        mPath.moveTo(mCalculator.getCircleCenterX(), mCalculator.getCircleCenterY());
-        mPath.addCircle(mCalculator.getCircleCenterX(), mCalculator.getCircleCenterY(),
-                mCalculator.circleRadius(mAnimCounter, mAnimMoveFactor), Path.Direction.CW);
-        canvas.drawPath(mPath, mCircleBorderPaint);
+        if (mFocusBorderSize > 0) {
+            mPath.reset();
+            mPath.moveTo(mCalculator.getCircleCenterX(), mCalculator.getCircleCenterY());
+            mPath.addCircle(mCalculator.getCircleCenterX(), mCalculator.getCircleCenterY(),
+                    mCalculator.circleRadius(mAnimCounter, mAnimMoveFactor), Path.Direction.CW);
+            canvas.drawPath(mPath, mCircleBorderPaint);
+        }
     }
 
     /**
@@ -151,17 +154,19 @@ class FancyImageView extends ImageView {
      * @param canvas canvas to draw
      */
     private void drawRoundedRectangle(Canvas canvas) {
-        float left = mCalculator.roundRectLeft();
+        float left = mCalculator.roundRectLeft(mAnimCounter, mAnimMoveFactor);
         float top = mCalculator.roundRectTop(mAnimCounter, mAnimMoveFactor);
-        float right = mCalculator.roundRectRight();
+        float right = mCalculator.roundRectRight(mAnimCounter, mAnimMoveFactor);
         float bottom = mCalculator.roundRectBottom(mAnimCounter, mAnimMoveFactor);
 
-        rectF.set(left, top, right, bottom);
         canvas.drawRoundRect(rectF, mRoundRectRadius, mRoundRectRadius, mErasePaint);
 
-        mPath.reset();
-        mPath.moveTo(mCalculator.getCircleCenterX(), mCalculator.getCircleCenterY());
-        mPath.addRoundRect(left, top, right, bottom, mRoundRectRadius,mRoundRectRadius, Path.Direction.CW);
-        canvas.drawPath(mPath, mCircleBorderPaint);
+        if (mFocusBorderSize > 0) {
+            rectF.set(left, top, right, bottom);
+            mPath.reset();
+            mPath.moveTo(mCalculator.getCircleCenterX(), mCalculator.getCircleCenterY());
+            mPath.addRoundRect(rectF, mRoundRectRadius,mRoundRectRadius, Path.Direction.CW);
+            canvas.drawPath(mPath, mCircleBorderPaint);
+        }
     }
 }
