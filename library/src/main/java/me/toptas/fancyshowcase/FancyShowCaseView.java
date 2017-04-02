@@ -93,6 +93,7 @@ public class FancyShowCaseView {
     private SharedPreferences mSharedPreferences;
     private Calculator mCalculator;
 
+    private int mFocusPositionX, mFocusPositionY, mFocusCircleRadius, mFocusRectangleWidth, mFocusRectangleHeight;
     /**
      * Constructor for FancyShowCaseView
      *
@@ -117,13 +118,20 @@ public class FancyShowCaseView {
      * @param fitSystemWindows        should be the same value of root view's fitSystemWindows value
      * @param focusShape              shape of focus, can be circle or rounded rectangle
      * @param dismissListener         listener that gets notified when showcase is dismissed
+     * @param roundRectRadius         round rectangle radius
+     * @param focusPositionX          focus at specific position X coordinate
+     * @param focusPositionY          focus at specific position Y coordinate
+     * @param focusCircleRadius       focus at specific position circle radius
+     * @param focusRectangleWidth     focus at specific position rectangle width
+     * @param focusRectangleHeight    focus at specific position rectangle height
      */
     private FancyShowCaseView(Activity activity, View view, String id, String title, Spanned spannedTitle,
                               int titleGravity, int titleStyle, int titleSize, int titleSizeUnit, double focusCircleRadiusFactor,
                               int backgroundColor, int focusBorderColor, int focusBorderSize, int customViewRes,
                               OnViewInflateListener viewInflateListener, Animation enterAnimation,
                               Animation exitAnimation, boolean closeOnTouch, boolean fitSystemWindows,
-                              FocusShape focusShape, DismissListener dismissListener, int roundRectRadius) {
+                              FocusShape focusShape, DismissListener dismissListener, int roundRectRadius,
+                              int focusPositionX, int focusPositionY, int focusCircleRadius, int focusRectangleWidth, int focusRectangleHeight) {
         mId = id;
         mActivity = activity;
         mView = view;
@@ -146,6 +154,11 @@ public class FancyShowCaseView {
         mFitSystemWindows = fitSystemWindows;
         mFocusShape = focusShape;
         mDismissListener = dismissListener;
+        mFocusPositionX = focusPositionX;
+        mFocusPositionY = focusPositionY;
+        mFocusCircleRadius = focusCircleRadius;
+        mFocusRectangleWidth = focusRectangleWidth;
+        mFocusRectangleHeight = focusRectangleHeight;
 
         initializeParameters();
     }
@@ -213,7 +226,14 @@ public class FancyShowCaseView {
                 mRadius = mCalculator.getViewRadius();
             }
 
+
             imageView.setParameters(mBackgroundColor, mCalculator);
+            if (mFocusPositionX > 0 && mFocusPositionY > 0 && mFocusRectangleWidth > 0 && mFocusRectangleHeight > 0) {
+                mCalculator.setRectPosition(mFocusPositionX, mFocusPositionY, mFocusRectangleWidth, mFocusRectangleHeight);
+            }
+            if (mFocusPositionX > 0 && mFocusPositionY > 0 && mFocusCircleRadius > 0) {
+                mCalculator.setCirclePosition(mFocusPositionX, mFocusPositionY, mFocusCircleRadius);
+            }
             imageView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT));
             if (mFocusBorderColor != 0 && mFocusBorderSize > 0) {
@@ -363,6 +383,9 @@ public class FancyShowCaseView {
                         int startRadius = 0;
                         if (mView != null) {
                             startRadius = mView.getWidth() / 2;
+                        } else {
+                            mCenterX = mFocusPositionX;
+                            mCenterY = mFocusPositionY;
                         }
                         Animator enterAnimator = ViewAnimationUtils.createCircularReveal(mContainer,
                                 mCenterX, mCenterY, startRadius, revealRadius);
@@ -480,6 +503,7 @@ public class FancyShowCaseView {
         private FocusShape mFocusShape = FocusShape.CIRCLE;
         private DismissListener mDismissListener = null;
         private int mFocusBorderSize;
+        private int mFocusPositionX, mFocusPositionY, mFocusCircleRadius, mFocusRectangleWidth, mFocusRectangleHeight;
 
         /**
          * Constructor for Builder class
@@ -655,6 +679,40 @@ public class FancyShowCaseView {
         }
 
         /**
+         *  Focus round rectangle at specific position
+         *
+         * @param positionX       focus at specific position Y coordinate
+         * @param positionY       focus at specific position circle radius
+         * @param positionWidth   focus at specific position rectangle width
+         * @param positionHeight  focus at specific position rectangle height
+         * @return Builder
+         */
+
+        public Builder focusRectAtPosition(int positionX, int positionY, int positionWidth, int positionHeight) {
+            mFocusPositionX = positionX;
+            mFocusPositionY = positionY;
+            mFocusRectangleWidth = positionWidth;
+            mFocusRectangleHeight = positionHeight;
+            return this;
+        }
+
+        /**
+         *  Focus circle at specific position
+         *
+         * @param positionX       focus at specific position Y coordinate
+         * @param positionY       focus at specific position circle radius
+         * @param radius          focus at specific position circle radius
+         * @return Builder
+         */
+
+        public Builder focusCircleAtPosition(int positionX, int positionY, int radius) {
+            mFocusPositionX = positionX;
+            mFocusPositionY = positionY;
+            mFocusCircleRadius = radius;
+            return this;
+        }
+
+        /**
          * @param dismissListener the dismiss listener
          * @return Builder
          */
@@ -676,7 +734,8 @@ public class FancyShowCaseView {
         public FancyShowCaseView build() {
             return new FancyShowCaseView(mActivity, mView, mId, mTitle, mSpannedTitle, mTitleGravity, mTitleStyle, mTitleSize, mTitleSizeUnit,
                     mFocusCircleRadiusFactor, mBackgroundColor, mFocusBorderColor, mFocusBorderSize, mCustomViewRes, mViewInflateListener,
-                    mEnterAnimation, mExitAnimation, mCloseOnTouch, mFitSystemWindows, mFocusShape, mDismissListener, mRoundRectRadius);
+                    mEnterAnimation, mExitAnimation, mCloseOnTouch, mFitSystemWindows, mFocusShape, mDismissListener, mRoundRectRadius,
+                    mFocusPositionX, mFocusPositionY, mFocusCircleRadius, mFocusRectangleWidth, mFocusRectangleHeight);
         }
     }
 }
