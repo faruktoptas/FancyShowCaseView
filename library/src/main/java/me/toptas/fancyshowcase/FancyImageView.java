@@ -18,9 +18,9 @@ class FancyImageView extends ImageView {
     private Bitmap mBitmap;
     private Paint mBackgroundPaint, mErasePaint, mCircleBorderPaint;
     private int mBackgroundColor = Color.TRANSPARENT;
-    public int mFocusBorderColor = Color.TRANSPARENT;
-    public int mFocusBorderSize;
-    public int mRoundRectRadius = 20;
+    private int mFocusBorderColor = Color.TRANSPARENT;
+    private int mFocusBorderSize;
+    private int mRoundRectRadius = 20;
     private Calculator mCalculator;
     private int mAnimCounter = 0;
     private int mStep = 1;
