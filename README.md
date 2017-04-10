@@ -1,6 +1,9 @@
 # FancyShowCaseView [![Status](https://travis-ci.org/faruktoptas/FancyShowCaseView.svg?branch=master)](https://travis-ci.org/faruktoptas/FancyShowCaseView) [![](https://jitpack.io/v/faruktoptas/FancyShowCaseView.svg)](https://jitpack.io/#faruktoptas/FancyShowCaseView)  [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-FancyShowCaseView-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/5440) [![API](https://img.shields.io/badge/API-10%2B-blue.svg?style=flat)](https://android-arsenal.com/api?level=10)
 An easy-to-use customizable show case view with circular reveal animation.
 
+![materialup](https://cloud.githubusercontent.com/assets/1595227/24761426/f80dbc64-1af3-11e7-9c99-bca3dd836a8e.png)
+
+[@MaterialUp Best of the Day](https://material.uplabs.com/posts/fancyshowcaseview)
 
 ## Features
 - Circular reveal animation (API Level 21+)
@@ -32,7 +35,7 @@ allprojects {
 Then, add the library to your module `build.gradle`
 ```gradle
 dependencies {
-    com.github.faruktoptas:FancyShowCaseView:latest.release.here
+    compile 'com.github.faruktoptas:FancyShowCaseView:latest.release.here'
 }
 ```
 
