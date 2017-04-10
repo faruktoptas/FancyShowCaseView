@@ -60,7 +60,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/default_margin"
-                    android:text="Round rect positioning" />
+                    android:text="Focus a Position" />
         </LinearLayout>
 
         <LinearLayout
