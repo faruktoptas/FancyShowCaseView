@@ -228,10 +228,10 @@ public class FancyShowCaseView {
 
 
             imageView.setParameters(mBackgroundColor, mCalculator);
-            if (mFocusPositionX > 0 && mFocusPositionY > 0 && mFocusRectangleWidth > 0 && mFocusRectangleHeight > 0) {
+            if (mFocusRectangleWidth > 0 && mFocusRectangleHeight > 0) {
                 mCalculator.setRectPosition(mFocusPositionX, mFocusPositionY, mFocusRectangleWidth, mFocusRectangleHeight);
             }
-            if (mFocusPositionX > 0 && mFocusPositionY > 0 && mFocusCircleRadius > 0) {
+            if (mFocusCircleRadius > 0) {
                 mCalculator.setCirclePosition(mFocusPositionX, mFocusPositionY, mFocusCircleRadius);
             }
             imageView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
@@ -383,7 +383,7 @@ public class FancyShowCaseView {
                         int startRadius = 0;
                         if (mView != null) {
                             startRadius = mView.getWidth() / 2;
-                        } else {
+                        } else if (mFocusCircleRadius > 0 || mFocusRectangleWidth > 0 || mFocusRectangleHeight > 0 ){
                             mCenterX = mFocusPositionX;
                             mCenterY = mFocusPositionY;
                         }
