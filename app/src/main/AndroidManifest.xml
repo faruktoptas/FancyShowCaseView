@@ -19,6 +19,8 @@
         <activity android:theme="@style/NoActionBar" android:name=".SecondActivity"/>
 
         <activity android:name=".QueueActivity"/>
+
+        <activity android:name=".RecyclerViewActivity"/>
     </application>
 
 </manifest>

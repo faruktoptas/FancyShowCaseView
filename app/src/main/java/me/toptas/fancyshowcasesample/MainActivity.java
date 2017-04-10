@@ -228,6 +228,11 @@ public class MainActivity extends BaseActivity {
         startActivity(new Intent(this, SecondActivity.class));
     }
 
+    @OnClick(R.id.btn_recycler_view)
+    public void recyclerViewSample(){
+        startActivity(new Intent(this, RecyclerViewActivity.class));
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
