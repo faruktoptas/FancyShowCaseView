@@ -63,6 +63,7 @@ public class MainActivity extends BaseActivity {
         new FancyShowCaseView.Builder(this)
                 .focusOn(view)
                 .focusShape(FocusShape.ROUNDED_RECTANGLE)
+                .roundRectRadius(90)
                 .title("Focus on View")
                 .build()
                 .show();
@@ -81,6 +82,21 @@ public class MainActivity extends BaseActivity {
                 .title("Focus on View with larger circle")
                 .focusBorderColor(Color.GREEN)
                 .titleStyle(0, Gravity.BOTTOM | Gravity.CENTER)
+                .build()
+                .show();
+    }
+
+    /**
+     * Shows FancyShowCaseView at specific position (round rectangle shape)
+     *
+     * @param view View to focus
+     */
+    @OnClick(R.id.btn_rect_position)
+    public void focusRoundRectPosition(View view) {
+        new FancyShowCaseView.Builder(this)
+                .title("Focus on larger view")
+                .focusRectAtPosition(260, 85,  480, 80)
+                .roundRectRadius(60)
                 .build()
                 .show();
     }

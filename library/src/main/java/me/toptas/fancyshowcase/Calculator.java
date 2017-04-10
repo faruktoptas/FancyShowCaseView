@@ -14,10 +14,13 @@ class Calculator {
 
     private final int mBitmapWidth, mBitmapHeight;
     private FocusShape mFocusShape;
-    private int mFocusWidth, mFocusHeight, mCircleCenterX, mCircleCenterY, mViewRadius;
+    private int mFocusWidth, mFocusHeight, mCircleCenterX, mCircleCenterY, mCircleRadius;
     private boolean mHasFocus;
 
 
+    public void setmCircleRadius(int mCircleRadius) {
+        this.mCircleRadius = mCircleRadius;
+    }
     Calculator(Activity activity, FocusShape focusShape, View view, double radiusFactor,
                boolean fitSystemWindows) {
 
@@ -37,12 +40,47 @@ class Calculator {
             mFocusShape = focusShape;
             mCircleCenterX = viewPoint[0] + mFocusWidth / 2;
             mCircleCenterY = viewPoint[1] + mFocusHeight / 2 - adjustHeight;
-            mViewRadius = (int) ((int) (Math.hypot(view.getWidth(), view.getHeight()) / 2) * radiusFactor);
+            mCircleRadius = (int) ((int) (Math.hypot(view.getWidth(), view.getHeight()) / 2) * radiusFactor);
             mHasFocus = true;
         } else {
             mHasFocus = false;
         }
     }
+
+    /**
+     *  Setting round rectangle focus at specific position
+     *
+     * @param positionX       focus at specific position Y coordinate
+     * @param positionY       focus at specific position circle radius
+     * @param rectWidth   focus at specific position rectangle width
+     * @param rectHeight  focus at specific position rectangle height
+     */
+
+    public void setRectPosition(int positionX, int positionY, int rectWidth, int rectHeight) {
+        mCircleCenterX = positionX;
+        mCircleCenterY = positionY;
+        mFocusWidth = rectWidth;
+        mFocusHeight = rectHeight;
+        mFocusShape = FocusShape.ROUNDED_RECTANGLE;
+        mHasFocus = true;
+    }
+
+    /**
+     *  Setting circle focus at specific position
+     *
+     * @param positionX       focus at specific position Y coordinate
+     * @param positionY       focus at specific position circle radius
+     * @param radius          focus at specific position circle radius
+     */
+
+    public void setCirclePosition(int positionX, int positionY, int radius) {
+        mCircleCenterX = positionX;
+        mCircleRadius = radius;
+        mCircleCenterY = positionY;
+        mFocusShape = FocusShape.CIRCLE;
+        mHasFocus = true;
+    }
+
 
     /**
      * @return Shape of focus
@@ -83,7 +121,7 @@ class Calculator {
      * @return Radius of focus circle
      */
     int getViewRadius() {
-        return mViewRadius;
+        return mCircleRadius;
     }
 
     /**
@@ -113,7 +151,7 @@ class Calculator {
      * @return Radius of animating circle
      */
     float circleRadius(int animCounter, double animMoveFactor) {
-        return (float) (mViewRadius + animCounter * animMoveFactor);
+        return (float) (mCircleRadius + animCounter * animMoveFactor);
     }
 
 
