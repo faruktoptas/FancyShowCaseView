@@ -734,11 +734,12 @@ public class FancyShowCaseView {
         }
 
         /**
-         * @param animateFocus true if Focus should be animated, false otherwise
+         * disable Focus Animation
+         *
          * @return Builder
          */
-        public Builder animateFocus(final boolean animateFocus) {
-            mFocusAnimationEnabled = animateFocus;
+        public Builder disableFocusAnimation() {
+            mFocusAnimationEnabled = false;
             return this;
         }
 

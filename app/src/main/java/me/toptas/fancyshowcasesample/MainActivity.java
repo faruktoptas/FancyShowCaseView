@@ -213,7 +213,7 @@ public class MainActivity extends BaseActivity {
     public void noFocusAnimation(View view) {
         mFancyShowCaseView = new FancyShowCaseView.Builder(this)
                 .focusOn(view)
-                .animateFocus(false)
+                .disableFocusAnimation()
                 .build();
         mFancyShowCaseView.show();
     }

@@ -133,6 +133,11 @@ class FancyImageView extends ImageView {
         }
         canvas.drawBitmap(mBitmap, 0, 0, mBackgroundPaint);
         if (mCalculator.hasFocus()) {
+            if (mCalculator.getFocusShape().equals(FocusShape.CIRCLE)) {
+                drawCircle(canvas);
+            } else {
+                drawRoundedRectangle(canvas);
+            }
             if (mAnimationEnabled) {
                 if (mAnimCounter == ANIM_COUNTER_MAX) {
                     mStep = -1;
@@ -140,14 +145,8 @@ class FancyImageView extends ImageView {
                     mStep = 1;
                 }
                 mAnimCounter = mAnimCounter + mStep;
+                postInvalidate();
             }
-            if (mCalculator.getFocusShape().equals(FocusShape.CIRCLE)) {
-                drawCircle(canvas);
-            } else {
-                drawRoundedRectangle(canvas);
-            }
-
-            postInvalidate();
         }
     }
 
