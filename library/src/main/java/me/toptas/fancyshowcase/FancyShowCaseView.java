@@ -31,7 +31,6 @@ import android.widget.TextView;
 
 public class FancyShowCaseView {
 
-
     // Tag for container view
     private static final String CONTAINER_TAG = "ShowCaseViewTag";
     // SharedPreferences name
@@ -94,6 +93,9 @@ public class FancyShowCaseView {
     private Calculator mCalculator;
 
     private int mFocusPositionX, mFocusPositionY, mFocusCircleRadius, mFocusRectangleWidth, mFocusRectangleHeight;
+
+    private final boolean mFocusAnimationEnabled;
+
     /**
      * Constructor for FancyShowCaseView
      *
@@ -124,6 +126,7 @@ public class FancyShowCaseView {
      * @param focusCircleRadius       focus at specific position circle radius
      * @param focusRectangleWidth     focus at specific position rectangle width
      * @param focusRectangleHeight    focus at specific position rectangle height
+     * @param animationEnabled        flag to enable/disable animation
      */
     private FancyShowCaseView(Activity activity, View view, String id, String title, Spanned spannedTitle,
                               int titleGravity, int titleStyle, int titleSize, int titleSizeUnit, double focusCircleRadiusFactor,
@@ -131,7 +134,8 @@ public class FancyShowCaseView {
                               OnViewInflateListener viewInflateListener, Animation enterAnimation,
                               Animation exitAnimation, boolean closeOnTouch, boolean fitSystemWindows,
                               FocusShape focusShape, DismissListener dismissListener, int roundRectRadius,
-                              int focusPositionX, int focusPositionY, int focusCircleRadius, int focusRectangleWidth, int focusRectangleHeight) {
+                              int focusPositionX, int focusPositionY, int focusCircleRadius, int focusRectangleWidth, int focusRectangleHeight,
+                              final boolean animationEnabled) {
         mId = id;
         mActivity = activity;
         mView = view;
@@ -159,6 +163,7 @@ public class FancyShowCaseView {
         mFocusCircleRadius = focusCircleRadius;
         mFocusRectangleWidth = focusRectangleWidth;
         mFocusRectangleHeight = focusRectangleHeight;
+        mFocusAnimationEnabled = animationEnabled;
 
         initializeParameters();
     }
@@ -234,6 +239,7 @@ public class FancyShowCaseView {
             if (mFocusCircleRadius > 0) {
                 mCalculator.setCirclePosition(mFocusPositionX, mFocusPositionY, mFocusCircleRadius);
             }
+            imageView.setAnimationEnabled(mFocusAnimationEnabled);
             imageView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT));
             if (mFocusBorderColor != 0 && mFocusBorderSize > 0) {
@@ -256,11 +262,11 @@ public class FancyShowCaseView {
         }
     }
 
-/**
-* Check is FancyShowCaseView visible
-*@param activity should be used to find FancyShowCaseView inside it
-*
-* */
+    /**
+    * Check is FancyShowCaseView visible
+    *@param activity should be used to find FancyShowCaseView inside it
+    *
+    * */
     public static Boolean isVisible(Activity activity) {
         ViewGroup androidContent = (ViewGroup) activity.findViewById(android.R.id.content);
         ViewGroup mRoot = (ViewGroup) androidContent.getParent().getParent();
@@ -504,6 +510,7 @@ public class FancyShowCaseView {
         private DismissListener mDismissListener = null;
         private int mFocusBorderSize;
         private int mFocusPositionX, mFocusPositionY, mFocusCircleRadius, mFocusRectangleWidth, mFocusRectangleHeight;
+        private boolean mFocusAnimationEnabled = true;
 
         /**
          * Constructor for Builder class
@@ -727,6 +734,15 @@ public class FancyShowCaseView {
         }
 
         /**
+         * @param animateFocus true if Focus should be animated, false otherwise
+         * @return Builder
+         */
+        public Builder animateFocus(final boolean animateFocus) {
+            mFocusAnimationEnabled = animateFocus;
+            return this;
+        }
+
+        /**
          * builds the builder
          *
          * @return {@link FancyShowCaseView} with given parameters
@@ -735,7 +751,7 @@ public class FancyShowCaseView {
             return new FancyShowCaseView(mActivity, mView, mId, mTitle, mSpannedTitle, mTitleGravity, mTitleStyle, mTitleSize, mTitleSizeUnit,
                     mFocusCircleRadiusFactor, mBackgroundColor, mFocusBorderColor, mFocusBorderSize, mCustomViewRes, mViewInflateListener,
                     mEnterAnimation, mExitAnimation, mCloseOnTouch, mFitSystemWindows, mFocusShape, mDismissListener, mRoundRectRadius,
-                    mFocusPositionX, mFocusPositionY, mFocusCircleRadius, mFocusRectangleWidth, mFocusRectangleHeight);
+                    mFocusPositionX, mFocusPositionY, mFocusCircleRadius, mFocusRectangleWidth, mFocusRectangleHeight, mFocusAnimationEnabled);
         }
     }
 }

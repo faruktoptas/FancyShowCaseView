@@ -22,9 +22,10 @@ class FancyImageView extends ImageView {
     private int mFocusBorderSize;
     private int mRoundRectRadius = 20;
     private Calculator mCalculator;
-    private int mAnimCounter = 0;
+    private int mAnimCounter = 20;
     private int mStep = 1;
     private double mAnimMoveFactor = 1;
+    private boolean mAnimationEnabled = true;
     private Path mPath;
     private RectF rectF;
 
@@ -110,6 +111,14 @@ class FancyImageView extends ImageView {
     }
 
     /**
+     * Enable/disable animation
+     * @param animationEnabled
+     */
+    public void setAnimationEnabled(final boolean animationEnabled) {
+        mAnimationEnabled = animationEnabled;
+    }
+
+    /**
      * Draws background and moving focus area
      *
      * @param canvas draw canvas
@@ -124,17 +133,20 @@ class FancyImageView extends ImageView {
         }
         canvas.drawBitmap(mBitmap, 0, 0, mBackgroundPaint);
         if (mCalculator.hasFocus()) {
-            mAnimCounter = mAnimCounter + mStep;
+            if (mAnimationEnabled) {
+                if (mAnimCounter == ANIM_COUNTER_MAX) {
+                    mStep = -1;
+                } else if (mAnimCounter == 0) {
+                    mStep = 1;
+                }
+                mAnimCounter = mAnimCounter + mStep;
+            }
             if (mCalculator.getFocusShape().equals(FocusShape.CIRCLE)) {
                 drawCircle(canvas);
             } else {
                 drawRoundedRectangle(canvas);
             }
-            if (mAnimCounter == ANIM_COUNTER_MAX) {
-                mStep = -1;
-            } else if (mAnimCounter == 0) {
-                mStep = 1;
-            }
+
             postInvalidate();
         }
     }
