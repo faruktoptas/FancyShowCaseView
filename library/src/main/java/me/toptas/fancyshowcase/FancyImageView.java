@@ -14,19 +14,19 @@ import android.widget.ImageView;
 
 class FancyImageView extends ImageView {
 
-    private static final int ANIM_COUNTER_MAX = 20;
-    private Bitmap mBitmap;
-    private Paint mBackgroundPaint, mErasePaint, mCircleBorderPaint;
-    private int mBackgroundColor = Color.TRANSPARENT;
-    private int mFocusBorderColor = Color.TRANSPARENT;
-    private int mFocusBorderSize;
-    private int mRoundRectRadius = 20;
-    private Calculator mCalculator;
-    private int mAnimCounter = 0;
-    private int mStep = 1;
-    private double mAnimMoveFactor = 1;
-    private Path mPath;
-    private RectF rectF;
+    static final int ANIM_COUNTER_MAX = 20;
+    Bitmap mBitmap;
+    Paint mBackgroundPaint, mErasePaint, mCircleBorderPaint;
+    int mBackgroundColor = Color.TRANSPARENT;
+    int mFocusBorderColor = Color.TRANSPARENT;
+    int mFocusBorderSize;
+    int mRoundRectRadius = 20;
+    Calculator mCalculator;
+    int mAnimCounter = 0;
+    int mStep = 1;
+    double mAnimMoveFactor = 1;
+    Path mPath;
+    RectF rectF;
 
     public FancyImageView(Context context) {
         super(context);

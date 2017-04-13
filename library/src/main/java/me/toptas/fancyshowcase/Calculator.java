@@ -21,6 +21,7 @@ class Calculator {
     public void setmCircleRadius(int mCircleRadius) {
         this.mCircleRadius = mCircleRadius;
     }
+
     Calculator(Activity activity, FocusShape focusShape, View view, double radiusFactor,
                boolean fitSystemWindows) {
 
@@ -31,8 +32,7 @@ class Calculator {
         mBitmapWidth = deviceWidth;
         mBitmapHeight = deviceHeight - (fitSystemWindows ? 0 : Utils.getStatusBarHeight(activity));
         if (view != null) {
-            int adjustHeight = (fitSystemWindows && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
-                    ? 0 : Utils.getStatusBarHeight(activity));
+            int adjustHeight = adjustHeight(activity, fitSystemWindows);
             int[] viewPoint = new int[2];
             view.getLocationInWindow(viewPoint);
             mFocusWidth = view.getWidth();
@@ -45,6 +45,18 @@ class Calculator {
         } else {
             mHasFocus = false;
         }
+    }
+
+    /**
+     *  This method was extracted for the sake of unit testing
+     *
+     * @param activity
+     * @param fitSystemWindows
+     * @return
+     */
+    int adjustHeight(Activity activity, boolean fitSystemWindows) {
+        return (fitSystemWindows && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+                ? 0 : Utils.getStatusBarHeight(activity));
     }
 
     /**

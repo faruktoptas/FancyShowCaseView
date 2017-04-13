@@ -256,11 +256,11 @@ public class FancyShowCaseView {
         }
     }
 
-/**
-* Check is FancyShowCaseView visible
-*@param activity should be used to find FancyShowCaseView inside it
-*
-* */
+    /**
+    * Check if FancyShowCaseView is visible
+    *@param activity should be used to find FancyShowCaseView inside it
+    *
+    * */
     public static Boolean isVisible(Activity activity) {
         ViewGroup androidContent = (ViewGroup) activity.findViewById(android.R.id.content);
         ViewGroup mRoot = (ViewGroup) androidContent.getParent().getParent();
