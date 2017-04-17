@@ -207,8 +207,15 @@ public class MainActivity extends BaseActivity {
                 .closeOnTouch(false)
                 .build();
         mFancyShowCaseView.show();
+    }
 
-
+    @OnClick(R.id.btn_no_anim)
+    public void noFocusAnimation(View view) {
+        mFancyShowCaseView = new FancyShowCaseView.Builder(this)
+                .focusOn(view)
+                .disableFocusAnimation()
+                .build();
+        mFancyShowCaseView.show();
     }
 
     @OnClick(R.id.btn_queue)

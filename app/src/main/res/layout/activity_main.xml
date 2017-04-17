@@ -98,6 +98,13 @@
                 android:orientation="horizontal">
 
             <Button
+                    android:id="@+id/btn_no_anim"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/default_margin"
+                    android:text="No\nAnimation" />
+
+            <Button
                     android:id="@+id/btn_anim"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
