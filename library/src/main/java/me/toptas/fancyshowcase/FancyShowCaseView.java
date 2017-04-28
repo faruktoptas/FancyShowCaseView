@@ -8,11 +8,14 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Build;
+import android.support.annotation.AttrRes;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.annotation.StyleRes;
 import android.text.Spanned;
+import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
@@ -29,7 +32,24 @@ import android.widget.TextView;
  * FancyShowCaseView class
  */
 
-public class FancyShowCaseView {
+public class FancyShowCaseView extends FrameLayout {
+
+    FancyShowCaseView(@NonNull Context context) {
+        super(context);
+    }
+
+    FancyShowCaseView(@NonNull Context context, @Nullable AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    FancyShowCaseView(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    FancyShowCaseView(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr, @StyleRes int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+    }
 
     // Tag for container view
     private static final String CONTAINER_TAG = "ShowCaseViewTag";
@@ -37,32 +57,30 @@ public class FancyShowCaseView {
     private static final String PREF_NAME = "PrefShowCaseView";
 
     /**
-     * resets the show once flag
+     * Resets the show once flag
      *
      * @param context context that should be used to create the shared preference instance
-     * @param id id of the show once flag that should be reset
+     * @param id      id of the show once flag that should be reset
      */
     public static void resetShowOnce(Context context, String id) {
         SharedPreferences sharedPrefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         sharedPrefs.edit().remove(id).commit();
-        return;
     }
 
     /**
-     * resets all show once flags
+     * Resets all show once flags
      *
      * @param context context that should be used to create the shared preference instance
      */
     public static void resetAllShowOnce(Context context) {
         SharedPreferences sharedPrefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         sharedPrefs.edit().clear().commit();
-        return;
     }
 
     /**
      * Builder parameters
      */
-    private final Activity mActivity;
+    private Activity mActivity;
     private String mTitle;
     private Spanned mSpannedTitle;
     private String mId;
@@ -87,14 +105,13 @@ public class FancyShowCaseView {
 
     private int mAnimationDuration = 400;
     private int mCenterX, mCenterY, mRadius;
-    private FrameLayout mContainer;
     private ViewGroup mRoot;
     private SharedPreferences mSharedPreferences;
     private Calculator mCalculator;
 
     private int mFocusPositionX, mFocusPositionY, mFocusCircleRadius, mFocusRectangleWidth, mFocusRectangleHeight;
 
-    private final boolean mFocusAnimationEnabled;
+    private boolean mFocusAnimationEnabled;
 
     /**
      * Constructor for FancyShowCaseView
@@ -136,6 +153,7 @@ public class FancyShowCaseView {
                               FocusShape focusShape, DismissListener dismissListener, int roundRectRadius,
                               int focusPositionX, int focusPositionY, int focusCircleRadius, int focusRectangleWidth, int focusRectangleHeight,
                               final boolean animationEnabled) {
+        super(activity);
         mId = id;
         mActivity = activity;
         mView = view;
@@ -205,22 +223,22 @@ public class FancyShowCaseView {
 
         ViewGroup androidContent = (ViewGroup) mActivity.findViewById(android.R.id.content);
         mRoot = (ViewGroup) androidContent.getParent().getParent();
-        mContainer = (FrameLayout) mRoot.findViewWithTag(CONTAINER_TAG);
-        if (mContainer == null) {
-            mContainer = new FrameLayout(mActivity);
-            mContainer.setTag(CONTAINER_TAG);
+        FancyShowCaseView visibleView = (FancyShowCaseView) mRoot.findViewWithTag(CONTAINER_TAG);
+        if (visibleView == null) {
+            //mContainer = new FrameLayout(mActivity);
+            setTag(CONTAINER_TAG);
             if (mCloseOnTouch) {
-                mContainer.setClickable(true);
-                mContainer.setOnClickListener(new View.OnClickListener() {
+                setClickable(true);
+                setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         hide();
                     }
                 });
             }
-            mContainer.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+            setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT));
-            mRoot.addView(mContainer);
+            mRoot.addView(this);
 
 
             FancyImageView imageView = new FancyImageView(mActivity);
@@ -249,7 +267,7 @@ public class FancyShowCaseView {
                 imageView.setRoundRectRadius(mRoundRectRadius);
             }
             //imageView.setImageBitmap(bitmap);
-            mContainer.addView(imageView);
+            addView(imageView);
 
             if (mCustomViewRes == 0) {
                 inflateTitleView();
@@ -263,26 +281,27 @@ public class FancyShowCaseView {
     }
 
     /**
-    * Check is FancyShowCaseView visible
-    *@param activity should be used to find FancyShowCaseView inside it
-    *
-    * */
+     * Check is FancyShowCaseView visible
+     *
+     * @param activity should be used to find FancyShowCaseView inside it
+     */
     public static Boolean isVisible(Activity activity) {
         ViewGroup androidContent = (ViewGroup) activity.findViewById(android.R.id.content);
         ViewGroup mRoot = (ViewGroup) androidContent.getParent().getParent();
-        FrameLayout mContainer = (FrameLayout) mRoot.findViewWithTag(CONTAINER_TAG);
+        FancyShowCaseView mContainer = (FancyShowCaseView) mRoot.findViewWithTag(CONTAINER_TAG);
         return mContainer != null;
     }
+
     /**
      * Hide  FancyShowCaseView
-     *@param activity should be used to hide FancyShowCaseView inside it
      *
-     * */
-    public static void hideCurrent(Activity activity){
+     * @param activity should be used to hide FancyShowCaseView inside it
+     */
+    public static void hideCurrent(Activity activity) {
         ViewGroup androidContent = (ViewGroup) activity.findViewById(android.R.id.content);
         ViewGroup mRoot = (ViewGroup) androidContent.getParent().getParent();
-        FrameLayout mContainer = (FrameLayout) mRoot.findViewWithTag(CONTAINER_TAG);
-        mRoot.removeView(mContainer);
+        FancyShowCaseView mContainer = (FancyShowCaseView) mRoot.findViewWithTag(CONTAINER_TAG);
+        mContainer.hide();
     }
 
     /**
@@ -290,13 +309,13 @@ public class FancyShowCaseView {
      */
     private void startEnterAnimation() {
         if (mEnterAnimation != null) {
-            mContainer.startAnimation(mEnterAnimation);
+            startAnimation(mEnterAnimation);
         } else if (Utils.shouldShowCircularAnimation()) {
             doCircularEnterAnimation();
         } else {
             Animation fadeInAnimation = AnimationUtils.loadAnimation(mActivity, R.anim.fscv_fade_in);
             fadeInAnimation.setFillAfter(true);
-            mContainer.startAnimation(fadeInAnimation);
+            startAnimation(fadeInAnimation);
         }
     }
 
@@ -305,7 +324,7 @@ public class FancyShowCaseView {
      */
     public void hide() {
         if (mExitAnimation != null) {
-            mContainer.startAnimation(mExitAnimation);
+            startAnimation(mExitAnimation);
         } else if (Utils.shouldShowCircularAnimation()) {
             doCircularExitAnimation();
         } else {
@@ -327,7 +346,7 @@ public class FancyShowCaseView {
                 }
             });
             fadeOut.setFillAfter(true);
-            mContainer.startAnimation(fadeOut);
+            startAnimation(fadeOut);
         }
     }
 
@@ -338,8 +357,8 @@ public class FancyShowCaseView {
      * @param viewInflateListener inflate listener for custom view
      */
     private void inflateCustomView(@LayoutRes int layout, OnViewInflateListener viewInflateListener) {
-        View view = mActivity.getLayoutInflater().inflate(layout, mContainer, false);
-        mContainer.addView(view);
+        View view = mActivity.getLayoutInflater().inflate(layout, this, false);
+        this.addView(view);
         if (viewInflateListener != null) {
             viewInflateListener.onViewInflated(view);
         }
@@ -378,22 +397,22 @@ public class FancyShowCaseView {
      */
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void doCircularEnterAnimation() {
-        mContainer.getViewTreeObserver().addOnPreDrawListener(
+        getViewTreeObserver().addOnPreDrawListener(
                 new ViewTreeObserver.OnPreDrawListener() {
                     @Override
                     public boolean onPreDraw() {
-                        mContainer.getViewTreeObserver().removeOnPreDrawListener(this);
+                        getViewTreeObserver().removeOnPreDrawListener(this);
 
                         final int revealRadius = (int) Math.hypot(
-                                mContainer.getWidth(), mContainer.getHeight());
+                                getWidth(), getHeight());
                         int startRadius = 0;
                         if (mView != null) {
                             startRadius = mView.getWidth() / 2;
-                        } else if (mFocusCircleRadius > 0 || mFocusRectangleWidth > 0 || mFocusRectangleHeight > 0 ){
+                        } else if (mFocusCircleRadius > 0 || mFocusRectangleWidth > 0 || mFocusRectangleHeight > 0) {
                             mCenterX = mFocusPositionX;
                             mCenterY = mFocusPositionY;
                         }
-                        Animator enterAnimator = ViewAnimationUtils.createCircularReveal(mContainer,
+                        Animator enterAnimator = ViewAnimationUtils.createCircularReveal(FancyShowCaseView.this,
                                 mCenterX, mCenterY, startRadius, revealRadius);
                         enterAnimator.setDuration(mAnimationDuration);
                         enterAnimator.setInterpolator(AnimationUtils.loadInterpolator(mActivity,
@@ -410,8 +429,8 @@ public class FancyShowCaseView {
      */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void doCircularExitAnimation() {
-        final int revealRadius = (int) Math.hypot(mContainer.getWidth(), mContainer.getHeight());
-        Animator exitAnimator = ViewAnimationUtils.createCircularReveal(mContainer,
+        final int revealRadius = (int) Math.hypot(getWidth(), getHeight());
+        Animator exitAnimator = ViewAnimationUtils.createCircularReveal(this,
                 mCenterX, mCenterY, revealRadius, 0f);
         exitAnimator.setDuration(mAnimationDuration);
         exitAnimator.setInterpolator(AnimationUtils.loadInterpolator(mActivity,
@@ -450,28 +469,10 @@ public class FancyShowCaseView {
      * Removes FancyShowCaseView view from activity root view
      */
     public void removeView() {
-        mRoot.removeView(mContainer);
+        mRoot.removeView(this);
         if (mDismissListener != null) {
             mDismissListener.onDismiss(mId);
         }
-    }
-
-    /**
-     * Returns if FancyShowCaseView is showing
-     *
-     * @return true if showing
-     */
-    public boolean isShowing() {
-        return mContainer.isShown();
-    }
-
-    /**
-     * Returns FrameLayout
-     *
-     * @return FrameLayout used to display {@link FancyShowCaseView}
-     */
-    public FrameLayout getContainerView() {
-        return mContainer;
     }
 
     protected DismissListener getDismissListener() {
@@ -554,8 +555,7 @@ public class FancyShowCaseView {
         }
 
         /**
-         *
-         * @param focusBorderColor
+         * @param focusBorderColor Border color for focus shape
          * @return Builder
          */
         public Builder focusBorderColor(int focusBorderColor) {
@@ -564,8 +564,7 @@ public class FancyShowCaseView {
         }
 
         /**
-         *
-         * @param focusBorderSize
+         * @param focusBorderSize Border size for focus shape
          * @return Builder
          */
         public Builder focusBorderSize(int focusBorderSize) {
@@ -586,7 +585,7 @@ public class FancyShowCaseView {
          * the defined text size overrides any defined size in the default or provided style
          *
          * @param titleSize title size
-         * @param unit title text unit
+         * @param unit      title text unit
          * @return Builder
          */
         public Builder titleSize(int titleSize, int unit) {
@@ -686,12 +685,12 @@ public class FancyShowCaseView {
         }
 
         /**
-         *  Focus round rectangle at specific position
+         * Focus round rectangle at specific position
          *
-         * @param positionX       focus at specific position Y coordinate
-         * @param positionY       focus at specific position circle radius
-         * @param positionWidth   focus at specific position rectangle width
-         * @param positionHeight  focus at specific position rectangle height
+         * @param positionX      focus at specific position Y coordinate
+         * @param positionY      focus at specific position circle radius
+         * @param positionWidth  focus at specific position rectangle width
+         * @param positionHeight focus at specific position rectangle height
          * @return Builder
          */
 
@@ -704,11 +703,11 @@ public class FancyShowCaseView {
         }
 
         /**
-         *  Focus circle at specific position
+         * Focus circle at specific position
          *
-         * @param positionX       focus at specific position Y coordinate
-         * @param positionY       focus at specific position circle radius
-         * @param radius          focus at specific position circle radius
+         * @param positionX focus at specific position Y coordinate
+         * @param positionY focus at specific position circle radius
+         * @param radius    focus at specific position circle radius
          * @return Builder
          */
 
