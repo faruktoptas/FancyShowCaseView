@@ -1,9 +1,13 @@
 package me.toptas.fancyshowcase;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Build;
 import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
 /**
  * Created by ftoptas on 23/03/17.
@@ -17,10 +21,10 @@ class Calculator {
     private int mFocusWidth, mFocusHeight, mCircleCenterX, mCircleCenterY, mCircleRadius;
     private boolean mHasFocus;
 
-
-    public void setmCircleRadius(int mCircleRadius) {
+    public void setCircleRadius(int mCircleRadius) {
         this.mCircleRadius = mCircleRadius;
     }
+
     Calculator(Activity activity, FocusShape focusShape, View view, double radiusFactor,
                boolean fitSystemWindows) {
 
@@ -79,6 +83,33 @@ class Calculator {
         mCircleCenterY = positionY;
         mFocusShape = FocusShape.CIRCLE;
         mHasFocus = true;
+    }
+
+    public void calcAutoTextPosition(final View view, final int padding) {
+        view.post(new Runnable() {
+            @Override
+            public void run() {
+
+                // calc target view position
+                float top = roundRectTop(0, 0);
+                float bottom = roundRectBottom(0, 0);
+
+                int hParent = ((View)view.getParent()).getHeight();
+
+                int spaceAbove = (int) top;
+                int spaceBelow = hParent - (int) bottom;
+
+                // TODO:
+                // 1) search for biggest rectangular space, currently only compares space above with space below
+                // 2) setter for padding
+                // for easiness, we position the text view view custom paddings
+                if (spaceAbove > spaceBelow) {
+                    view.setPadding(padding, padding, hParent - (int)top, padding);
+                } else {
+                    view.setPadding(padding, (int)bottom, padding, padding);
+                }
+            }
+        });
     }
 
 
