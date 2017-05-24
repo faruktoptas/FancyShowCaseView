@@ -104,7 +104,7 @@ class Calculator {
                 // 2) setter for padding
                 // for easiness, we position the text view view custom paddings
                 if (spaceAbove > spaceBelow) {
-                    view.setPadding(padding, padding, hParent - (int)top, padding);
+                    view.setPadding(padding, padding, padding, hParent - (int)top);
                 } else {
                     view.setPadding(padding, (int)bottom, padding, padding);
                 }
