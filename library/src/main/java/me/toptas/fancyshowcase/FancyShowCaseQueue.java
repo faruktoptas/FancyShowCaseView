@@ -11,6 +11,7 @@ public class FancyShowCaseQueue implements DismissListener {
 
     private Queue<FancyShowCaseView> mQueue;
     private DismissListener mCurrentOriginalDismissListener;
+    private FancyShowCaseView mCurrent;
 
     /**
      * Constructor
@@ -21,7 +22,7 @@ public class FancyShowCaseQueue implements DismissListener {
     }
 
     /**
-     * adds a view to the queue
+     * Adds a FancyShowCaseView to the queue
      *
      * @param showCaseView the view that should be added to the queue
      * @return Builder
@@ -32,14 +33,27 @@ public class FancyShowCaseQueue implements DismissListener {
     }
 
     /**
-     * starts displaying all views in order of their insertion in the queue, one after another
+     * Starts displaying all views in order of their insertion in the queue, one after another
      */
     public void show() {
         if (!mQueue.isEmpty()) {
-            FancyShowCaseView view = mQueue.poll();
-            mCurrentOriginalDismissListener = view.getDismissListener();
-            view.setDismissListener(this);
-            view.show();
+            mCurrent = mQueue.poll();
+            mCurrentOriginalDismissListener = mCurrent.getDismissListener();
+            mCurrent.setDismissListener(this);
+            mCurrent.show();
+        }
+    }
+
+    /**
+     * Cancels the queue
+     * @param hideCurrent hides current FancyShowCaseView
+     */
+    public void cancel(boolean hideCurrent) {
+        if (hideCurrent && mCurrent != null) {
+            mCurrent.hide();
+        }
+        if (!mQueue.isEmpty()) {
+            mQueue.clear();
         }
     }
 
