@@ -224,11 +224,11 @@ public class FancyShowCaseView extends FrameLayout {
         ViewGroup androidContent = (ViewGroup) mActivity.findViewById(android.R.id.content);
         mRoot = (ViewGroup) androidContent.getParent().getParent();
         FancyShowCaseView visibleView = (FancyShowCaseView) mRoot.findViewWithTag(CONTAINER_TAG);
+        setClickable(true);
         if (visibleView == null) {
             //mContainer = new FrameLayout(mActivity);
             setTag(CONTAINER_TAG);
             if (mCloseOnTouch) {
-                setClickable(true);
                 setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
