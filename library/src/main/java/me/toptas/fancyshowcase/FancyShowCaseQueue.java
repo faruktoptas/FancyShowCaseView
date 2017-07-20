@@ -20,7 +20,6 @@ public class FancyShowCaseQueue implements DismissListener {
     public FancyShowCaseQueue() {
         mQueue = new LinkedList<>();
         mCurrentOriginalDismissListener = null;
-        mCompleteListener = null;
     }
 
     /**
