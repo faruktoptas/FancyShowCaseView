@@ -12,6 +12,7 @@ public class FancyShowCaseQueue implements DismissListener {
     private Queue<FancyShowCaseView> mQueue;
     private DismissListener mCurrentOriginalDismissListener;
     private FancyShowCaseView mCurrent;
+    private OnCompleteListener mCompleteListener;
 
     /**
      * Constructor
@@ -19,6 +20,7 @@ public class FancyShowCaseQueue implements DismissListener {
     public FancyShowCaseQueue() {
         mQueue = new LinkedList<>();
         mCurrentOriginalDismissListener = null;
+        mCompleteListener = null;
     }
 
     /**
@@ -41,6 +43,8 @@ public class FancyShowCaseQueue implements DismissListener {
             mCurrentOriginalDismissListener = mCurrent.getDismissListener();
             mCurrent.setDismissListener(this);
             mCurrent.show();
+        } else if (mCompleteListener != null) {
+            mCompleteListener.onComplete();
         }
     }
 
@@ -71,5 +75,9 @@ public class FancyShowCaseQueue implements DismissListener {
             mCurrentOriginalDismissListener.onSkipped(id);
         }
         show();
+    }
+
+    public void setCompleteListener(OnCompleteListener completeListener) {
+        mCompleteListener = completeListener;
     }
 }
