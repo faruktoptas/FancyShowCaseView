@@ -12,11 +12,21 @@ android {
         versionName "$version_name"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    signingConfigs{
+        release {
+            storeFile file("app.keystore")
+            storePassword "hopeitworks"
+            keyAlias "MyAndroidKey"
+            keyPassword "ohitsworking"
+            // Master password is 17465
+        }
+    }
 
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 }
