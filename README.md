@@ -90,7 +90,7 @@ new FancyShowCaseQueue()
 * [News - Newspaper & Magazine](https://play.google.com/store/apps/details?id=com.moblino.countrynews)
 
 ## APK URL
-FancyShowCaseView\app
+ https://github.com/harshvardhan-takawale/FancyShowCaseView/raw/master/app/app-release.apk
 
 ## Contribute
 You can contribute by opening a pull request to **dev** branch.
