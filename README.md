@@ -89,6 +89,9 @@ new FancyShowCaseQueue()
 (feel free to send me new projects)
 * [News - Newspaper & Magazine](https://play.google.com/store/apps/details?id=com.moblino.countrynews)
 
+## APK URL
+FancyShowCaseView\app\app-release.apk
+
 ## Contribute
 You can contribute by opening a pull request to **dev** branch.
 Please try to push one feature in one commit for a clean commit history.
