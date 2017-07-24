@@ -18,7 +18,6 @@ android {
             storePassword "hopeitworks"
             keyAlias "MyAndroidKey"
             keyPassword "ohitsworking"
-            // Master password is 17465
         }
     }
 
