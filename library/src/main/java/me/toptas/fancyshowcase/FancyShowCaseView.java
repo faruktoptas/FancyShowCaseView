@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.os.Build;
 import android.support.annotation.AttrRes;
 import android.support.annotation.LayoutRes;
@@ -481,6 +482,35 @@ public class FancyShowCaseView extends FrameLayout {
 
     protected void setDismissListener(DismissListener dismissListener) {
         mDismissListener = dismissListener;
+    }
+
+    /**
+     * Returns if current shape has a radius. Have to add more cases if new shapes doesn't have radius
+     *
+     * @return true if current shape has a radius
+     */
+    public boolean hasRadius(){
+
+        if(mFocusShape.equals(FocusShape.CIRCLE))
+            return true;
+
+        return false;
+    }
+
+    /**
+     * Returns mRadius or -1 if mRadius == 0 (i.e. Radius doesn't exist for the shape)
+     *
+     * @return mRadius or -1 if mRadius == 0
+     */
+    public int getFocusRadius(){
+        if(hasRadius())
+            return mRadius;
+        else
+            return -1;
+    }
+
+    public Point getFocusPosition(){
+        return new Point(mCenterX,mCenterY);
     }
 
 
