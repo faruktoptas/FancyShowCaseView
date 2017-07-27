@@ -499,6 +499,26 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
         focus();
     }
 
+    public int getFocusCenterX() {
+        return mCalculator.getCircleCenterX();
+    }
+
+    public int getFocusCenterY() {
+        return mCalculator.getCircleCenterY();
+    }
+
+    public float getFocusRadius() {
+        return FocusShape.CIRCLE.equals(mFocusShape) ? mCalculator.circleRadius(0, 1) : 0;
+    }
+
+    public int getFocusWidth() {
+        return mCalculator.getFocusWidth();
+    }
+
+    public int getFocusHeight() {
+        return mCalculator.getFocusHeight();
+    }
+
 
     /**
      * Builder class for {@link FancyShowCaseView}
