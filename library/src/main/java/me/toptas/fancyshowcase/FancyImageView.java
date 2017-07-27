@@ -15,6 +15,8 @@ import android.widget.ImageView;
 class FancyImageView extends ImageView {
 
     private static final int ANIM_COUNTER_MAX = 20;
+    private static final int DEFAULT_ANIM_COUNTER = 20;
+
     private Bitmap mBitmap;
     private Paint mBackgroundPaint, mErasePaint, mCircleBorderPaint;
     private int mBackgroundColor = Color.TRANSPARENT;
@@ -22,7 +24,7 @@ class FancyImageView extends ImageView {
     private int mFocusBorderSize;
     private int mRoundRectRadius = 20;
     private Calculator mCalculator;
-    private int mAnimCounter = 20;
+    private int mAnimCounter;
     private int mStep = 1;
     private double mAnimMoveFactor = 1;
     private boolean mAnimationEnabled = true;
@@ -112,10 +114,12 @@ class FancyImageView extends ImageView {
 
     /**
      * Enable/disable animation
+     *
      * @param animationEnabled
      */
     public void setAnimationEnabled(final boolean animationEnabled) {
         mAnimationEnabled = animationEnabled;
+        mAnimCounter = mAnimationEnabled ? DEFAULT_ANIM_COUNTER : 0;
     }
 
     /**
@@ -185,7 +189,7 @@ class FancyImageView extends ImageView {
         if (mFocusBorderSize > 0) {
             mPath.reset();
             mPath.moveTo(mCalculator.getCircleCenterX(), mCalculator.getCircleCenterY());
-            mPath.addRoundRect(rectF, mRoundRectRadius,mRoundRectRadius, Path.Direction.CW);
+            mPath.addRoundRect(rectF, mRoundRectRadius, mRoundRectRadius, Path.Direction.CW);
             canvas.drawPath(mPath, mCircleBorderPaint);
         }
     }
