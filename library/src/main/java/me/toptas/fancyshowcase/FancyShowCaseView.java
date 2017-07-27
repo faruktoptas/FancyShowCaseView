@@ -6,7 +6,6 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.os.Build;
 import android.support.annotation.AttrRes;
 import android.support.annotation.LayoutRes;
@@ -32,7 +31,7 @@ import android.widget.TextView;
  * FancyShowCaseView class
  */
 
-public class FancyShowCaseView extends FrameLayout {
+public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.OnGlobalLayoutListener {
 
     FancyShowCaseView(@NonNull Context context) {
         super(context);
@@ -215,18 +214,27 @@ public class FancyShowCaseView extends FrameLayout {
             return;
         }
 
+        if (mView != null) {
+            // if view is not laid out get width/height values in onGlobalLayout
+            if (mView.getWidth() == 0 && mView.getHeight() == 0) {
+                mView.getViewTreeObserver().addOnGlobalLayoutListener(this);
+            } else {
+                focus();
+            }
+        } else {
+            focus();
+        }
+    }
+
+    private void focus() {
         mCalculator = new Calculator(mActivity, mFocusShape, mView, mFocusCircleRadiusFactor,
                 mFitSystemWindows);
-        Bitmap bitmap = Bitmap.createBitmap(mCalculator.getBitmapWidth(), mCalculator.getBitmapHeight(),
-                Bitmap.Config.ARGB_8888);
-        bitmap.eraseColor(mBackgroundColor);
 
         ViewGroup androidContent = (ViewGroup) mActivity.findViewById(android.R.id.content);
         mRoot = (ViewGroup) androidContent.getParent().getParent();
         FancyShowCaseView visibleView = (FancyShowCaseView) mRoot.findViewWithTag(CONTAINER_TAG);
         setClickable(true);
         if (visibleView == null) {
-            //mContainer = new FrameLayout(mActivity);
             setTag(CONTAINER_TAG);
             if (mCloseOnTouch) {
                 setOnClickListener(new View.OnClickListener() {
@@ -243,7 +251,6 @@ public class FancyShowCaseView extends FrameLayout {
 
             FancyImageView imageView = new FancyImageView(mActivity);
             if (mCalculator.hasFocus()) {
-                //Utils.drawFocusCircle(bitmap, focusPoint, focusPoint[2]);
                 mCenterX = mCalculator.getCircleCenterX();
                 mCenterY = mCalculator.getCircleCenterY();
                 mRadius = mCalculator.getViewRadius();
@@ -266,7 +273,6 @@ public class FancyShowCaseView extends FrameLayout {
             if (mRoundRectRadius > 0) {
                 imageView.setRoundRectRadius(mRoundRectRadius);
             }
-            //imageView.setImageBitmap(bitmap);
             addView(imageView);
 
             if (mCustomViewRes == 0) {
@@ -481,6 +487,16 @@ public class FancyShowCaseView extends FrameLayout {
 
     protected void setDismissListener(DismissListener dismissListener) {
         mDismissListener = dismissListener;
+    }
+
+    @Override
+    public void onGlobalLayout() {
+        if (Build.VERSION.SDK_INT < 16) {
+            mView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+        } else {
+            mView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+        }
+        focus();
     }
 
 

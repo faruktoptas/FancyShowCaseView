@@ -24,13 +24,7 @@ public class SecondActivity extends BaseActivity {
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
 
-        // use post or postDelayed otherwise view width/height will be 0
-        mButton.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mButton.performClick();
-            }
-        }, 500);
+        mButton.performClick();
     }
 
     /**

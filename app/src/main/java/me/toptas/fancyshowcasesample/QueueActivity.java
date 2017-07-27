@@ -44,17 +44,10 @@ public class QueueActivity extends BaseActivity {
                 .focusOn(mButton3)
                 .build();
 
-        mButton1.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (!isFinishing()) {
-                    new FancyShowCaseQueue()
-                            .add(fancyShowCaseView1)
-                            .add(fancyShowCaseView2)
-                            .add(fancyShowCaseView3)
-                            .show();
-                }
-            }
-        }, 500);
+        new FancyShowCaseQueue()
+                .add(fancyShowCaseView1)
+                .add(fancyShowCaseView2)
+                .add(fancyShowCaseView3)
+                .show();
     }
 }
