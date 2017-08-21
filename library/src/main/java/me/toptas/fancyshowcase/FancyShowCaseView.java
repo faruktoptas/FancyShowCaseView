@@ -100,7 +100,8 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
     private boolean mFitSystemWindows;
     private FocusShape mFocusShape;
     private DismissListener mDismissListener;
-
+    private boolean mAutoPosText;
+    private int mAutoTextPadding;
 
     private int mAnimationDuration = 400;
     private int mCenterX, mCenterY, mRadius;
@@ -143,6 +144,8 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
      * @param focusRectangleWidth     focus at specific position rectangle width
      * @param focusRectangleHeight    focus at specific position rectangle height
      * @param animationEnabled        flag to enable/disable animation
+     * @param autoPosText             flag to enable/disable automatic text positioning
+     * @param autoTextPadding         padding size of the automatically calculated text position
      */
     private FancyShowCaseView(Activity activity, View view, String id, String title, Spanned spannedTitle,
                               int titleGravity, int titleStyle, int titleSize, int titleSizeUnit, double focusCircleRadiusFactor,
@@ -151,7 +154,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
                               Animation exitAnimation, boolean closeOnTouch, boolean fitSystemWindows,
                               FocusShape focusShape, DismissListener dismissListener, int roundRectRadius,
                               int focusPositionX, int focusPositionY, int focusCircleRadius, int focusRectangleWidth, int focusRectangleHeight,
-                              final boolean animationEnabled) {
+                              final boolean animationEnabled, final boolean autoPosText, final int autoTextPadding) {
         super(activity);
         mId = id;
         mActivity = activity;
@@ -181,6 +184,8 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
         mFocusRectangleWidth = focusRectangleWidth;
         mFocusRectangleHeight = focusRectangleHeight;
         mFocusAnimationEnabled = animationEnabled;
+        mAutoPosText = autoPosText;
+        mAutoTextPadding = autoTextPadding;
 
         initializeParameters();
     }
@@ -393,6 +398,9 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
                 } else {
                     textView.setText(mTitle);
                 }
+                if (mAutoPosText) {
+                    mCalculator.calcAutoTextPosition(textView, mAutoTextPadding);
+                }
             }
         });
 
@@ -548,6 +556,8 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
         private int mFocusBorderSize;
         private int mFocusPositionX, mFocusPositionY, mFocusCircleRadius, mFocusRectangleWidth, mFocusRectangleHeight;
         private boolean mFocusAnimationEnabled = true;
+        private boolean mAutoPosText = false;
+        private int mAutoTextPadding = 0;
 
         /**
          * Constructor for Builder class
@@ -779,6 +789,25 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
         }
 
         /**
+         * enable automatic text positioning
+         *
+         * @return Builder
+         */
+        public Builder enableAutoTextPosition() {
+            mAutoPosText = true;
+            return this;
+        }
+
+        /**
+         * @param autoTextPadding padding size for automatically calculated text position
+         * @return Builder
+         */
+        public Builder autoTextPadding(int autoTextPadding) {
+            mAutoTextPadding = autoTextPadding;
+            return this;
+        }
+
+        /**
          * builds the builder
          *
          * @return {@link FancyShowCaseView} with given parameters
@@ -787,7 +816,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
             return new FancyShowCaseView(mActivity, mView, mId, mTitle, mSpannedTitle, mTitleGravity, mTitleStyle, mTitleSize, mTitleSizeUnit,
                     mFocusCircleRadiusFactor, mBackgroundColor, mFocusBorderColor, mFocusBorderSize, mCustomViewRes, mViewInflateListener,
                     mEnterAnimation, mExitAnimation, mCloseOnTouch, mFitSystemWindows, mFocusShape, mDismissListener, mRoundRectRadius,
-                    mFocusPositionX, mFocusPositionY, mFocusCircleRadius, mFocusRectangleWidth, mFocusRectangleHeight, mFocusAnimationEnabled);
+                    mFocusPositionX, mFocusPositionY, mFocusCircleRadius, mFocusRectangleWidth, mFocusRectangleHeight, mFocusAnimationEnabled, mAutoPosText, mAutoTextPadding);
         }
     }
 }
