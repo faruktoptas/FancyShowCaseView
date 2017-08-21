@@ -19,6 +19,36 @@ An easy-to-use customizable show case view with circular reveal animation.
 
 ![!gif](https://cloud.githubusercontent.com/assets/1595227/24331189/afec8d9e-1237-11e7-986d-0ab7c44db7c7.gif)
 
+#### Builder Properties
+*  `activity`                Activity to show FancyShowCaseView in
+*  `view`                    view to focus
+*  `id `                     unique identifier for FancyShowCaseView
+*  `title`                   title text
+*  `spannedTitle`            title text if spanned text should be used
+*  `titleGravity`            title gravity
+*  `titleStyle`              title text style
+*  `titleSize`               title text size
+*  `titleSizeUnit`           title text size unit
+*  `focusCircleRadiusFactor` focus circle radius factor (default value = 1)
+*  `backgroundColor`         background color of FancyShowCaseView
+*  `focusBorderColor`        focus border color of FancyShowCaseView
+*  `focusBorderSize`         focus border size of FancyShowCaseView
+*  `customViewRes`           custom view layout resource
+*  `viewInflateListener`     inflate listener for custom view
+*  `enterAnimation`          enter animation for FancyShowCaseView
+*  `exitAnimation`           exit animation for FancyShowCaseView
+*  `closeOnTouch`            closes on touch if enabled
+*  `fitSystemWindows`        should be the same value of root view's fitSystemWindows value
+*  `focusShape`              shape of focus, can be circle or rounded rectangle
+*  `dismissListener`         listener that gets notified when showcase is dismissed
+*  `roundRectRadius`         round rectangle radius
+*  `focusPositionX`          focus at specific position X coordinate
+*  `focusPositionY`          focus at specific position Y coordinate
+*  `focusCircleRadius`       focus at specific position circle radius
+*  `focusRectangleWidth`     focus at specific position rectangle width
+*  `focusRectangleHeight`    focus at specific position rectangle height
+*  `animationEnabled`        flag to enable/disable animation
+
 # Gradle Dependency
 
 Add this in your root `build.gradle` file (**not** your module `build.gradle` file):
