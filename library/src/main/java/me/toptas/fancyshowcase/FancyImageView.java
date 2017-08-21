@@ -69,9 +69,11 @@ class FancyImageView extends ImageView {
         mErasePaint = new Paint();
         mErasePaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
         mErasePaint.setAlpha(0xFF);
+        mErasePaint.setAntiAlias(true);
 
         mPath = new Path();
         mCircleBorderPaint = new Paint();
+        mCircleBorderPaint.setAntiAlias(true);
         mCircleBorderPaint.setColor(mFocusBorderColor);
         mCircleBorderPaint.setStrokeWidth(mFocusBorderSize);
         mCircleBorderPaint.setStyle(Paint.Style.STROKE);
