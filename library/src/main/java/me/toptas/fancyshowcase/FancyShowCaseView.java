@@ -103,7 +103,9 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
 
 
     private int mAnimationDuration = 400;
-    private int mCenterX, mCenterY, mRadius;
+    private int mRadiusAnimationMaxValue;
+    private int mRadiusAnimationStep;
+    private int mCenterX, mCenterY;
     private ViewGroup mRoot;
     private SharedPreferences mSharedPreferences;
     private Calculator mCalculator;
@@ -151,7 +153,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
                               Animation exitAnimation, boolean closeOnTouch, boolean fitSystemWindows,
                               FocusShape focusShape, DismissListener dismissListener, int roundRectRadius,
                               int focusPositionX, int focusPositionY, int focusCircleRadius, int focusRectangleWidth, int focusRectangleHeight,
-                              final boolean animationEnabled) {
+                              final boolean animationEnabled, int radiusAnimationMaxValue, int radiusAnimationStep) {
         super(activity);
         mId = id;
         mActivity = activity;
@@ -181,6 +183,8 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
         mFocusRectangleWidth = focusRectangleWidth;
         mFocusRectangleHeight = focusRectangleHeight;
         mFocusAnimationEnabled = animationEnabled;
+        mRadiusAnimationMaxValue = radiusAnimationMaxValue;
+        mRadiusAnimationStep = radiusAnimationStep;
 
         initializeParameters();
     }
@@ -250,10 +254,10 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
 
 
             FancyImageView imageView = new FancyImageView(mActivity);
+            imageView.setRadiusAnimationParameters(mRadiusAnimationMaxValue, mRadiusAnimationStep);
             if (mCalculator.hasFocus()) {
                 mCenterX = mCalculator.getCircleCenterX();
                 mCenterY = mCalculator.getCircleCenterY();
-                mRadius = mCalculator.getViewRadius();
             }
 
 
@@ -548,6 +552,8 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
         private int mFocusBorderSize;
         private int mFocusPositionX, mFocusPositionY, mFocusCircleRadius, mFocusRectangleWidth, mFocusRectangleHeight;
         private boolean mFocusAnimationEnabled = true;
+        private int mRadiusAnimationMaxValue = 20;
+        private int mRadiusAnimationStep = 1;
 
         /**
          * Constructor for Builder class
@@ -778,6 +784,16 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
             return this;
         }
 
+        public Builder radiusAnimationMaxValue(int radiusAnimationMaxValue) {
+            mRadiusAnimationMaxValue = radiusAnimationMaxValue;
+            return this;
+        }
+
+        public Builder radiusAnimationStep(int radiusAnimationStep) {
+            mRadiusAnimationStep = radiusAnimationStep;
+            return this;
+        }
+
         /**
          * builds the builder
          *
@@ -787,7 +803,8 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
             return new FancyShowCaseView(mActivity, mView, mId, mTitle, mSpannedTitle, mTitleGravity, mTitleStyle, mTitleSize, mTitleSizeUnit,
                     mFocusCircleRadiusFactor, mBackgroundColor, mFocusBorderColor, mFocusBorderSize, mCustomViewRes, mViewInflateListener,
                     mEnterAnimation, mExitAnimation, mCloseOnTouch, mFitSystemWindows, mFocusShape, mDismissListener, mRoundRectRadius,
-                    mFocusPositionX, mFocusPositionY, mFocusCircleRadius, mFocusRectangleWidth, mFocusRectangleHeight, mFocusAnimationEnabled);
+                    mFocusPositionX, mFocusPositionY, mFocusCircleRadius, mFocusRectangleWidth, mFocusRectangleHeight, mFocusAnimationEnabled,
+                    mRadiusAnimationMaxValue, mRadiusAnimationStep);
         }
     }
 }

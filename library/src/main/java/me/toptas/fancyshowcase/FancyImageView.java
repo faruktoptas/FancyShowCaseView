@@ -14,7 +14,7 @@ import android.widget.ImageView;
 
 class FancyImageView extends ImageView {
 
-    private static final int ANIM_COUNTER_MAX = 20;
+    private static final int DEFAULT_ANIM_COUNTER_MAX = 20;
     private static final int DEFAULT_ANIM_COUNTER = 20;
 
     private Bitmap mBitmap;
@@ -30,6 +30,8 @@ class FancyImageView extends ImageView {
     private boolean mAnimationEnabled = true;
     private Path mPath;
     private RectF rectF;
+    private int mRadiusAnimationMaxValue;
+    private int mRadiusAnimationStep;
 
     public FancyImageView(Context context) {
         super(context);
@@ -145,10 +147,10 @@ class FancyImageView extends ImageView {
                 drawRoundedRectangle(canvas);
             }
             if (mAnimationEnabled) {
-                if (mAnimCounter == ANIM_COUNTER_MAX) {
-                    mStep = -1;
+                if (mAnimCounter == mRadiusAnimationMaxValue) {
+                    mStep = -1 * mRadiusAnimationStep;
                 } else if (mAnimCounter == 0) {
-                    mStep = 1;
+                    mStep = mRadiusAnimationStep;
                 }
                 mAnimCounter = mAnimCounter + mStep;
                 postInvalidate();
@@ -194,5 +196,10 @@ class FancyImageView extends ImageView {
             mPath.addRoundRect(rectF, mRoundRectRadius, mRoundRectRadius, Path.Direction.CW);
             canvas.drawPath(mPath, mCircleBorderPaint);
         }
+    }
+
+    public void setRadiusAnimationParameters(int maxValue, int step) {
+        mRadiusAnimationMaxValue = maxValue;
+        mRadiusAnimationStep = step;
     }
 }
