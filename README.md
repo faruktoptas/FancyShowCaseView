@@ -35,7 +35,7 @@ allprojects {
 Then, add the library to your module `build.gradle`
 ```gradle
 dependencies {
-    compile 'com.github.faruktoptas:FancyShowCaseView:0.1.1'
+    compile 'com.github.faruktoptas:FancyShowCaseView:0.1.5'
 }
 ```
 
@@ -47,50 +47,14 @@ new FancyShowCaseView.Builder(this)
         .build()
         .show();
 ```
-## Rounded Rectangle
-```java
-new FancyShowCaseView.Builder(this)
-        .focusOn(view)
-        .title("Focus on View")
-        .focusShape(FocusShape.ROUNDED_RECTANGLE)
-        .build()
-        .show();
-```
-## Customize
-```java
-new FancyShowCaseView.Builder(this)
-        .focusOn(view)
-        .focusCircleRadiusFactor(1.5)
-        .title("Focus on View with larger circle")
-        .titleStyle(0, Gravity.BOTTOM | Gravity.CENTER)
-        .enterAnimation(enterAnimation)
-        .exitAnimation(exitAnimation)
-        .showOnce("fancy1")
-        .backgroundColor(Color.parseColor("#CC00FF00"))
-        .build()
-        .show();
-```
-## Inflating Custom View
-```java
-new FancyShowCaseView.Builder(this)
-        .customView(R.layout.layout_my_custom_view, null)
-        .build()
-        .show();
-```
-## Queuing multiple instances
-```java
-new FancyShowCaseQueue()
-	    .add(fancyShowCaseView1)
-	    .add(fancyShowCaseView2)
-	    .add(fancyShowCaseView3)
-	    .show();
-```
+Please see [wiki](https://github.com/faruktoptas/FancyShowCaseView/wiki) for more samples. 
+
 ## Already in use in following apps
 (feel free to send me new projects)
 * [News - Newspaper & Magazine](https://play.google.com/store/apps/details?id=com.moblino.countrynews)
 
 ## Sample App
- [fancyshowcaseview-sample-v0.1.2.apk](https://github.com/faruktoptas/FancyShowCaseView/releases/download/0.1.2/fancyshowcaseview-sample-v0.1.2.apk)
+ [fancyshowcaseview-sample-v0.1.5.apk](https://github.com/faruktoptas/FancyShowCaseView/releases/download/0.1.5/fancyshowcaseview-sample-v0.1.5.apk)
 
 ## Contribute
 You can contribute by opening a pull request to **dev** branch.
