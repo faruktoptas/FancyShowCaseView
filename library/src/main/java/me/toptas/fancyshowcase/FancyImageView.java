@@ -1,20 +1,25 @@
 package me.toptas.fancyshowcase;
 
 import android.content.Context;
-import android.graphics.*;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.RectF;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
-import android.widget.ImageView;
 
 /**
  * Created by ftoptas on 13/03/17.
  * ImageView with focus area animation
  */
 
-class FancyImageView extends ImageView {
+class FancyImageView extends AppCompatImageView {
 
-    private static final int DEFAULT_ANIM_COUNTER_MAX = 20;
     private static final int DEFAULT_ANIM_COUNTER = 20;
 
     private Bitmap mBitmap;
@@ -30,8 +35,8 @@ class FancyImageView extends ImageView {
     private boolean mAnimationEnabled = true;
     private Path mPath;
     private RectF rectF;
-    private int mRadiusAnimationMaxValue;
-    private int mRadiusAnimationStep;
+    private int mFocusAnimationMaxValue;
+    private int mFocusAnimationStep;
 
     public FancyImageView(Context context) {
         super(context);
@@ -45,12 +50,6 @@ class FancyImageView extends ImageView {
 
     public FancyImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public FancyImageView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
         init();
     }
 
@@ -147,10 +146,10 @@ class FancyImageView extends ImageView {
                 drawRoundedRectangle(canvas);
             }
             if (mAnimationEnabled) {
-                if (mAnimCounter == mRadiusAnimationMaxValue) {
-                    mStep = -1 * mRadiusAnimationStep;
+                if (mAnimCounter == mFocusAnimationMaxValue) {
+                    mStep = -1 * mFocusAnimationStep;
                 } else if (mAnimCounter == 0) {
-                    mStep = mRadiusAnimationStep;
+                    mStep = mFocusAnimationStep;
                 }
                 mAnimCounter = mAnimCounter + mStep;
                 postInvalidate();
@@ -198,8 +197,8 @@ class FancyImageView extends ImageView {
         }
     }
 
-    public void setRadiusAnimationParameters(int maxValue, int step) {
-        mRadiusAnimationMaxValue = maxValue;
-        mRadiusAnimationStep = step;
+    public void setFocusAnimationParameters(int maxValue, int step) {
+        mFocusAnimationMaxValue = maxValue;
+        mFocusAnimationStep = step;
     }
 }

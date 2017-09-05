@@ -103,8 +103,8 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
 
 
     private int mAnimationDuration = 400;
-    private int mRadiusAnimationMaxValue;
-    private int mRadiusAnimationStep;
+    private int mFocusAnimationMaxValue;
+    private int mFocusAnimationStep;
     private int mCenterX, mCenterY;
     private ViewGroup mRoot;
     private SharedPreferences mSharedPreferences;
@@ -153,7 +153,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
                               Animation exitAnimation, boolean closeOnTouch, boolean fitSystemWindows,
                               FocusShape focusShape, DismissListener dismissListener, int roundRectRadius,
                               int focusPositionX, int focusPositionY, int focusCircleRadius, int focusRectangleWidth, int focusRectangleHeight,
-                              final boolean animationEnabled, int radiusAnimationMaxValue, int radiusAnimationStep) {
+                              final boolean animationEnabled, int focusAnimationMaxValue, int focusAnimationStep) {
         super(activity);
         mId = id;
         mActivity = activity;
@@ -183,8 +183,8 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
         mFocusRectangleWidth = focusRectangleWidth;
         mFocusRectangleHeight = focusRectangleHeight;
         mFocusAnimationEnabled = animationEnabled;
-        mRadiusAnimationMaxValue = radiusAnimationMaxValue;
-        mRadiusAnimationStep = radiusAnimationStep;
+        mFocusAnimationMaxValue = focusAnimationMaxValue;
+        mFocusAnimationStep = focusAnimationStep;
 
         initializeParameters();
     }
@@ -254,7 +254,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
 
 
             FancyImageView imageView = new FancyImageView(mActivity);
-            imageView.setRadiusAnimationParameters(mRadiusAnimationMaxValue, mRadiusAnimationStep);
+            imageView.setFocusAnimationParameters(mFocusAnimationMaxValue, mFocusAnimationStep);
             if (mCalculator.hasFocus()) {
                 mCenterX = mCalculator.getCircleCenterX();
                 mCenterY = mCalculator.getCircleCenterY();
@@ -552,8 +552,8 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
         private int mFocusBorderSize;
         private int mFocusPositionX, mFocusPositionY, mFocusCircleRadius, mFocusRectangleWidth, mFocusRectangleHeight;
         private boolean mFocusAnimationEnabled = true;
-        private int mRadiusAnimationMaxValue = 20;
-        private int mRadiusAnimationStep = 1;
+        private int mFocusAnimationMaxValue = 20;
+        private int mFocusAnimationStep = 1;
 
         /**
          * Constructor for Builder class
@@ -784,13 +784,13 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
             return this;
         }
 
-        public Builder radiusAnimationMaxValue(int radiusAnimationMaxValue) {
-            mRadiusAnimationMaxValue = radiusAnimationMaxValue;
+        public Builder focusAnimationMaxValue(int focusAnimationMaxValue) {
+            mFocusAnimationMaxValue = focusAnimationMaxValue;
             return this;
         }
 
-        public Builder radiusAnimationStep(int radiusAnimationStep) {
-            mRadiusAnimationStep = radiusAnimationStep;
+        public Builder radiusAnimationStep(int focusAnimationStep) {
+            mFocusAnimationStep = focusAnimationStep;
             return this;
         }
 
@@ -804,7 +804,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
                     mFocusCircleRadiusFactor, mBackgroundColor, mFocusBorderColor, mFocusBorderSize, mCustomViewRes, mViewInflateListener,
                     mEnterAnimation, mExitAnimation, mCloseOnTouch, mFitSystemWindows, mFocusShape, mDismissListener, mRoundRectRadius,
                     mFocusPositionX, mFocusPositionY, mFocusCircleRadius, mFocusRectangleWidth, mFocusRectangleHeight, mFocusAnimationEnabled,
-                    mRadiusAnimationMaxValue, mRadiusAnimationStep);
+                    mFocusAnimationMaxValue, mFocusAnimationStep);
         }
     }
 }
