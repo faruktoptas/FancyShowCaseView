@@ -789,7 +789,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
             return this;
         }
 
-        public Builder radiusAnimationStep(int focusAnimationStep) {
+        public Builder focusAnimationStep(int focusAnimationStep) {
             mFocusAnimationStep = focusAnimationStep;
             return this;
         }
