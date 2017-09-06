@@ -2,6 +2,8 @@ package me.toptas.fancyshowcase;
 
 import android.app.Activity;
 import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.view.View;
 
@@ -21,7 +23,7 @@ class Calculator {
     public void setmCircleRadius(int mCircleRadius) {
         this.mCircleRadius = mCircleRadius;
     }
-    Calculator(Activity activity, FocusShape focusShape, View view, double radiusFactor,
+    Calculator(@NonNull Activity activity, FocusShape focusShape, @Nullable View view, double radiusFactor,
                boolean fitSystemWindows) {
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
