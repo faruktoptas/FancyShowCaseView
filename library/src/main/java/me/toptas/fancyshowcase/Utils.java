@@ -7,6 +7,8 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.View;
 
 /**
@@ -32,7 +34,7 @@ class Utils {
      * @param circleRadiusFactor radius factor of circle
      * @return x, y, radius values for the circle
      */
-    static int[] calculateFocusPointValues(View view, double circleRadiusFactor, int adjustHeight) {
+    static int[] calculateFocusPointValues(@Nullable  View view, double circleRadiusFactor, int adjustHeight) {
         int[] point = new int[3];
         if (view != null) {
             int[] viewPoint = new int[2];
@@ -54,7 +56,7 @@ class Utils {
      * @param point  circle point
      * @param radius circle radius
      */
-    static void drawFocusCircle(Bitmap bitmap, int[] point, int radius) {
+    static void drawFocusCircle(@NonNull Bitmap bitmap, @NonNull int[] point, int radius) {
         Paint p = new Paint();
         p.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
         Canvas c = new Canvas(bitmap);
@@ -67,7 +69,7 @@ class Utils {
      * @param context context to access resources
      * @return statusBar height
      */
-    static int getStatusBarHeight(Context context) {
+    static int getStatusBarHeight(@NonNull Context context) {
         int result = 0;
         int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) {

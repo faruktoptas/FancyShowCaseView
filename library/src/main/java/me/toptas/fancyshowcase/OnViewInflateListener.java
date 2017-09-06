@@ -1,5 +1,6 @@
 package me.toptas.fancyshowcase;
 
+import android.support.annotation.NonNull;
 import android.view.View;
 
 /**
@@ -8,5 +9,5 @@ import android.view.View;
  */
 
 public interface OnViewInflateListener {
-    void onViewInflated(View view);
+    void onViewInflated(@NonNull View view);
 }
