@@ -24,7 +24,7 @@ public class SecondActivity extends BaseActivity {
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
 
-        mButton.performClick();
+        focusOnButton();
     }
 
     /**
@@ -33,13 +33,17 @@ public class SecondActivity extends BaseActivity {
     @OnClick(R.id.button1)
     public void focus() {
         if (!isFinishing()) {
-            new FancyShowCaseView.Builder(SecondActivity.this)
-                    .focusOn(mButton)
-                    .title("Focus a view")
-                    .fitSystemWindows(true)
-                    .build()
-                    .show();
+            focusOnButton();
         }
+    }
+
+    private void focusOnButton() {
+        new FancyShowCaseView.Builder(SecondActivity.this)
+                .focusOn(mButton)
+                .title("Focus a view")
+                .fitSystemWindows(true)
+                .build()
+                .show();
     }
 
     /**
