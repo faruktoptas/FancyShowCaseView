@@ -407,11 +407,15 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
      */
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void doCircularEnterAnimation() {
-        getViewTreeObserver().addOnPreDrawListener(
-                new ViewTreeObserver.OnPreDrawListener() {
+        getViewTreeObserver().addOnGlobalLayoutListener(
+                new ViewTreeObserver.OnGlobalLayoutListener() {
                     @Override
-                    public boolean onPreDraw() {
-                        getViewTreeObserver().removeOnPreDrawListener(this);
+                    public void onGlobalLayout() {
+                        if (Build.VERSION.SDK_INT < 16) {
+                            getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                        } else {
+                            getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                        }
 
                         final int revealRadius = (int) Math.hypot(
                                 getWidth(), getHeight());
@@ -428,7 +432,6 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
                         enterAnimator.setInterpolator(AnimationUtils.loadInterpolator(mActivity,
                                 android.R.interpolator.accelerate_cubic));
                         enterAnimator.start();
-                        return false;
                     }
                 });
 
