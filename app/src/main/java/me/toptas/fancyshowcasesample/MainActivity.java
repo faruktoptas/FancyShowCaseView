@@ -3,6 +3,7 @@ package me.toptas.fancyshowcasesample;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,11 +13,14 @@ import android.view.animation.AnimationUtils;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import me.toptas.fancyshowcase.AnimationListener;
 import me.toptas.fancyshowcase.FancyShowCaseView;
 import me.toptas.fancyshowcase.FocusShape;
 import me.toptas.fancyshowcase.OnViewInflateListener;
 
 public class MainActivity extends BaseActivity {
+
+    public static final String TAG = "FancyShowCaseView";
 
     FancyShowCaseView mFancyShowCaseView;
 
@@ -35,6 +39,17 @@ public class MainActivity extends BaseActivity {
     public void simple() {
         new FancyShowCaseView.Builder(this)
                 .title("No Focus")
+                .animationListener(new AnimationListener() {
+                    @Override
+                    public void onEnterAnimationEnd() {
+                        Log.v(TAG, "onEnterAnimationEnd");
+                    }
+
+                    @Override
+                    public void onExitAnimationEnd() {
+                        Log.v(TAG, "onExitAnimationEnd");
+                    }
+                })
                 .build()
                 .show();
     }
@@ -95,7 +110,7 @@ public class MainActivity extends BaseActivity {
     public void focusRoundRectPosition(View view) {
         new FancyShowCaseView.Builder(this)
                 .title("Focus on larger view")
-                .focusRectAtPosition(260, 85,  480, 80)
+                .focusRectAtPosition(260, 85, 480, 80)
                 .roundRectRadius(60)
                 .build()
                 .show();
@@ -236,7 +251,7 @@ public class MainActivity extends BaseActivity {
     }
 
     @OnClick(R.id.btn_recycler_view)
-    public void recyclerViewSample(){
+    public void recyclerViewSample() {
         startActivity(new Intent(this, RecyclerViewActivity.class));
     }
 

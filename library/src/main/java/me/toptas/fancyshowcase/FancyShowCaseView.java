@@ -96,6 +96,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
     private int mRoundRectRadius;
     private OnViewInflateListener mViewInflateListener;
     private Animation mEnterAnimation, mExitAnimation;
+    private AnimationListener mAnimationListener;
     private boolean mCloseOnTouch;
     private boolean mFitSystemWindows;
     private FocusShape mFocusShape;
@@ -150,7 +151,8 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
                               int titleGravity, int titleStyle, int titleSize, int titleSizeUnit, double focusCircleRadiusFactor,
                               int backgroundColor, int focusBorderColor, int focusBorderSize, int customViewRes,
                               OnViewInflateListener viewInflateListener, Animation enterAnimation,
-                              Animation exitAnimation, boolean closeOnTouch, boolean fitSystemWindows,
+                              Animation exitAnimation, AnimationListener animationListener,
+                              boolean closeOnTouch, boolean fitSystemWindows,
                               FocusShape focusShape, DismissListener dismissListener, int roundRectRadius,
                               int focusPositionX, int focusPositionY, int focusCircleRadius, int focusRectangleWidth, int focusRectangleHeight,
                               final boolean animationEnabled, int focusAnimationMaxValue, int focusAnimationStep) {
@@ -173,6 +175,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
         mViewInflateListener = viewInflateListener;
         mEnterAnimation = enterAnimation;
         mExitAnimation = exitAnimation;
+        mAnimationListener = animationListener;
         mCloseOnTouch = closeOnTouch;
         mFitSystemWindows = fitSystemWindows;
         mFocusShape = focusShape;
@@ -325,6 +328,24 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
         } else {
             Animation fadeInAnimation = AnimationUtils.loadAnimation(mActivity, R.anim.fscv_fade_in);
             fadeInAnimation.setFillAfter(true);
+            fadeInAnimation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    if (mAnimationListener != null) {
+                        mAnimationListener.onEnterAnimationEnd();
+                    }
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
             startAnimation(fadeInAnimation);
         }
     }
@@ -348,6 +369,9 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
                 @Override
                 public void onAnimationEnd(Animation animation) {
                     removeView();
+                    if (mAnimationListener != null) {
+                        mAnimationListener.onExitAnimationEnd();
+                    }
                 }
 
                 @Override
@@ -429,8 +453,18 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
                         Animator enterAnimator = ViewAnimationUtils.createCircularReveal(FancyShowCaseView.this,
                                 mCenterX, mCenterY, startRadius, revealRadius);
                         enterAnimator.setDuration(mAnimationDuration);
+                        if (mAnimationListener != null) {
+                            enterAnimator.addListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    mAnimationListener.onEnterAnimationEnd();
+                                }
+                            });
+
+                        }
                         enterAnimator.setInterpolator(AnimationUtils.loadInterpolator(mActivity,
                                 android.R.interpolator.accelerate_cubic));
+
                         enterAnimator.start();
                     }
                 });
@@ -452,7 +486,9 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
             @Override
             public void onAnimationEnd(Animator animation) {
                 removeView();
-
+                if (mAnimationListener != null) {
+                    mAnimationListener.onExitAnimationEnd();
+                }
             }
         });
         exitAnimator.start();
@@ -548,6 +584,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
         private int mRoundRectRadius;
         private OnViewInflateListener mViewInflateListener;
         private Animation mEnterAnimation, mExitAnimation;
+        private AnimationListener mAnimationListener;
         private boolean mCloseOnTouch = true;
         private boolean mFitSystemWindows;
         private FocusShape mFocusShape = FocusShape.CIRCLE;
@@ -709,6 +746,18 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
         }
 
         /**
+         * Listener for enter/exit animations
+         *
+         * @param listener animation listener
+         * @return Builder
+         */
+        @NonNull
+        public Builder animationListener(AnimationListener listener) {
+            mAnimationListener = listener;
+            return this;
+        }
+
+        /**
          * @param exitAnimation exit animation for FancyShowCaseView
          * @return Builder
          */
@@ -830,7 +879,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
         public FancyShowCaseView build() {
             return new FancyShowCaseView(mActivity, mView, mId, mTitle, mSpannedTitle, mTitleGravity, mTitleStyle, mTitleSize, mTitleSizeUnit,
                     mFocusCircleRadiusFactor, mBackgroundColor, mFocusBorderColor, mFocusBorderSize, mCustomViewRes, mViewInflateListener,
-                    mEnterAnimation, mExitAnimation, mCloseOnTouch, mFitSystemWindows, mFocusShape, mDismissListener, mRoundRectRadius,
+                    mEnterAnimation, mExitAnimation, mAnimationListener, mCloseOnTouch, mFitSystemWindows, mFocusShape, mDismissListener, mRoundRectRadius,
                     mFocusPositionX, mFocusPositionY, mFocusCircleRadius, mFocusRectangleWidth, mFocusRectangleHeight, mFocusAnimationEnabled,
                     mFocusAnimationMaxValue, mFocusAnimationStep);
         }
