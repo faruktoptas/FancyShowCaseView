@@ -24,6 +24,7 @@ import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 /**
@@ -416,6 +417,10 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
                     textView.setTextSize(mTitleSizeUnit, mTitleSize);
                 }
                 textView.setGravity(mTitleGravity);
+                if (mFitSystemWindows) {
+                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) textView.getLayoutParams();
+                    params.setMargins(0, Utils.getStatusBarHeight(getContext()), 0, 0);
+                }
                 if (mSpannedTitle != null) {
                     textView.setText(mSpannedTitle);
                 } else {
