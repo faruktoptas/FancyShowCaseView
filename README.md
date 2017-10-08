@@ -35,7 +35,7 @@ allprojects {
 Then, add the library to your module `build.gradle`
 ```gradle
 dependencies {
-    compile 'com.github.faruktoptas:FancyShowCaseView:0.1.7'
+    compile 'com.github.faruktoptas:FancyShowCaseView:0.1.8'
 }
 ```
 
@@ -54,7 +54,7 @@ Please see [wiki](https://github.com/faruktoptas/FancyShowCaseView/wiki) for mor
 * [News - Newspaper & Magazine](https://play.google.com/store/apps/details?id=com.moblino.countrynews)
 
 ## Sample App
- [fancyshowcaseview-sample-v0.1.5.apk](https://github.com/faruktoptas/FancyShowCaseView/releases/download/0.1.5/fancyshowcaseview-sample-v0.1.5.apk)
+ [fancyshowcaseview-sample-v0.1.8.apk](https://github.com/faruktoptas/FancyShowCaseView/releases/download/0.1.8/fancyshowcaseview-sample-v0.1.8.apk)
 
 ## Contribute
 You can contribute by opening a pull request to **dev** branch.
