@@ -10,6 +10,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 
@@ -131,7 +132,7 @@ class FancyImageView extends AppCompatImageView {
      * @param canvas draw canvas
      */
     @Override
-    protected void onDraw(Canvas canvas) {
+    protected void onDraw(@NonNull Canvas canvas) {
         super.onDraw(canvas);
         if (mBitmap == null) {
             mBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
@@ -162,7 +163,7 @@ class FancyImageView extends AppCompatImageView {
      *
      * @param canvas canvas to draw
      */
-    private void drawCircle(Canvas canvas) {
+    private void drawCircle(@NonNull Canvas canvas) {
         canvas.drawCircle(mCalculator.getCircleCenterX(), mCalculator.getCircleCenterY(),
                 mCalculator.circleRadius(mAnimCounter, mAnimMoveFactor), mErasePaint);
 
@@ -180,7 +181,7 @@ class FancyImageView extends AppCompatImageView {
      *
      * @param canvas canvas to draw
      */
-    private void drawRoundedRectangle(Canvas canvas) {
+    private void drawRoundedRectangle(@NonNull Canvas canvas) {
         float left = mCalculator.roundRectLeft(mAnimCounter, mAnimMoveFactor);
         float top = mCalculator.roundRectTop(mAnimCounter, mAnimMoveFactor);
         float right = mCalculator.roundRectRight(mAnimCounter, mAnimMoveFactor);

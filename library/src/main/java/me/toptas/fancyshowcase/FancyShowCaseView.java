@@ -61,7 +61,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
      * @param context context that should be used to create the shared preference instance
      * @param id      id of the show once flag that should be reset
      */
-    public static void resetShowOnce(Context context, String id) {
+    public static void resetShowOnce(@NonNull Context context, String id) {
         SharedPreferences sharedPrefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         sharedPrefs.edit().remove(id).commit();
     }
@@ -71,7 +71,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
      *
      * @param context context that should be used to create the shared preference instance
      */
-    public static void resetAllShowOnce(Context context) {
+    public static void resetAllShowOnce(@NonNull Context context) {
         SharedPreferences sharedPrefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         sharedPrefs.edit().clear().commit();
     }
@@ -146,7 +146,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
      * @param focusRectangleHeight    focus at specific position rectangle height
      * @param animationEnabled        flag to enable/disable animation
      */
-    private FancyShowCaseView(Activity activity, View view, String id, String title, Spanned spannedTitle,
+    private FancyShowCaseView(@NonNull Activity activity, View view, String id, String title, Spanned spannedTitle,
                               int titleGravity, int titleStyle, int titleSize, int titleSizeUnit, double focusCircleRadiusFactor,
                               int backgroundColor, int focusBorderColor, int focusBorderSize, int customViewRes,
                               OnViewInflateListener viewInflateListener, Animation enterAnimation,
@@ -295,7 +295,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
      *
      * @param activity should be used to find FancyShowCaseView inside it
      */
-    public static Boolean isVisible(Activity activity) {
+    public static Boolean isVisible(@NonNull Activity activity) {
         ViewGroup androidContent = (ViewGroup) activity.findViewById(android.R.id.content);
         ViewGroup mRoot = (ViewGroup) androidContent.getParent().getParent();
         FancyShowCaseView mContainer = (FancyShowCaseView) mRoot.findViewWithTag(CONTAINER_TAG);
@@ -307,7 +307,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
      *
      * @param activity should be used to hide FancyShowCaseView inside it
      */
-    public static void hideCurrent(Activity activity) {
+    public static void hideCurrent(@NonNull Activity activity) {
         ViewGroup androidContent = (ViewGroup) activity.findViewById(android.R.id.content);
         ViewGroup mRoot = (ViewGroup) androidContent.getParent().getParent();
         FancyShowCaseView mContainer = (FancyShowCaseView) mRoot.findViewWithTag(CONTAINER_TAG);
@@ -563,7 +563,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
          *
          * @param activity Activity to show FancyShowCaseView in
          */
-        public Builder(Activity activity) {
+        public Builder(@NonNull Activity activity) {
             mActivity = activity;
         }
 
@@ -572,6 +572,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
          * @param title title text
          * @return Builder
          */
+        @NonNull
         public Builder title(String title) {
             mTitle = title;
             mSpannedTitle = null;
@@ -582,6 +583,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
          * @param title title text
          * @return Builder
          */
+        @NonNull
         public Builder title(Spanned title) {
             mSpannedTitle = title;
             mTitle = null;
@@ -593,6 +595,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
          * @param titleGravity title gravity
          * @return Builder
          */
+        @NonNull
         public Builder titleStyle(@StyleRes int style, int titleGravity) {
             mTitleGravity = titleGravity;
             mTitleStyle = style;
@@ -603,6 +606,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
          * @param focusBorderColor Border color for focus shape
          * @return Builder
          */
+        @NonNull
         public Builder focusBorderColor(int focusBorderColor) {
             mFocusBorderColor = focusBorderColor;
             return this;
@@ -612,6 +616,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
          * @param focusBorderSize Border size for focus shape
          * @return Builder
          */
+        @NonNull
         public Builder focusBorderSize(int focusBorderSize) {
             mFocusBorderSize = focusBorderSize;
             return this;
@@ -621,6 +626,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
          * @param titleGravity title gravity
          * @return Builder
          */
+        @NonNull
         public Builder titleGravity(int titleGravity) {
             mTitleGravity = titleGravity;
             return this;
@@ -633,6 +639,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
          * @param unit      title text unit
          * @return Builder
          */
+        @NonNull
         public Builder titleSize(int titleSize, int unit) {
             mTitleSize = titleSize;
             mTitleSizeUnit = unit;
@@ -643,6 +650,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
          * @param id unique identifier for FancyShowCaseView
          * @return Builder
          */
+        @NonNull
         public Builder showOnce(String id) {
             mId = id;
             return this;
@@ -652,6 +660,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
          * @param view view to focus
          * @return Builder
          */
+        @NonNull
         public Builder focusOn(View view) {
             mView = view;
             return this;
@@ -661,6 +670,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
          * @param backgroundColor background color of FancyShowCaseView
          * @return Builder
          */
+        @NonNull
         public Builder backgroundColor(int backgroundColor) {
             mBackgroundColor = backgroundColor;
             return this;
@@ -670,6 +680,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
          * @param focusCircleRadiusFactor focus circle radius factor (default value = 1)
          * @return Builder
          */
+        @NonNull
         public Builder focusCircleRadiusFactor(double focusCircleRadiusFactor) {
             mFocusCircleRadiusFactor = focusCircleRadiusFactor;
             return this;
@@ -680,6 +691,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
          * @param listener       inflate listener for custom view
          * @return Builder
          */
+        @NonNull
         public Builder customView(@LayoutRes int layoutResource, @Nullable OnViewInflateListener listener) {
             mCustomViewRes = layoutResource;
             mViewInflateListener = listener;
@@ -690,6 +702,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
          * @param enterAnimation enter animation for FancyShowCaseView
          * @return Builder
          */
+        @NonNull
         public Builder enterAnimation(Animation enterAnimation) {
             mEnterAnimation = enterAnimation;
             return this;
@@ -699,6 +712,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
          * @param exitAnimation exit animation for FancyShowCaseView
          * @return Builder
          */
+        @NonNull
         public Builder exitAnimation(Animation exitAnimation) {
             mExitAnimation = exitAnimation;
             return this;
@@ -708,6 +722,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
          * @param closeOnTouch closes on touch if enabled
          * @return Builder
          */
+        @NonNull
         public Builder closeOnTouch(boolean closeOnTouch) {
             mCloseOnTouch = closeOnTouch;
             return this;
@@ -719,11 +734,13 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
          * @param fitSystemWindows fitSystemWindows value
          * @return Builder
          */
+        @NonNull
         public Builder fitSystemWindows(boolean fitSystemWindows) {
             mFitSystemWindows = fitSystemWindows;
             return this;
         }
 
+        @NonNull
         public Builder focusShape(FocusShape focusShape) {
             mFocusShape = focusShape;
             return this;
@@ -739,6 +756,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
          * @return Builder
          */
 
+        @NonNull
         public Builder focusRectAtPosition(int positionX, int positionY, int positionWidth, int positionHeight) {
             mFocusPositionX = positionX;
             mFocusPositionY = positionY;
@@ -756,6 +774,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
          * @return Builder
          */
 
+        @NonNull
         public Builder focusCircleAtPosition(int positionX, int positionY, int radius) {
             mFocusPositionX = positionX;
             mFocusPositionY = positionY;
@@ -767,11 +786,13 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
          * @param dismissListener the dismiss listener
          * @return Builder
          */
+        @NonNull
         public Builder dismissListener(DismissListener dismissListener) {
             mDismissListener = dismissListener;
             return this;
         }
 
+        @NonNull
         public Builder roundRectRadius(int roundRectRadius) {
             mRoundRectRadius = roundRectRadius;
             return this;
@@ -782,16 +803,19 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
          *
          * @return Builder
          */
+        @NonNull
         public Builder disableFocusAnimation() {
             mFocusAnimationEnabled = false;
             return this;
         }
 
+        @NonNull
         public Builder focusAnimationMaxValue(int focusAnimationMaxValue) {
             mFocusAnimationMaxValue = focusAnimationMaxValue;
             return this;
         }
 
+        @NonNull
         public Builder focusAnimationStep(int focusAnimationStep) {
             mFocusAnimationStep = focusAnimationStep;
             return this;
@@ -802,6 +826,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
          *
          * @return {@link FancyShowCaseView} with given parameters
          */
+        @NonNull
         public FancyShowCaseView build() {
             return new FancyShowCaseView(mActivity, mView, mId, mTitle, mSpannedTitle, mTitleGravity, mTitleStyle, mTitleSize, mTitleSizeUnit,
                     mFocusCircleRadiusFactor, mBackgroundColor, mFocusBorderColor, mFocusBorderSize, mCustomViewRes, mViewInflateListener,
