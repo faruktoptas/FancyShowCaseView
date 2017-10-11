@@ -85,6 +85,38 @@ public class MainActivity extends BaseActivity {
     }
 
     /**
+     * Shows a FancyShowCaseView that focus on a view
+     *
+     * @param view View to focus
+     */
+    @OnClick(R.id.btn_focus_dismiss_on_focus_area)
+    public void focusViewDismissOnFocusArea(View view) {
+        new FancyShowCaseView.Builder(this)
+                .focusOn(view)
+                .enableTouchOnFocusedView(true)
+                .title("Focus on View \n(dismiss on focus area)")
+                .build()
+                .show();
+    }
+
+    /**
+     * Shows a FancyShowCaseView with rounded rect focus shape
+     *
+     * @param view View to focus
+     */
+    @OnClick(R.id.btn_rounded_rect_dismiss_on_focus_area)
+    public void focusRoundedRectDismissOnFocusArea(View view) {
+        new FancyShowCaseView.Builder(this)
+                .focusOn(view)
+                .focusShape(FocusShape.ROUNDED_RECTANGLE)
+                .roundRectRadius(90)
+                .enableTouchOnFocusedView(true)
+                .title("Focus on View \n(dismiss on focus area)")
+                .build()
+                .show();
+    }
+
+    /**
      * Shows FancyShowCaseView with focusCircleRadiusFactor 1.5 and title gravity
      *
      * @param view View to focus

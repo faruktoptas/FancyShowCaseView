@@ -6,6 +6,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Rect;
 import android.os.Build;
 import android.support.annotation.AttrRes;
 import android.support.annotation.LayoutRes;
@@ -17,6 +18,7 @@ import android.text.Spanned;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
@@ -99,6 +101,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
     private Animation mEnterAnimation, mExitAnimation;
     private AnimationListener mAnimationListener;
     private boolean mCloseOnTouch;
+    private boolean mEnableTouchOnFocusedView;
     private boolean mFitSystemWindows;
     private FocusShape mFocusShape;
     private DismissListener mDismissListener;
@@ -113,6 +116,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
     private Calculator mCalculator;
 
     private int mFocusPositionX, mFocusPositionY, mFocusCircleRadius, mFocusRectangleWidth, mFocusRectangleHeight;
+    private float[] mLastTouchDownXY = new float[2];
 
     private boolean mFocusAnimationEnabled;
 
@@ -137,6 +141,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
      * @param enterAnimation          enter animation for FancyShowCaseView
      * @param exitAnimation           exit animation for FancyShowCaseView
      * @param closeOnTouch            closes on touch if enabled
+     * @param enableTouchOnFocusedView closes on touch of focused view if enabled
      * @param fitSystemWindows        should be the same value of root view's fitSystemWindows value
      * @param focusShape              shape of focus, can be circle or rounded rectangle
      * @param dismissListener         listener that gets notified when showcase is dismissed
@@ -153,7 +158,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
                               int backgroundColor, int focusBorderColor, int focusBorderSize, int customViewRes,
                               OnViewInflateListener viewInflateListener, Animation enterAnimation,
                               Animation exitAnimation, AnimationListener animationListener,
-                              boolean closeOnTouch, boolean fitSystemWindows,
+                              boolean closeOnTouch, boolean enableTouchOnFocusedView, boolean fitSystemWindows,
                               FocusShape focusShape, DismissListener dismissListener, int roundRectRadius,
                               int focusPositionX, int focusPositionY, int focusCircleRadius, int focusRectangleWidth, int focusRectangleHeight,
                               final boolean animationEnabled, int focusAnimationMaxValue, int focusAnimationStep) {
@@ -178,6 +183,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
         mExitAnimation = exitAnimation;
         mAnimationListener = animationListener;
         mCloseOnTouch = closeOnTouch;
+        mEnableTouchOnFocusedView = enableTouchOnFocusedView;
         mFitSystemWindows = fitSystemWindows;
         mFocusShape = focusShape;
         mDismissListener = dismissListener;
@@ -245,12 +251,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
         if (visibleView == null) {
             setTag(CONTAINER_TAG);
             if (mCloseOnTouch) {
-                setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        hide();
-                    }
-                });
+                setupCloseOnTouchListeners();
             }
             setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT));
@@ -292,6 +293,65 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
             startEnterAnimation();
             writeShown();
         }
+    }
+
+    private void setupCloseOnTouchListeners() {
+        if (mEnableTouchOnFocusedView) {
+            // the purpose of the touch listener is just to store the touch X,Y coordinates
+            setOnTouchListener(new OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+
+                    // save the X,Y coordinates
+                    if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
+                        mLastTouchDownXY[0] = event.getX();
+                        mLastTouchDownXY[1] = event.getY();
+                    }
+
+                    // let the touch event pass on to whoever needs it
+                    return false;
+                }
+            });
+        }
+        setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // retrieve the stored coordinates
+                if (mEnableTouchOnFocusedView) {
+                    float x = mLastTouchDownXY[0];
+                    float y = mLastTouchDownXY[1];
+                    boolean isWithin = false;
+
+                    switch (mFocusShape) {
+                        case CIRCLE:
+                            double distance = Math.sqrt(
+                                    Math.pow((getFocusCenterX() - x), 2)
+                                            + Math.pow((getFocusCenterY() - y), 2));
+
+                            isWithin = Math.abs(distance) < getFocusRadius();
+                            break;
+                        case ROUNDED_RECTANGLE:
+                            Rect rect = new Rect();
+                            int left = getFocusCenterX()-(getFocusWidth()/2);
+                            int right = getFocusCenterX()+(getFocusWidth()/2);
+                            int top = getFocusCenterY()-(getFocusHeight()/2);
+                            int bottom = getFocusCenterY()+(getFocusHeight()/2);
+                            rect.set(left, top, right, bottom);
+                            isWithin = rect.contains((int)x, (int)y);
+                            break;
+                    }
+
+                    if (isWithin) {
+                        //Touch within shape
+                        hide();
+                    }
+
+                } else {
+                    hide();
+                }
+
+            }
+        });
     }
 
     /**
@@ -591,6 +651,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
         private Animation mEnterAnimation, mExitAnimation;
         private AnimationListener mAnimationListener;
         private boolean mCloseOnTouch = true;
+        private boolean mEnableTouchOnFocusedView;
         private boolean mFitSystemWindows;
         private FocusShape mFocusShape = FocusShape.CIRCLE;
         private DismissListener mDismissListener = null;
@@ -783,6 +844,16 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
         }
 
         /**
+         * @param enableTouchOnFocusedView closes on touch of focused view if enabled
+         * @return Builder
+         */
+        @NonNull
+        public Builder enableTouchOnFocusedView(boolean enableTouchOnFocusedView) {
+            mEnableTouchOnFocusedView = enableTouchOnFocusedView;
+            return this;
+        }
+
+        /**
          * This should be the same as root view's fitSystemWindows value
          *
          * @param fitSystemWindows fitSystemWindows value
@@ -884,7 +955,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
         public FancyShowCaseView build() {
             return new FancyShowCaseView(mActivity, mView, mId, mTitle, mSpannedTitle, mTitleGravity, mTitleStyle, mTitleSize, mTitleSizeUnit,
                     mFocusCircleRadiusFactor, mBackgroundColor, mFocusBorderColor, mFocusBorderSize, mCustomViewRes, mViewInflateListener,
-                    mEnterAnimation, mExitAnimation, mAnimationListener, mCloseOnTouch, mFitSystemWindows, mFocusShape, mDismissListener, mRoundRectRadius,
+                    mEnterAnimation, mExitAnimation, mAnimationListener, mCloseOnTouch, mEnableTouchOnFocusedView, mFitSystemWindows, mFocusShape, mDismissListener, mRoundRectRadius,
                     mFocusPositionX, mFocusPositionY, mFocusCircleRadius, mFocusRectangleWidth, mFocusRectangleHeight, mFocusAnimationEnabled,
                     mFocusAnimationMaxValue, mFocusAnimationStep);
         }
