@@ -298,6 +298,16 @@ public class MainActivity extends BaseActivity {
         startActivity(new Intent(this, RecyclerViewActivity.class));
     }
 
+    @OnClick(R.id.btn_focus_delay)
+    public void focusDelayed(View view) {
+        new FancyShowCaseView.Builder(this)
+                .title("Focus with delay")
+                .focusOn(view)
+                .delay(1000)
+                .build()
+                .show();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);

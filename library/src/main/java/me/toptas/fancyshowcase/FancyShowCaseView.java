@@ -105,6 +105,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
     private boolean mFitSystemWindows;
     private FocusShape mFocusShape;
     private DismissListener mDismissListener;
+    private long mDelay;
 
 
     private int mAnimationDuration = 400;
@@ -161,7 +162,8 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
                               boolean closeOnTouch, boolean enableTouchOnFocusedView, boolean fitSystemWindows,
                               FocusShape focusShape, DismissListener dismissListener, int roundRectRadius,
                               int focusPositionX, int focusPositionY, int focusCircleRadius, int focusRectangleWidth, int focusRectangleHeight,
-                              final boolean animationEnabled, int focusAnimationMaxValue, int focusAnimationStep) {
+                              final boolean animationEnabled, int focusAnimationMaxValue, int focusAnimationStep,
+                              long delay) {
         super(activity);
         mId = id;
         mActivity = activity;
@@ -195,6 +197,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
         mFocusAnimationEnabled = animationEnabled;
         mFocusAnimationMaxValue = focusAnimationMaxValue;
         mFocusAnimationStep = focusAnimationStep;
+        mDelay = delay;
 
         initializeParameters();
     }
@@ -246,53 +249,60 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
 
         ViewGroup androidContent = (ViewGroup) mActivity.findViewById(android.R.id.content);
         mRoot = (ViewGroup) androidContent.getParent().getParent();
-        FancyShowCaseView visibleView = (FancyShowCaseView) mRoot.findViewWithTag(CONTAINER_TAG);
-        setClickable(!mEnableTouchOnFocusedView);
-        if (visibleView == null) {
-            setTag(CONTAINER_TAG);
-            if (mCloseOnTouch) {
-                setupTouchListener();
-            }
-            setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT));
-            mRoot.addView(this);
+        mRoot.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (mActivity == null || mActivity.isFinishing()) {
+                    return;
+                }
+                FancyShowCaseView visibleView = (FancyShowCaseView) mRoot.findViewWithTag(CONTAINER_TAG);
+                setClickable(!mEnableTouchOnFocusedView);
+                if (visibleView == null) {
+                    setTag(CONTAINER_TAG);
+                    if (mCloseOnTouch) {
+                        setupTouchListener();
+                    }
+                    setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.MATCH_PARENT));
+                    mRoot.addView(FancyShowCaseView.this);
 
 
-            FancyImageView imageView = new FancyImageView(mActivity);
-            imageView.setFocusAnimationParameters(mFocusAnimationMaxValue, mFocusAnimationStep);
-            if (mCalculator.hasFocus()) {
-                mCenterX = mCalculator.getCircleCenterX();
-                mCenterY = mCalculator.getCircleCenterY();
-            }
+                    FancyImageView imageView = new FancyImageView(mActivity);
+                    imageView.setFocusAnimationParameters(mFocusAnimationMaxValue, mFocusAnimationStep);
+                    if (mCalculator.hasFocus()) {
+                        mCenterX = mCalculator.getCircleCenterX();
+                        mCenterY = mCalculator.getCircleCenterY();
+                    }
+                    imageView.setParameters(mBackgroundColor, mCalculator);
+                    if (mFocusRectangleWidth > 0 && mFocusRectangleHeight > 0) {
+                        mCalculator.setRectPosition(mFocusPositionX, mFocusPositionY, mFocusRectangleWidth, mFocusRectangleHeight);
+                    }
+                    if (mFocusCircleRadius > 0) {
+                        mCalculator.setCirclePosition(mFocusPositionX, mFocusPositionY, mFocusCircleRadius);
+                    }
+                    imageView.setAnimationEnabled(mFocusAnimationEnabled);
+                    imageView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.MATCH_PARENT));
+                    if (mFocusBorderColor != 0 && mFocusBorderSize > 0) {
+                        imageView.setBorderParameters(mFocusBorderColor, mFocusBorderSize);
+                    }
+                    if (mRoundRectRadius > 0) {
+                        imageView.setRoundRectRadius(mRoundRectRadius);
+                    }
+                    addView(imageView);
 
 
-            imageView.setParameters(mBackgroundColor, mCalculator);
-            if (mFocusRectangleWidth > 0 && mFocusRectangleHeight > 0) {
-                mCalculator.setRectPosition(mFocusPositionX, mFocusPositionY, mFocusRectangleWidth, mFocusRectangleHeight);
-            }
-            if (mFocusCircleRadius > 0) {
-                mCalculator.setCirclePosition(mFocusPositionX, mFocusPositionY, mFocusCircleRadius);
-            }
-            imageView.setAnimationEnabled(mFocusAnimationEnabled);
-            imageView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT));
-            if (mFocusBorderColor != 0 && mFocusBorderSize > 0) {
-                imageView.setBorderParameters(mFocusBorderColor, mFocusBorderSize);
-            }
-            if (mRoundRectRadius > 0) {
-                imageView.setRoundRectRadius(mRoundRectRadius);
-            }
-            addView(imageView);
+                    if (mCustomViewRes == 0) {
+                        inflateTitleView();
+                    } else {
+                        inflateCustomView(mCustomViewRes, mViewInflateListener);
+                    }
 
-            if (mCustomViewRes == 0) {
-                inflateTitleView();
-            } else {
-                inflateCustomView(mCustomViewRes, mViewInflateListener);
+                    startEnterAnimation();
+                    writeShown();
+                }
             }
-
-            startEnterAnimation();
-            writeShown();
-        }
+        }, mDelay);
     }
 
     private void setupTouchListener() {
@@ -656,6 +666,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
         private boolean mFocusAnimationEnabled = true;
         private int mFocusAnimationMaxValue = 20;
         private int mFocusAnimationStep = 1;
+        private long mDelay;
 
         /**
          * Constructor for Builder class
@@ -942,6 +953,12 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
             return this;
         }
 
+        @NonNull
+        public Builder delay(int delayInMillis) {
+            mDelay = delayInMillis;
+            return this;
+        }
+
         /**
          * builds the builder
          *
@@ -953,7 +970,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
                     mFocusCircleRadiusFactor, mBackgroundColor, mFocusBorderColor, mFocusBorderSize, mCustomViewRes, mViewInflateListener,
                     mEnterAnimation, mExitAnimation, mAnimationListener, mCloseOnTouch, mEnableTouchOnFocusedView, mFitSystemWindows, mFocusShape, mDismissListener, mRoundRectRadius,
                     mFocusPositionX, mFocusPositionY, mFocusCircleRadius, mFocusRectangleWidth, mFocusRectangleHeight, mFocusAnimationEnabled,
-                    mFocusAnimationMaxValue, mFocusAnimationStep);
+                    mFocusAnimationMaxValue, mFocusAnimationStep, mDelay);
         }
     }
 }
