@@ -123,35 +123,35 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
     /**
      * Constructor for FancyShowCaseView
      *
-     * @param activity                Activity to show FancyShowCaseView in
-     * @param view                    view to focus
-     * @param id                      unique identifier for FancyShowCaseView
-     * @param title                   title text
-     * @param spannedTitle            title text if spanned text should be used
-     * @param titleGravity            title gravity
-     * @param titleStyle              title text style
-     * @param titleSize               title text size
-     * @param titleSizeUnit           title text size unit
-     * @param focusCircleRadiusFactor focus circle radius factor (default value = 1)
-     * @param backgroundColor         background color of FancyShowCaseView
-     * @param focusBorderColor        focus border color of FancyShowCaseView
-     * @param focusBorderSize         focus border size of FancyShowCaseView
-     * @param customViewRes           custom view layout resource
-     * @param viewInflateListener     inflate listener for custom view
-     * @param enterAnimation          enter animation for FancyShowCaseView
-     * @param exitAnimation           exit animation for FancyShowCaseView
-     * @param closeOnTouch            closes on touch if enabled
+     * @param activity                 Activity to show FancyShowCaseView in
+     * @param view                     view to focus
+     * @param id                       unique identifier for FancyShowCaseView
+     * @param title                    title text
+     * @param spannedTitle             title text if spanned text should be used
+     * @param titleGravity             title gravity
+     * @param titleStyle               title text style
+     * @param titleSize                title text size
+     * @param titleSizeUnit            title text size unit
+     * @param focusCircleRadiusFactor  focus circle radius factor (default value = 1)
+     * @param backgroundColor          background color of FancyShowCaseView
+     * @param focusBorderColor         focus border color of FancyShowCaseView
+     * @param focusBorderSize          focus border size of FancyShowCaseView
+     * @param customViewRes            custom view layout resource
+     * @param viewInflateListener      inflate listener for custom view
+     * @param enterAnimation           enter animation for FancyShowCaseView
+     * @param exitAnimation            exit animation for FancyShowCaseView
+     * @param closeOnTouch             closes on touch if enabled
      * @param enableTouchOnFocusedView closes on touch of focused view if enabled
-     * @param fitSystemWindows        should be the same value of root view's fitSystemWindows value
-     * @param focusShape              shape of focus, can be circle or rounded rectangle
-     * @param dismissListener         listener that gets notified when showcase is dismissed
-     * @param roundRectRadius         round rectangle radius
-     * @param focusPositionX          focus at specific position X coordinate
-     * @param focusPositionY          focus at specific position Y coordinate
-     * @param focusCircleRadius       focus at specific position circle radius
-     * @param focusRectangleWidth     focus at specific position rectangle width
-     * @param focusRectangleHeight    focus at specific position rectangle height
-     * @param animationEnabled        flag to enable/disable animation
+     * @param fitSystemWindows         should be the same value of root view's fitSystemWindows value
+     * @param focusShape               shape of focus, can be circle or rounded rectangle
+     * @param dismissListener          listener that gets notified when showcase is dismissed
+     * @param roundRectRadius          round rectangle radius
+     * @param focusPositionX           focus at specific position X coordinate
+     * @param focusPositionY           focus at specific position Y coordinate
+     * @param focusCircleRadius        focus at specific position circle radius
+     * @param focusRectangleWidth      focus at specific position rectangle width
+     * @param focusRectangleHeight     focus at specific position rectangle height
+     * @param animationEnabled         flag to enable/disable animation
      */
     private FancyShowCaseView(@NonNull Activity activity, View view, String id, String title, Spanned spannedTitle,
                               int titleGravity, int titleStyle, int titleSize, int titleSizeUnit, double focusCircleRadiusFactor,
@@ -247,11 +247,11 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
         ViewGroup androidContent = (ViewGroup) mActivity.findViewById(android.R.id.content);
         mRoot = (ViewGroup) androidContent.getParent().getParent();
         FancyShowCaseView visibleView = (FancyShowCaseView) mRoot.findViewWithTag(CONTAINER_TAG);
-        setClickable(true);
+        setClickable(!mEnableTouchOnFocusedView);
         if (visibleView == null) {
             setTag(CONTAINER_TAG);
             if (mCloseOnTouch) {
-                setupCloseOnTouchListeners();
+                setupTouchListener();
             }
             setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT));
@@ -295,63 +295,59 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
         }
     }
 
-    private void setupCloseOnTouchListeners() {
+    private void setupTouchListener() {
         if (mEnableTouchOnFocusedView) {
             // the purpose of the touch listener is just to store the touch X,Y coordinates
             setOnTouchListener(new OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-
-                    // save the X,Y coordinates
+                    // if touch position is on focused view pass the touch to the focused view
                     if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
-                        mLastTouchDownXY[0] = event.getX();
-                        mLastTouchDownXY[1] = event.getY();
+                        boolean isWithin = false;
+                        float x = event.getX();
+                        float y = event.getY();
+
+                        switch (mFocusShape) {
+                            case CIRCLE:
+                                double distance = Math.sqrt(
+                                        Math.pow((getFocusCenterX() - x), 2)
+                                                + Math.pow((getFocusCenterY() - y), 2));
+
+                                isWithin = Math.abs(distance) < getFocusRadius();
+                                break;
+                            case ROUNDED_RECTANGLE:
+                                Rect rect = new Rect();
+                                int left = getFocusCenterX() - (getFocusWidth() / 2);
+                                int right = getFocusCenterX() + (getFocusWidth() / 2);
+                                int top = getFocusCenterY() - (getFocusHeight() / 2);
+                                int bottom = getFocusCenterY() + (getFocusHeight() / 2);
+                                rect.set(left, top, right, bottom);
+                                isWithin = rect.contains((int) x, (int) y);
+                                break;
+                        }
+
+                        // let the touch event pass on to whoever needs it
+                        if (isWithin) {
+                            return false;
+                        } else {
+                            if (mCloseOnTouch) {
+                                hide();
+                            }
+                        }
                     }
 
-                    // let the touch event pass on to whoever needs it
-                    return false;
+                    return true;
+                }
+            });
+        } else {
+            setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    hide();
                 }
             });
         }
-        setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // retrieve the stored coordinates
-                if (mEnableTouchOnFocusedView) {
-                    float x = mLastTouchDownXY[0];
-                    float y = mLastTouchDownXY[1];
-                    boolean isWithin = false;
 
-                    switch (mFocusShape) {
-                        case CIRCLE:
-                            double distance = Math.sqrt(
-                                    Math.pow((getFocusCenterX() - x), 2)
-                                            + Math.pow((getFocusCenterY() - y), 2));
-
-                            isWithin = Math.abs(distance) < getFocusRadius();
-                            break;
-                        case ROUNDED_RECTANGLE:
-                            Rect rect = new Rect();
-                            int left = getFocusCenterX()-(getFocusWidth()/2);
-                            int right = getFocusCenterX()+(getFocusWidth()/2);
-                            int top = getFocusCenterY()-(getFocusHeight()/2);
-                            int bottom = getFocusCenterY()+(getFocusHeight()/2);
-                            rect.set(left, top, right, bottom);
-                            isWithin = rect.contains((int)x, (int)y);
-                            break;
-                    }
-
-                    if (isWithin) {
-                        //Touch within shape
-                        hide();
-                    }
-
-                } else {
-                    hide();
-                }
-
-            }
-        });
     }
 
     /**

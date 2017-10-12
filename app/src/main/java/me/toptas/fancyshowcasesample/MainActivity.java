@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Toast;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -91,12 +92,17 @@ public class MainActivity extends BaseActivity {
      */
     @OnClick(R.id.btn_focus_dismiss_on_focus_area)
     public void focusViewDismissOnFocusArea(View view) {
-        new FancyShowCaseView.Builder(this)
-                .focusOn(view)
-                .enableTouchOnFocusedView(true)
-                .title("Focus on View \n(dismiss on focus area)")
-                .build()
-                .show();
+        if (FancyShowCaseView.isVisible(this)) {
+            Toast.makeText(MainActivity.this, "Clickable button", Toast.LENGTH_SHORT).show();
+            FancyShowCaseView.hideCurrent(this);
+        } else {
+            new FancyShowCaseView.Builder(this)
+                    .focusOn(findViewById(R.id.btn_focus_dismiss_on_focus_area))
+                    .enableTouchOnFocusedView(true)
+                    .title("Focus on View \n(dismiss on focus area)")
+                    .build()
+                    .show();
+        }
     }
 
     /**
@@ -106,14 +112,19 @@ public class MainActivity extends BaseActivity {
      */
     @OnClick(R.id.btn_rounded_rect_dismiss_on_focus_area)
     public void focusRoundedRectDismissOnFocusArea(View view) {
-        new FancyShowCaseView.Builder(this)
-                .focusOn(view)
-                .focusShape(FocusShape.ROUNDED_RECTANGLE)
-                .roundRectRadius(90)
-                .enableTouchOnFocusedView(true)
-                .title("Focus on View \n(dismiss on focus area)")
-                .build()
-                .show();
+        if (FancyShowCaseView.isVisible(this)) {
+            Toast.makeText(MainActivity.this, "Clickable button", Toast.LENGTH_SHORT).show();
+            FancyShowCaseView.hideCurrent(this);
+        } else {
+            new FancyShowCaseView.Builder(this)
+                    .focusOn(view)
+                    .focusShape(FocusShape.ROUNDED_RECTANGLE)
+                    .roundRectRadius(90)
+                    .enableTouchOnFocusedView(true)
+                    .title("Focus on View \n(dismiss on focus area)")
+                    .build()
+                    .show();
+        }
     }
 
     /**
