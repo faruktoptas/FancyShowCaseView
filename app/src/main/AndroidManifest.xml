@@ -15,12 +15,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:theme="@style/NoActionBar" android:name=".SecondActivity"/>
-
-        <activity android:name=".QueueActivity"/>
-
-        <activity android:name=".RecyclerViewActivity"/>
+        <activity
+            android:name=".SecondActivity"
+            android:theme="@style/NoActionBar" />
+        <activity android:name=".QueueActivity" />
+        <activity android:name=".RecyclerViewActivity" />
+        <activity android:name=".CustomQueueActivity"></activity>
     </application>
 
 </manifest>
