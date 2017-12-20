@@ -20,7 +20,7 @@
             android:theme="@style/NoActionBar" />
         <activity android:name=".QueueActivity" />
         <activity android:name=".RecyclerViewActivity" />
-        <activity android:name=".CustomQueueActivity"></activity>
+        <activity android:name=".CustomQueueActivity"/>
     </application>
 
 </manifest>
