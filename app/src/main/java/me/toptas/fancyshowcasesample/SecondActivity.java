@@ -1,6 +1,8 @@
 package me.toptas.fancyshowcasesample;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
@@ -56,5 +58,30 @@ public class SecondActivity extends BaseActivity {
         } else {
             mToolbar.setVisibility(View.VISIBLE);
         }
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+
+    /**
+     * Shows a FancyShowCaseView that focuses to ActionBar items
+     *
+     * @param item actionbar item to focus
+     * @return true
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        new FancyShowCaseView.Builder(this)
+                .focusOn(findViewById(item.getItemId()))
+                .title("Focus on Actionbar items")
+                .fitSystemWindows(true)
+                .build()
+                .show();
+        return true;
     }
 }
