@@ -164,6 +164,13 @@
                 android:text="queuing Multiple Instances" />
 
         <Button
+                android:id="@+id/btn_custom_queue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_margin"
+                android:text="Custom view of queuing Multiple Instances" />
+
+        <Button
             android:id="@+id/btn_recycler_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

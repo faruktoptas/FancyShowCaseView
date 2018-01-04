@@ -281,6 +281,11 @@ public class MainActivity extends BaseActivity {
         startActivity(new Intent(this, QueueActivity.class));
     }
 
+    @OnClick(R.id.btn_custom_queue)
+    public void customQueueMultipleInstances() {
+        startActivity(new Intent(this, CustomQueueActivity.class));
+    }
+
     View.OnClickListener mClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {

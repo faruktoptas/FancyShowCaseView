@@ -79,4 +79,13 @@ public class FancyShowCaseQueue implements DismissListener {
     public void setCompleteListener(OnCompleteListener completeListener) {
         mCompleteListener = completeListener;
     }
+
+    /**
+     * Get the current item of the queue
+     * @return FancyShowCaseView
+     */
+    public FancyShowCaseView getCurrent() {
+        return mCurrent;
+    }
+
 }
