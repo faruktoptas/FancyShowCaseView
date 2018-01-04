@@ -52,6 +52,7 @@ Please see [wiki](https://github.com/faruktoptas/FancyShowCaseView/wiki) for mor
 ## Already in use in following apps
 (feel free to send me new projects)
 * [News - Newspaper & Magazine](https://play.google.com/store/apps/details?id=com.moblino.countrynews)
+* [Get Off Your Phone](https://play.google.com/store/apps/details?id=com.nephi.getoffyourphone)
 
 ## Sample App
  [fancyshowcaseview-sample-v1.0.0.apk](https://github.com/faruktoptas/FancyShowCaseView/releases/download/1.0.0/fancyshowcaseview-sample-v1.0.0.apk)
