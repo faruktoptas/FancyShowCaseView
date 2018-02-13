@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion compile_sdk_version
-    buildToolsVersion '26.0.2'
+    buildToolsVersion "$build_tools_version"
     defaultConfig {
         applicationId "me.toptas.fancyshowcasesample"
         minSdkVersion min_sdk_version
@@ -49,5 +49,5 @@ dependencies {
     compile "com.jakewharton:butterknife-compiler:$butterknife_version"
     compile "com.google.dagger:dagger-compiler:2.0"
     annotationProcessor "com.google.dagger:dagger-compiler:2.0"
-    implementation project(':library')
+    compile project(':library')
 }
