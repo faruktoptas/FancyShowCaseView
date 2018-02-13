@@ -36,7 +36,7 @@ dependencies {
     changed the configuration of dependencies to use annotationProcessor.
     If a dependency includes components that also need to be on the compile classpath,
     declare that dependency a second time and use the compile dependency configuration.
-    android-developers link
+    android-developers   link
     https://developer.android.com/studio/build/gradle-plugin-3-0-0-migration.html#annotationProcessor_config
     */
     annotationProcessor "com.android.support:appcompat-v7:$support_version"
