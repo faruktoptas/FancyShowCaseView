@@ -5,7 +5,7 @@ group = 'com.github.jitpack'
 
 android {
     compileSdkVersion compile_sdk_version
-    buildToolsVersion "$build_tools_version"
+    buildToolsVersion '26.0.2'
 
     defaultConfig {
         minSdkVersion min_sdk_version
