@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-//android-apt removed as it is deprecated now
 
 android {
     compileSdkVersion compile_sdk_version
@@ -32,13 +31,7 @@ android {
 }
 
 dependencies {
-    /*
-    changed the configuration of dependencies to use annotationProcessor.
-    If a dependency includes components that also need to be on the compile classpath,
-    declare that dependency a second time and use the compile dependency configuration.
-    android-developers   link
-    https://developer.android.com/studio/build/gradle-plugin-3-0-0-migration.html#annotationProcessor_config
-    */
+
     annotationProcessor "com.android.support:appcompat-v7:$support_version"
     compile "com.android.support:appcompat-v7:$support_version"
     annotationProcessor "com.android.support:design:$support_version"
@@ -47,7 +40,6 @@ dependencies {
     compile "com.jakewharton:butterknife:$butterknife_version"
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterknife_version"
     compile "com.jakewharton:butterknife-compiler:$butterknife_version"
-    compile "com.google.dagger:dagger-compiler:2.0"
-    annotationProcessor "com.google.dagger:dagger-compiler:2.0"
+
     compile project(':library')
 }
