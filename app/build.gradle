@@ -32,14 +32,10 @@ android {
 
 dependencies {
 
-    annotationProcessor "com.android.support:appcompat-v7:$support_version"
     compile "com.android.support:appcompat-v7:$support_version"
-    annotationProcessor "com.android.support:design:$support_version"
     compile "com.android.support:design:$support_version"
-    annotationProcessor "com.jakewharton:butterknife:$butterknife_version"
     compile "com.jakewharton:butterknife:$butterknife_version"
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterknife_version"
-    compile "com.jakewharton:butterknife-compiler:$butterknife_version"
 
     compile project(':library')
 }
