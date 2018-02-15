@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'android-apt'
 
 android {
     compileSdkVersion compile_sdk_version
@@ -11,6 +10,7 @@ android {
         versionCode 1
         versionName "$version_name"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
     }
     signingConfigs{
         release {
@@ -31,10 +31,15 @@ android {
 }
 
 dependencies {
+
+    annotationProcessor "com.android.support:appcompat-v7:$support_version"
     compile "com.android.support:appcompat-v7:$support_version"
+    annotationProcessor "com.android.support:design:$support_version"
     compile "com.android.support:design:$support_version"
+    annotationProcessor "com.jakewharton:butterknife:$butterknife_version"
     compile "com.jakewharton:butterknife:$butterknife_version"
-    apt "com.jakewharton:butterknife-compiler:$butterknife_version"
+    annotationProcessor "com.jakewharton:butterknife-compiler:$butterknife_version"
+    compile "com.jakewharton:butterknife-compiler:$butterknife_version"
 
     compile project(':library')
 }
