@@ -267,6 +267,11 @@ public class MainActivity extends BaseActivity {
         mFancyShowCaseView.show();
     }
 
+    @OnClick(R.id.btn_custom_view2)
+    public void customViewWithAnimation(View view) {
+        startActivity(new Intent(this, AnimatedActivity.class));
+    }
+
     @OnClick(R.id.btn_no_anim)
     public void noFocusAnimation(View view) {
         mFancyShowCaseView = new FancyShowCaseView.Builder(this)

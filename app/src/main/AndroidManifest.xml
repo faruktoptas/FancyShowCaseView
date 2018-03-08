@@ -21,6 +21,7 @@
         <activity android:name=".QueueActivity" />
         <activity android:name=".RecyclerViewActivity" />
         <activity android:name=".CustomQueueActivity"/>
+        <activity android:name=".AnimatedActivity"/>
     </application>
 
 </manifest>
