@@ -202,4 +202,13 @@ class FancyImageView extends AppCompatImageView {
         mFocusAnimationMaxValue = maxValue;
         mFocusAnimationStep = step;
     }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if (mBitmap!=null && !mBitmap.isRecycled()){
+            mBitmap.recycle();
+            mBitmap=null;
+        }
+    }
 }
