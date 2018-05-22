@@ -5,6 +5,8 @@ An easy-to-use customizable show case view with circular reveal animation.
 
 [@MaterialUp Best of the Day](https://material.uplabs.com/posts/fancyshowcaseview)
 
+Thanks to [DigitalSa1nt](https://github.com/DigitalSa1nt) for the Xamarin ported version [Xamarin.ShowcaseView](https://github.com/DigitalSa1nt/Xamarin.ShowcaseView)
+
 ## Features
 - Circular reveal animation (API Level 21+)
 - Background color
