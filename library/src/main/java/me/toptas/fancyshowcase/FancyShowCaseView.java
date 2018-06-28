@@ -598,11 +598,11 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
         }
     }
 
-    protected DismissListener getDismissListener() {
+    public DismissListener getDismissListener() {
         return mDismissListener;
     }
 
-    protected void setDismissListener(DismissListener dismissListener) {
+    public void setDismissListener(DismissListener dismissListener) {
         mDismissListener = dismissListener;
     }
 
