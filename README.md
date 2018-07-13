@@ -37,7 +37,7 @@ allprojects {
 Then, add the library to your module `build.gradle`
 ```gradle
 dependencies {
-    implementation 'com.github.faruktoptas:FancyShowCaseView:1.0.0'
+    implementation 'com.github.faruktoptas:FancyShowCaseView:1.0.1'
 }
 ```
 
@@ -57,7 +57,7 @@ Please see [wiki](https://github.com/faruktoptas/FancyShowCaseView/wiki) for mor
 * [Get Off Your Phone](https://play.google.com/store/apps/details?id=com.nephi.getoffyourphone)
 
 ## Sample App
- [fancyshowcaseview-sample-v1.0.0.apk](https://github.com/faruktoptas/FancyShowCaseView/releases/download/1.0.0/fancyshowcaseview-sample-v1.0.0.apk)
+ [fancyshowcaseview-sample-v1.0.1.apk](https://github.com/faruktoptas/FancyShowCaseView/releases/download/1.0.1/fancyshowcaseview-sample-v1.0.1.apk)
 
 ## Contribute
 You can contribute by opening a pull request to **dev** branch.
