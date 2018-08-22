@@ -106,7 +106,8 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
     private FocusShape mFocusShape;
     private DismissListener mDismissListener;
     private long mDelay;
-
+    private int mVerticalPadding;
+    private int mHorizontalPadding;
 
     private int mAnimationDuration = 400;
     private int mFocusAnimationMaxValue;
@@ -164,7 +165,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
                               FocusShape focusShape, DismissListener dismissListener, int roundRectRadius,
                               int focusPositionX, int focusPositionY, int focusCircleRadius, int focusRectangleWidth, int focusRectangleHeight,
                               final boolean animationEnabled, int focusAnimationMaxValue, int focusAnimationStep,
-                              long delay) {
+                              long delay, int verticalPadding, int horizontalPadding) {
         super(activity);
         mId = id;
         mActivity = activity;
@@ -199,6 +200,8 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
         mFocusAnimationMaxValue = focusAnimationMaxValue;
         mFocusAnimationStep = focusAnimationStep;
         mDelay = delay;
+        mVerticalPadding = verticalPadding;
+        mHorizontalPadding = horizontalPadding;
 
         initializeParameters();
     }
@@ -246,7 +249,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
 
     private void focus() {
         mCalculator = new Calculator(mActivity, mFocusShape, mView, mFocusCircleRadiusFactor,
-                mFitSystemWindows);
+                mFitSystemWindows, mVerticalPadding, mHorizontalPadding);
 
         ViewGroup androidContent = (ViewGroup) mActivity.findViewById(android.R.id.content);
         mRoot = (ViewGroup) androidContent.getParent().getParent();
@@ -666,6 +669,8 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
         private DismissListener mDismissListener = null;
         private int mFocusBorderSize;
         private int mFocusPositionX, mFocusPositionY, mFocusCircleRadius, mFocusRectangleWidth, mFocusRectangleHeight;
+        private int mVerticalPadding = 0;
+        private int mHorizontalPadding = 0;
         private boolean mFocusAnimationEnabled = true;
         private int mFocusAnimationMaxValue = 20;
         private int mFocusAnimationStep = 1;
@@ -962,6 +967,13 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
             return this;
         }
 
+        @NonNull
+        public Builder padding(int verticalPadding, int horizontalPadding) {
+            mVerticalPadding = verticalPadding;
+            mHorizontalPadding = horizontalPadding;
+            return this;
+        }
+
         /**
          * builds the builder
          *
@@ -973,7 +985,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
                     mFocusCircleRadiusFactor, mBackgroundColor, mFocusBorderColor, mFocusBorderSize, mCustomViewRes, mViewInflateListener,
                     mEnterAnimation, mExitAnimation, mAnimationListener, mCloseOnTouch, mEnableTouchOnFocusedView, mFitSystemWindows, mFocusShape, mDismissListener, mRoundRectRadius,
                     mFocusPositionX, mFocusPositionY, mFocusCircleRadius, mFocusRectangleWidth, mFocusRectangleHeight, mFocusAnimationEnabled,
-                    mFocusAnimationMaxValue, mFocusAnimationStep, mDelay);
+                    mFocusAnimationMaxValue, mFocusAnimationStep, mDelay, mVerticalPadding, mHorizontalPadding);
         }
     }
 }
