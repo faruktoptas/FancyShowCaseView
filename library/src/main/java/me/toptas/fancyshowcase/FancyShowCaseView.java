@@ -79,6 +79,11 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
         sharedPrefs.edit().clear().commit();
     }
 
+    public static boolean isShownBeforeById(@NonNull Context context, String id) {
+        SharedPreferences sharedPrefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        return sharedPrefs.getBoolean(id, false);
+    }
+
     /**
      * Builder parameters
      */
