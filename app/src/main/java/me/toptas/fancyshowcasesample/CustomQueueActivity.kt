@@ -4,11 +4,10 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 
-import butterknife.ButterKnife
 import kotlinx.android.synthetic.main.activity_queue.*
 import me.toptas.fancyshowcase.FancyShowCaseQueue
 import me.toptas.fancyshowcase.FancyShowCaseView
-import me.toptas.fancyshowcase.OnViewInflateListener
+import me.toptas.fancyshowcase.listener.OnViewInflateListener
 
 class CustomQueueActivity : BaseActivity() {
 

@@ -14,6 +14,8 @@ import android.widget.Toast
 import butterknife.ButterKnife
 import kotlinx.android.synthetic.main.activity_main.*
 import me.toptas.fancyshowcase.*
+import me.toptas.fancyshowcase.listener.DismissListener
+import me.toptas.fancyshowcase.listener.OnViewInflateListener
 
 class MainActivity : BaseActivity() {
 

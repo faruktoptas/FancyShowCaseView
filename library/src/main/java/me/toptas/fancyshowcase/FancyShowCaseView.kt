@@ -43,6 +43,9 @@ import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
+import me.toptas.fancyshowcase.listener.AnimationListener
+import me.toptas.fancyshowcase.listener.DismissListener
+import me.toptas.fancyshowcase.listener.OnViewInflateListener
 
 /**
  * FancyShowCaseView class
@@ -53,12 +56,12 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
     /**
      * Builder parameters
      */
-    private var mActivity: Activity? = null
+    private lateinit var activity: Activity
     private var title: String? = null
     private var spannedTitle: Spanned? = null
     private var id: String? = null
-    private var mFocusCircleRadiusFactor: Double = 1.0
-    private var mView: View? = null
+    private var focusCircleRadiusFactor: Double = 1.0
+    private var focusedView: View? = null
     private var mBackgroundColor: Int = 0
     private var mFocusBorderColor: Int = 0
     private var mTitleGravity: Int = -1
@@ -83,7 +86,7 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
     private var mCenterX: Int = 0
     private var mCenterY: Int = 0
     private var mRoot: ViewGroup? = null
-    private var mSharedPreferences: SharedPreferences? = null
+    private var sharedPreferences: SharedPreferences? = null
     private var mCalculator: Calculator? = null
     private var mFocusPositionX: Int = 0
     private var mFocusPositionY: Int = 0
@@ -118,35 +121,35 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
     /**
      * Constructor for FancyShowCaseView
      *
-     * @param activity                 Activity to show FancyShowCaseView in
-     * @param view                     view to focus
-     * @param id                       unique identifier for FancyShowCaseView
-     * @param title                    title text
-     * @param spannedTitle             title text if spanned text should be used
-     * @param titleGravity             title gravity
-     * @param titleStyle               title text style
-     * @param titleSize                title text size
-     * @param titleSizeUnit            title text size unit
-     * @param focusCircleRadiusFactor  focus circle radius factor (default value = 1)
-     * @param backgroundColor          background color of FancyShowCaseView
-     * @param focusBorderColor         focus border color of FancyShowCaseView
-     * @param focusBorderSize          focus border size of FancyShowCaseView
-     * @param customViewRes            custom view layout resource
-     * @param viewInflateListener      inflate listener for custom view
-     * @param enterAnimation           enter animation for FancyShowCaseView
-     * @param exitAnimation            exit animation for FancyShowCaseView
-     * @param closeOnTouch             closes on touch if enabled
-     * @param enableTouchOnFocusedView closes on touch of focused view if enabled
-     * @param fitSystemWindows         should be the same value of root view's fitSystemWindows value
-     * @param focusShape               shape of focus, can be circle or rounded rectangle
-     * @param dismissListener          listener that gets notified when showcase is dismissed
-     * @param roundRectRadius          round rectangle radius
-     * @param focusPositionX           focus at specific position X coordinate
-     * @param focusPositionY           focus at specific position Y coordinate
-     * @param focusCircleRadius        focus at specific position circle radius
-     * @param focusRectangleWidth      focus at specific position rectangle width
-     * @param focusRectangleHeight     focus at specific position rectangle height
-     * @param animationEnabled         flag to enable/disable animation
+     * @param _activity                 Activity to show FancyShowCaseView in
+     * @param _view                     view to focus
+     * @param _id                       unique identifier for FancyShowCaseView
+     * @param _title                    title text
+     * @param _spannedTitle             title text if spanned text should be used
+     * @param _titleGravity             title gravity
+     * @param _titleStyle               title text style
+     * @param _titleSize                title text size
+     * @param _titleSizeUnit            title text size unit
+     * @param _focusCircleRadiusFactor  focus circle radius factor (default value = 1)
+     * @param _backgroundColor          background color of FancyShowCaseView
+     * @param _focusBorderColor         focus border color of FancyShowCaseView
+     * @param _focusBorderSize          focus border size of FancyShowCaseView
+     * @param _customViewRes            custom view layout resource
+     * @param _viewInflateListener      inflate listener for custom view
+     * @param _enterAnimation           enter animation for FancyShowCaseView
+     * @param _exitAnimation            exit animation for FancyShowCaseView
+     * @param _closeOnTouch             closes on touch if enabled
+     * @param _enableTouchOnFocusedView closes on touch of focused view if enabled
+     * @param _fitSystemWindows         should be the same value of root view's fitSystemWindows value
+     * @param _focusShape               shape of focus, can be circle or rounded rectangle
+     * @param _dismissListener          listener that gets notified when showcase is dismissed
+     * @param _roundRectRadius          round rectangle radius
+     * @param _focusPositionX           focus at specific position X coordinate
+     * @param _focusPositionY           focus at specific position Y coordinate
+     * @param _focusCircleRadius        focus at specific position circle radius
+     * @param _focusRectangleWidth      focus at specific position rectangle width
+     * @param _focusRectangleHeight     focus at specific position rectangle height
+     * @param _animationEnabled         flag to enable/disable animation
      */
     private constructor(_activity: Activity,
                         _view: View?,
@@ -181,12 +184,14 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
                         _focusAnimationMaxValue: Int,
                         _focusAnimationStep: Int,
                         _delay: Long) : super(_activity) {
+
+        requireNotNull(_activity)
         id = _id
-        mActivity = _activity
-        mView = _view
+        activity = _activity
+        focusedView = _view
         title = _title
         spannedTitle = _spannedTitle
-        mFocusCircleRadiusFactor = _focusCircleRadiusFactor
+        focusCircleRadiusFactor = _focusCircleRadiusFactor
         mBackgroundColor = _backgroundColor
         mFocusBorderColor = _focusBorderColor
         mFocusBorderSize = _focusBorderSize
@@ -225,43 +230,43 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
         mBackgroundColor = if (mBackgroundColor != 0)
             mBackgroundColor
         else
-            ContextCompat.getColor(mActivity!!, R.color.fancy_showcase_view_default_background_color)
+            ContextCompat.getColor(activity, R.color.fancy_showcase_view_default_background_color)
         mTitleGravity = if (mTitleGravity >= 0) mTitleGravity else Gravity.CENTER
         mTitleStyle = if (mTitleStyle != 0) mTitleStyle else R.style.FancyShowCaseDefaultTitleStyle
 
         val displayMetrics = DisplayMetrics()
-        mActivity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
+        activity.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
         val deviceWidth = displayMetrics.widthPixels
         val deviceHeight = displayMetrics.heightPixels
         mCenterX = deviceWidth / 2
         mCenterY = deviceHeight / 2
-        mSharedPreferences = mActivity?.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        sharedPreferences = activity.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
     }
 
     /**
      * Shows FancyShowCaseView
      */
     fun show() {
-        if (mActivity == null || id != null && isShownBefore(context, id!!)) {
+        if (id != null && isShownBefore(context, id!!)) {
             dismissListener?.onSkipped(id)
             return
         }
         // if view is not laid out get width/height values in onGlobalLayout
-        if (mView != null && mView?.width == 0 && mView?.height == 0) {
-            mView?.viewTreeObserver?.addOnGlobalLayoutListener(this)
+        if (focusedView != null && focusedView?.width == 0 && focusedView?.height == 0) {
+            focusedView?.viewTreeObserver?.addOnGlobalLayoutListener(this)
         } else {
             focus()
         }
     }
 
     private fun focus() {
-        mCalculator = Calculator(mActivity!!, mFocusShape, mView, mFocusCircleRadiusFactor,
+        mCalculator = Calculator(activity, mFocusShape, focusedView, focusCircleRadiusFactor,
                 mFitSystemWindows)
 
-        val androidContent = mActivity!!.findViewById<View>(android.R.id.content) as ViewGroup
+        val androidContent = activity.findViewById<View>(android.R.id.content) as ViewGroup
         mRoot = androidContent.parent.parent as ViewGroup?
         mRoot?.postDelayed(Runnable {
-            if (mActivity?.isFinishing == true) {
+            if (activity.isFinishing) {
                 return@Runnable
             }
             val visibleView = mRoot?.findViewWithTag<View>(CONTAINER_TAG) as FancyShowCaseView?
@@ -275,30 +280,29 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
                         ViewGroup.LayoutParams.MATCH_PARENT)
                 mRoot?.addView(this)
 
-                mImageView = FancyImageView(mActivity!!)
-                mImageView!!.setFocusAnimationParameters(mFocusAnimationMaxValue, mFocusAnimationStep)
+                mImageView = FancyImageView(activity)
+                mImageView?.setFocusAnimationParameters(mFocusAnimationMaxValue, mFocusAnimationStep)
                 if (mCalculator?.hasFocus() == true) {
                     mCenterX = mCalculator!!.circleCenterX
                     mCenterY = mCalculator!!.circleCenterY
                 }
-                mImageView!!.setParameters(mBackgroundColor, mCalculator!!)
+                mImageView?.setParameters(mBackgroundColor, mCalculator!!)
                 if (mFocusRectangleWidth > 0 && mFocusRectangleHeight > 0) {
                     mCalculator?.setRectPosition(mFocusPositionX, mFocusPositionY, mFocusRectangleWidth, mFocusRectangleHeight)
                 }
                 if (mFocusCircleRadius > 0) {
                     mCalculator?.setCirclePosition(mFocusPositionX, mFocusPositionY, mFocusCircleRadius)
                 }
-                mImageView!!.setAnimationEnabled(mFocusAnimationEnabled)
-                mImageView!!.layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                mImageView?.focusAnimationEnabled = mFocusAnimationEnabled
+                mImageView?.layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT)
                 if (mFocusBorderColor != 0 && mFocusBorderSize > 0) {
                     mImageView!!.setBorderParameters(mFocusBorderColor, mFocusBorderSize)
                 }
                 if (mRoundRectRadius > 0) {
-                    mImageView!!.setRoundRectRadius(mRoundRectRadius)
+                    mImageView?.roundRectRadius = mRoundRectRadius
                 }
                 addView(mImageView)
-
 
                 if (mCustomViewRes == 0) {
                     inflateTitleView()
@@ -361,9 +365,9 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
     private fun startEnterAnimation() {
         when {
             mEnterAnimation != null -> startAnimation(mEnterAnimation)
-            Utils.shouldShowCircularAnimation() -> doCircularEnterAnimation()
+            shouldShowCircularAnimation() -> doCircularEnterAnimation()
             else -> {
-                val fadeInAnimation = AnimationUtils.loadAnimation(mActivity, R.anim.fscv_fade_in)
+                val fadeInAnimation = AnimationUtils.loadAnimation(activity, R.anim.fscv_fade_in)
                 fadeInAnimation.fillAfter = true
                 fadeInAnimation.setAnimationListener(object : Animation.AnimationListener {
 
@@ -386,9 +390,9 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
     fun hide() {
         when {
             mExitAnimation != null -> startAnimation(mExitAnimation)
-            Utils.shouldShowCircularAnimation() -> doCircularExitAnimation()
+            shouldShowCircularAnimation() -> doCircularExitAnimation()
             else -> {
-                val fadeOut = AnimationUtils.loadAnimation(mActivity, R.anim.fscv_fade_out)
+                val fadeOut = AnimationUtils.loadAnimation(activity, R.anim.fscv_fade_out)
                 fadeOut.setAnimationListener(object : Animation.AnimationListener {
                     override fun onAnimationEnd(animation: Animation) {
                         removeView()
@@ -412,7 +416,7 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
      * @param viewInflateListener inflate listener for custom view
      */
     private fun inflateCustomView(@LayoutRes layout: Int, viewInflateListener: OnViewInflateListener?) {
-        mActivity?.layoutInflater?.inflate(layout, this, false)?.apply {
+        activity.layoutInflater?.inflate(layout, this, false)?.apply {
             addView(this)
             viewInflateListener?.onViewInflated(this)
         }
@@ -430,7 +434,7 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     textView.setTextAppearance(mTitleStyle)
                 } else {
-                    textView.setTextAppearance(mActivity, mTitleStyle)
+                    textView.setTextAppearance(activity, mTitleStyle)
                 }
                 if (mTitleSize != -1) {
                     textView.setTextSize(mTitleSizeUnit, mTitleSize.toFloat())
@@ -438,7 +442,7 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
                 textView.gravity = mTitleGravity
                 if (mFitSystemWindows) {
                     val params = textView.layoutParams as RelativeLayout.LayoutParams
-                    params.setMargins(0, Utils.getStatusBarHeight(context), 0, 0)
+                    params.setMargins(0, Calculator.getStatusBarHeight(context), 0, 0)
                 }
                 if (spannedTitle != null) {
                     textView.text = spannedTitle
@@ -466,27 +470,28 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
 
                         val revealRadius = Math.hypot(width.toDouble(), height.toDouble()).toInt()
                         var startRadius = 0
-                        if (mView != null) {
-                            startRadius = mView!!.width / 2
+                        if (focusedView != null) {
+                            startRadius = focusedView!!.width / 2
                         } else if (mFocusCircleRadius > 0 || mFocusRectangleWidth > 0 || mFocusRectangleHeight > 0) {
                             mCenterX = mFocusPositionX
                             mCenterY = mFocusPositionY
                         }
-                        val enterAnimator = ViewAnimationUtils.createCircularReveal(this@FancyShowCaseView,
-                                mCenterX, mCenterY, startRadius.toFloat(), revealRadius.toFloat())
-                        enterAnimator.duration = mAnimationDuration.toLong()
-                        if (mAnimationListener != null) {
-                            enterAnimator.addListener(object : AnimatorListenerAdapter() {
+                        ViewAnimationUtils.createCircularReveal(this@FancyShowCaseView,
+                                mCenterX,
+                                mCenterY,
+                                startRadius.toFloat(),
+                                revealRadius.toFloat()).apply {
+
+                            duration = mAnimationDuration.toLong()
+                            addListener(object : AnimatorListenerAdapter() {
                                 override fun onAnimationEnd(animation: Animator) {
                                     mAnimationListener?.onEnterAnimationEnd()
                                 }
                             })
-
+                            interpolator = AnimationUtils.loadInterpolator(activity,
+                                    android.R.interpolator.accelerate_cubic)
+                            start()
                         }
-                        enterAnimator.interpolator = AnimationUtils.loadInterpolator(mActivity,
-                                android.R.interpolator.accelerate_cubic)
-
-                        enterAnimator.start()
                     }
                 })
 
@@ -498,60 +503,66 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private fun doCircularExitAnimation() {
         val revealRadius = Math.hypot(width.toDouble(), height.toDouble()).toInt()
-        val exitAnimator = ViewAnimationUtils.createCircularReveal(this,
-                mCenterX, mCenterY, revealRadius.toFloat(), 0f)
-        exitAnimator.duration = mAnimationDuration.toLong()
-        exitAnimator.interpolator = AnimationUtils.loadInterpolator(mActivity,
-                android.R.interpolator.decelerate_cubic)
-        exitAnimator.addListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator) {
-                removeView()
-                mAnimationListener?.onExitAnimationEnd()
-            }
-        })
-        exitAnimator.start()
-
-
+        ViewAnimationUtils.createCircularReveal(this,
+                mCenterX,
+                mCenterY,
+                revealRadius.toFloat(),
+                0f).apply {
+            duration = mAnimationDuration.toLong()
+            interpolator = AnimationUtils.loadInterpolator(activity,
+                    android.R.interpolator.decelerate_cubic)
+            addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    removeView()
+                    mAnimationListener?.onExitAnimationEnd()
+                }
+            })
+            start()
+        }
     }
 
     /**
      * Saves the FancyShowCaseView id to SharedPreferences that is shown once
      */
     private fun writeShown() {
-        val editor = mSharedPreferences!!.edit()
-        editor.putBoolean(id, true)
-        editor.apply()
+        sharedPreferences?.edit()?.apply {
+            putBoolean(id, true)
+            apply()
+        }
     }
 
     /**
      * Removes FancyShowCaseView view from activity root view
      */
     fun removeView() {
-        if (mImageView != null)
-            mImageView = null
+        if (mImageView != null) mImageView = null
         mRoot?.removeView(this)
         dismissListener?.onDismiss(id)
     }
 
     override fun onGlobalLayout() {
         if (Build.VERSION.SDK_INT < 16) {
-            mView?.viewTreeObserver?.removeGlobalOnLayoutListener(this)
+            focusedView?.viewTreeObserver?.removeGlobalOnLayoutListener(this)
         } else {
-            mView?.viewTreeObserver?.removeOnGlobalLayoutListener(this)
+            focusedView?.viewTreeObserver?.removeOnGlobalLayoutListener(this)
         }
         focus()
+    }
+
+    private fun shouldShowCircularAnimation(): Boolean {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
     }
 
 
     /**
      * Builder class for [FancyShowCaseView]
      */
-    class Builder(private val mActivity: Activity) {
-        private var mView: View? = null
+    class Builder(private val activity: Activity) {
+        private var focusedView: View? = null
         private var mId: String? = null
         private var mTitle: String? = null
         private var mSpannedTitle: Spanned? = null
-        private var mFocusCircleRadiusFactor = 1.0
+        private var focusCircleRadiusFactor = 1.0
         private var mBackgroundColor: Int = 0
         private var mFocusBorderColor: Int = 0
         private var mTitleGravity = -1
@@ -666,7 +677,7 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
          * @return Builder
          */
         fun focusOn(view: View): Builder {
-            mView = view
+            focusedView = view
             return this
         }
 
@@ -680,11 +691,11 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
         }
 
         /**
-         * @param focusCircleRadiusFactor focus circle radius factor (default value = 1)
+         * @param factor focus circle radius factor (default value = 1)
          * @return Builder
          */
-        fun focusCircleRadiusFactor(focusCircleRadiusFactor: Double): Builder {
-            mFocusCircleRadiusFactor = focusCircleRadiusFactor
+        fun focusCircleRadiusFactor(factor: Double): Builder {
+            focusCircleRadiusFactor = factor
             return this
         }
 
@@ -841,8 +852,8 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
          * @return [FancyShowCaseView] with given parameters
          */
         fun build(): FancyShowCaseView {
-            return FancyShowCaseView(mActivity, mView, mId, mTitle, mSpannedTitle, mTitleGravity, mTitleStyle, mTitleSize, mTitleSizeUnit,
-                    mFocusCircleRadiusFactor, mBackgroundColor, mFocusBorderColor, mFocusBorderSize, mCustomViewRes, mViewInflateListener,
+            return FancyShowCaseView(activity, focusedView, mId, mTitle, mSpannedTitle, mTitleGravity, mTitleStyle, mTitleSize, mTitleSizeUnit,
+                    focusCircleRadiusFactor, mBackgroundColor, mFocusBorderColor, mFocusBorderSize, mCustomViewRes, mViewInflateListener,
                     mEnterAnimation, mExitAnimation, mAnimationListener, mCloseOnTouch, mEnableTouchOnFocusedView, mFitSystemWindows, mFocusShape, mDismissListener, mRoundRectRadius,
                     mFocusPositionX, mFocusPositionY, mFocusCircleRadius, mFocusRectangleWidth, mFocusRectangleHeight, mFocusAnimationEnabled,
                     mFocusAnimationMaxValue, mFocusAnimationStep, mDelay)
@@ -852,9 +863,9 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
     companion object {
 
         // Tag for container view
-        private val CONTAINER_TAG = "ShowCaseViewTag"
+        private const val CONTAINER_TAG = "ShowCaseViewTag"
         // SharedPreferences name
-        private val PREF_NAME = "PrefShowCaseView"
+        private const val PREF_NAME = "PrefShowCaseView"
 
         /**
          * Resets the show once flag
@@ -862,20 +873,27 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
          * @param context context that should be used to create the shared preference instance
          * @param id      id of the show once flag that should be reset
          */
-        fun resetShowOnce(context: Context, id: String) {
-            val sharedPrefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
-            sharedPrefs.edit().remove(id).commit()
-        }
+        fun resetShowOnce(context: Context, id: String) = preferences(context)
+                .edit()
+                .remove(id)
+                .apply()
+
 
         /**
          * Resets all show once flags
          *
          * @param context context that should be used to create the shared preference instance
          */
-        fun resetAllShowOnce(context: Context) {
-            val sharedPrefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
-            sharedPrefs.edit().clear().commit()
-        }
+        fun resetAllShowOnce(context: Context) = preferences(context)
+                .edit()
+                .clear()
+                .apply()
+
+
+        fun isShownBefore(context: Context, id: String) = preferences(context).getBoolean(id, false)
+
+        private fun preferences(context: Context) = context
+                .getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
 
         /**
          * Check is FancyShowCaseView visible
@@ -885,8 +903,7 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
         fun isVisible(activity: Activity): Boolean {
             val androidContent = activity.findViewById<View>(android.R.id.content) as ViewGroup
             val mRoot = androidContent.parent.parent as ViewGroup
-            val mContainer = mRoot.findViewWithTag<View>(CONTAINER_TAG) as FancyShowCaseView?
-            return mContainer != null
+            return mRoot.findViewWithTag<View>(CONTAINER_TAG) as FancyShowCaseView? != null
         }
 
         /**
@@ -897,13 +914,7 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
         fun hideCurrent(activity: Activity) {
             val androidContent = activity.findViewById<View>(android.R.id.content) as ViewGroup
             val mRoot = androidContent.parent.parent as ViewGroup
-            val mContainer = mRoot.findViewWithTag<View>(CONTAINER_TAG) as FancyShowCaseView
-            mContainer.hide()
-        }
-
-        fun isShownBefore(context: Context, id: String): Boolean {
-            val pref = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
-            return pref.getBoolean(id, false)
+            (mRoot.findViewWithTag<View>(CONTAINER_TAG) as FancyShowCaseView?)?.hide()
         }
     }
 }

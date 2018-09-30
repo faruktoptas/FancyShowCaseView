@@ -9,7 +9,7 @@ import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_main.*
 import me.toptas.fancyshowcase.FancyShowCaseQueue
 import me.toptas.fancyshowcase.FancyShowCaseView
-import me.toptas.fancyshowcase.OnViewInflateListener
+import me.toptas.fancyshowcase.listener.OnViewInflateListener
 
 
 class AnimatedActivity : BaseActivity() {

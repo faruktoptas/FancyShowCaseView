@@ -16,6 +16,8 @@
 
 package me.toptas.fancyshowcase
 
+import me.toptas.fancyshowcase.listener.DismissListener
+import me.toptas.fancyshowcase.listener.OnCompleteListener
 import java.util.LinkedList
 import java.util.Queue
 
@@ -45,7 +47,7 @@ class FancyShowCaseQueue : DismissListener {
      * Starts displaying all views in order of their insertion in the queue, one after another
      */
     fun show() {
-        if (!queue.isEmpty()) {
+        if (queue.isNotEmpty()) {
             current = queue.poll().apply {
                 dismissListener = this@FancyShowCaseQueue
                 show()
@@ -59,21 +61,14 @@ class FancyShowCaseQueue : DismissListener {
      * Cancels the queue
      * @param hideCurrent hides current FancyShowCaseView
      */
-    fun cancel(hideCurrent: Boolean) {
-        if (hideCurrent) {
-            current?.hide()
-        }
-        if (!queue.isEmpty()) {
-            queue.clear()
-        }
+    fun cancel(hideCurrent: Boolean = true) {
+        if (hideCurrent) current?.hide()
+
+        if (queue.isNotEmpty()) queue.clear()
     }
 
-    override fun onDismiss(id: String?) {
-        show()
-    }
+    override fun onDismiss(id: String?) = show()
 
-    override fun onSkipped(id: String?) {
-        show()
-    }
+    override fun onSkipped(id: String?) = show()
 
 }

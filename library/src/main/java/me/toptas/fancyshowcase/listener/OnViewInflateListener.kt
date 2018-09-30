@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package me.toptas.fancyshowcase
+package me.toptas.fancyshowcase.listener
+
+import android.view.View
 
 /**
- * Listener for enter/exit animations
+ * Listener for custom view inflation
  */
 
-interface AnimationListener {
-    fun onEnterAnimationEnd()
-
-    fun onExitAnimationEnd()
+interface OnViewInflateListener {
+    fun onViewInflated(view: View)
 }

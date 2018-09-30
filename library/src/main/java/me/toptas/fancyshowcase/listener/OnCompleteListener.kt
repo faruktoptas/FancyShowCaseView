@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package me.toptas.fancyshowcase
+package me.toptas.fancyshowcase.listener
 
 /**
  * Listener for FancyShowCaseQueue completion

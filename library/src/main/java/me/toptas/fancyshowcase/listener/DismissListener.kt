@@ -14,14 +14,23 @@
  * limitations under the License.
  */
 
-package me.toptas.fancyshowcase
-
-import android.view.View
+package me.toptas.fancyshowcase.listener
 
 /**
- * Listener for custom view inflation
+ * Listener for dismissing of one FancyShowCaseView
  */
+interface DismissListener {
+    /**
+     * is called when a [FancyShowCaseView] is dismissed
+     *
+     * @param id the show once id of the dismissed view
+     */
+    fun onDismiss(id: String?)
 
-interface OnViewInflateListener {
-    fun onViewInflated(view: View)
+    /**
+     * is called when a [FancyShowCaseView] is skipped because of it's show once id
+     *
+     * @param id the show once id of the dismissed view
+     */
+    fun onSkipped(id: String?)
 }

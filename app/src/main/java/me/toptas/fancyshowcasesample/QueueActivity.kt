@@ -1,15 +1,13 @@
 package me.toptas.fancyshowcasesample
 
 import android.os.Bundle
-import android.widget.Button
 import android.widget.Toast
 
-import butterknife.BindView
 import butterknife.ButterKnife
 import kotlinx.android.synthetic.main.activity_queue.*
 import me.toptas.fancyshowcase.FancyShowCaseQueue
 import me.toptas.fancyshowcase.FancyShowCaseView
-import me.toptas.fancyshowcase.OnCompleteListener
+import me.toptas.fancyshowcase.listener.OnCompleteListener
 
 
 class QueueActivity : BaseActivity() {

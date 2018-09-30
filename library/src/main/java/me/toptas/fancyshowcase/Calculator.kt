@@ -17,6 +17,7 @@
 package me.toptas.fancyshowcase
 
 import android.app.Activity
+import android.content.Context
 import android.os.Build
 import android.util.DisplayMetrics
 import android.view.View
@@ -76,12 +77,12 @@ internal class Calculator(activity: Activity, focusShape: FocusShape, view: View
         val deviceWidth = displayMetrics.widthPixels
         val deviceHeight = displayMetrics.heightPixels
         bitmapWidth = deviceWidth
-        bitmapHeight = deviceHeight - if (fitSystemWindows) 0 else Utils.getStatusBarHeight(activity)
+        bitmapHeight = deviceHeight - if (fitSystemWindows) 0 else getStatusBarHeight(activity)
         if (view != null) {
             val adjustHeight = if (fitSystemWindows && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
                 0
             else
-                Utils.getStatusBarHeight(activity)
+                getStatusBarHeight(activity)
             val viewPoint = IntArray(2)
             view.getLocationInWindow(viewPoint)
             focusWidth = view.width
@@ -190,5 +191,16 @@ internal class Calculator(activity: Activity, focusShape: FocusShape, view: View
      */
     fun roundRectLeftCircleRadius(animCounter: Int, animMoveFactor: Double): Float {
         return (focusHeight / 2 + animCounter * animMoveFactor).toFloat()
+    }
+
+    companion object {
+        fun getStatusBarHeight(context: Context): Int {
+            var result = 0
+            val resourceId = context.resources.getIdentifier("status_bar_height", "dimen", "android")
+            if (resourceId > 0) {
+                result = context.resources.getDimensionPixelSize(resourceId)
+            }
+            return result
+        }
     }
 }
