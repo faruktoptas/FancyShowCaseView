@@ -16,7 +16,7 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
     }
-    signingConfigs{
+    signingConfigs {
         release {
             storeFile file("app.keystore.jks")
             storePassword "hopeitworks"
@@ -38,8 +38,7 @@ dependencies {
 
     compile "com.android.support:appcompat-v7:$support_version"
     compile "com.android.support:design:$support_version"
-    compile "com.jakewharton:butterknife:$butterknife_version"
-    annotationProcessor "com.jakewharton:butterknife-compiler:$butterknife_version"
+
 
     compile project(':library')
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"

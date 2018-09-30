@@ -4,11 +4,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Button
 
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.OnClick
 import kotlinx.android.synthetic.main.activity_second.*
 import me.toptas.fancyshowcase.FancyShowCaseView
 
@@ -17,7 +13,6 @@ class SecondActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_second)
-        ButterKnife.bind(this)
         setSupportActionBar(toolbar)
 
         focusOnButton()

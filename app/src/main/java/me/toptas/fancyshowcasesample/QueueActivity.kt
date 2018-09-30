@@ -3,7 +3,6 @@ package me.toptas.fancyshowcasesample
 import android.os.Bundle
 import android.widget.Toast
 
-import butterknife.ButterKnife
 import kotlinx.android.synthetic.main.activity_queue.*
 import me.toptas.fancyshowcase.FancyShowCaseQueue
 import me.toptas.fancyshowcase.FancyShowCaseView
@@ -15,7 +14,6 @@ class QueueActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_queue)
-        ButterKnife.bind(this)
 
         val fancyShowCaseView1 = FancyShowCaseView.Builder(this)
                 .title("First Queue Item")

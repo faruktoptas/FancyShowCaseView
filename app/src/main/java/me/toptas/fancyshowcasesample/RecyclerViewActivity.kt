@@ -2,13 +2,10 @@ package me.toptas.fancyshowcasesample
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.View
 
 import java.util.ArrayList
 
-import butterknife.BindView
-import butterknife.ButterKnife
 import kotlinx.android.synthetic.main.activity_recycler_view.*
 import me.toptas.fancyshowcase.FancyShowCaseView
 

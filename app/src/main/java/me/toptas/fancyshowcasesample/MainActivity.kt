@@ -11,7 +11,6 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 
-import butterknife.ButterKnife
 import kotlinx.android.synthetic.main.activity_main.*
 import me.toptas.fancyshowcase.*
 import me.toptas.fancyshowcase.listener.DismissListener
@@ -26,7 +25,6 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        ButterKnife.bind(this)
 
         btn_simple.setOnClickListener {
             FancyShowCaseView.Builder(this)
