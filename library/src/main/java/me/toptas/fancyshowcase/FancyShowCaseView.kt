@@ -76,10 +76,10 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
     private var mAnimationListener: AnimationListener? = null
     private var mCloseOnTouch: Boolean = false
     private var mEnableTouchOnFocusedView: Boolean = false
-    private var mFitSystemWindows = false
+    private var fitSystemWindows = false
     private var mFocusShape: FocusShape = FocusShape.CIRCLE
-    private var mViewInflateListener: OnViewInflateListener? = null
-    private var mDelay: Long = 0
+    private var viewInflateListener: OnViewInflateListener? = null
+    private var delay: Long = 0
     private val mAnimationDuration = 400
     private var mFocusAnimationMaxValue = 20
     private var mFocusAnimationStep: Int = 1
@@ -87,27 +87,27 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
     private var mCenterY: Int = 0
     private var mRoot: ViewGroup? = null
     private var sharedPreferences: SharedPreferences? = null
-    private var mCalculator: Calculator? = null
+    private var calculator: Calculator? = null
     private var mFocusPositionX: Int = 0
     private var mFocusPositionY: Int = 0
     private var mFocusCircleRadius: Int = 0
     private var mFocusRectangleWidth: Int = 0
     private var mFocusRectangleHeight: Int = 0
-    private var mFocusAnimationEnabled: Boolean = true
-    private var mImageView: FancyImageView? = null
+    private var focusAnimationEnabled: Boolean = true
+    private var fancyImageView: FancyImageView? = null
     var dismissListener: DismissListener? = null
 
-    val focusCenterX = mCalculator?.circleCenterX ?: 0
+    val focusCenterX = calculator?.circleCenterX ?: 0
 
-    val focusCenterY = mCalculator?.circleCenterY ?: 0
+    val focusCenterY = calculator?.circleCenterY ?: 0
 
     val focusRadius = if (FocusShape.CIRCLE == mFocusShape)
-        mCalculator?.circleRadius(0, 1.0) ?: 0f
+        calculator?.circleRadius(0, 1.0) ?: 0f
     else 0f
 
-    val focusWidth = mCalculator?.focusWidth ?: 0
+    val focusWidth = calculator?.focusWidth ?: 0
 
-    val focusHeight = mCalculator?.focusHeight ?: 0
+    val focusHeight = calculator?.focusHeight ?: 0
 
     internal constructor(context: Context) : super(context)
 
@@ -201,13 +201,13 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
         mTitleSizeUnit = _titleSizeUnit
         mRoundRectRadius = _roundRectRadius
         mCustomViewRes = _customViewRes
-        mViewInflateListener = _viewInflateListener
+        viewInflateListener = _viewInflateListener
         mEnterAnimation = _enterAnimation
         mExitAnimation = _exitAnimation
         mAnimationListener = _animationListener
         mCloseOnTouch = _closeOnTouch
         mEnableTouchOnFocusedView = _enableTouchOnFocusedView
-        mFitSystemWindows = _fitSystemWindows
+        fitSystemWindows = _fitSystemWindows
         mFocusShape = _focusShape
         dismissListener = _dismissListener
         mFocusPositionX = _focusPositionX
@@ -215,10 +215,10 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
         mFocusCircleRadius = _focusCircleRadius
         mFocusRectangleWidth = _focusRectangleWidth
         mFocusRectangleHeight = _focusRectangleHeight
-        mFocusAnimationEnabled = _animationEnabled
+        focusAnimationEnabled = _animationEnabled
         mFocusAnimationMaxValue = _focusAnimationMaxValue
         mFocusAnimationStep = _focusAnimationStep
-        mDelay = _delay
+        delay = _delay
 
         initializeParameters()
     }
@@ -260,8 +260,11 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
     }
 
     private fun focus() {
-        mCalculator = Calculator(activity, mFocusShape, focusedView, focusCircleRadiusFactor,
-                mFitSystemWindows)
+        calculator = Calculator(activity,
+                mFocusShape,
+                focusedView,
+                focusCircleRadiusFactor,
+                fitSystemWindows)
 
         val androidContent = activity.findViewById<View>(android.R.id.content) as ViewGroup
         mRoot = androidContent.parent.parent as ViewGroup?
@@ -280,40 +283,57 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
                         ViewGroup.LayoutParams.MATCH_PARENT)
                 mRoot?.addView(this)
 
-                mImageView = FancyImageView(activity)
-                mImageView?.setFocusAnimationParameters(mFocusAnimationMaxValue, mFocusAnimationStep)
-                if (mCalculator?.hasFocus() == true) {
-                    mCenterX = mCalculator!!.circleCenterX
-                    mCenterY = mCalculator!!.circleCenterY
-                }
-                mImageView?.setParameters(mBackgroundColor, mCalculator!!)
-                if (mFocusRectangleWidth > 0 && mFocusRectangleHeight > 0) {
-                    mCalculator?.setRectPosition(mFocusPositionX, mFocusPositionY, mFocusRectangleWidth, mFocusRectangleHeight)
-                }
-                if (mFocusCircleRadius > 0) {
-                    mCalculator?.setCirclePosition(mFocusPositionX, mFocusPositionY, mFocusCircleRadius)
-                }
-                mImageView?.focusAnimationEnabled = mFocusAnimationEnabled
-                mImageView?.layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT)
-                if (mFocusBorderColor != 0 && mFocusBorderSize > 0) {
-                    mImageView!!.setBorderParameters(mFocusBorderColor, mFocusBorderSize)
-                }
-                if (mRoundRectRadius > 0) {
-                    mImageView?.roundRectRadius = mRoundRectRadius
-                }
-                addView(mImageView)
+                setCalculatorParams()
 
-                if (mCustomViewRes == 0) {
-                    inflateTitleView()
-                } else {
-                    inflateCustomView(mCustomViewRes, mViewInflateListener)
-                }
+                addFancyImageView()
+
+                inflateContent()
 
                 startEnterAnimation()
+
                 writeShown()
             }
-        }, mDelay)
+        }, delay)
+    }
+
+    private fun setCalculatorParams() {
+        calculator?.apply {
+            if (hasFocus()) {
+                mCenterX = circleCenterX
+                mCenterY = circleCenterY
+            }
+            if (mFocusRectangleWidth > 0 && mFocusRectangleHeight > 0) {
+                setRectPosition(mFocusPositionX, mFocusPositionY, mFocusRectangleWidth, mFocusRectangleHeight)
+            }
+            if (mFocusCircleRadius > 0) {
+                setCirclePosition(mFocusPositionX, mFocusPositionY, mFocusCircleRadius)
+            }
+        }
+    }
+
+    private fun addFancyImageView() {
+        FancyImageView(activity).apply {
+            setFocusAnimationParameters(mFocusAnimationMaxValue, mFocusAnimationStep)
+            setParameters(mBackgroundColor, calculator!!)
+            focusAnimationEnabled = this@FancyShowCaseView.focusAnimationEnabled
+            layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT)
+            if (mFocusBorderColor != 0 && mFocusBorderSize > 0) {
+                setBorderParameters(mFocusBorderColor, mFocusBorderSize)
+            }
+            if (mRoundRectRadius > 0) {
+                roundRectRadius = mRoundRectRadius
+            }
+            addView(this)
+        }
+    }
+
+    private fun inflateContent() {
+        if (mCustomViewRes == 0) {
+            inflateTitleView()
+        } else {
+            inflateCustomView(mCustomViewRes, viewInflateListener)
+        }
     }
 
     private fun setupTouchListener() {
@@ -440,7 +460,7 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
                     textView.setTextSize(mTitleSizeUnit, mTitleSize.toFloat())
                 }
                 textView.gravity = mTitleGravity
-                if (mFitSystemWindows) {
+                if (fitSystemWindows) {
                     val params = textView.layoutParams as RelativeLayout.LayoutParams
                     params.setMargins(0, Calculator.getStatusBarHeight(context), 0, 0)
                 }
@@ -535,7 +555,7 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
      * Removes FancyShowCaseView view from activity root view
      */
     fun removeView() {
-        if (mImageView != null) mImageView = null
+        if (fancyImageView != null) fancyImageView = null
         mRoot?.removeView(this)
         dismissListener?.onDismiss(id)
     }
@@ -571,13 +591,13 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
         private var mTitleStyle: Int = 0
         private var mCustomViewRes: Int = 0
         private var mRoundRectRadius: Int = 0
-        private var mViewInflateListener: OnViewInflateListener? = null
+        private var viewInflateListener: OnViewInflateListener? = null
         private var mEnterAnimation: Animation? = null
         private var mExitAnimation: Animation? = null
         private var mAnimationListener: AnimationListener? = null
         private var mCloseOnTouch = true
         private var mEnableTouchOnFocusedView: Boolean = false
-        private var mFitSystemWindows: Boolean = false
+        private var fitSystemWindows: Boolean = false
         private var mFocusShape = FocusShape.CIRCLE
         private var mDismissListener: DismissListener? = null
         private var mFocusBorderSize: Int = 0
@@ -586,10 +606,10 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
         private var mFocusCircleRadius: Int = 0
         private var mFocusRectangleWidth: Int = 0
         private var mFocusRectangleHeight: Int = 0
-        private var mFocusAnimationEnabled = true
+        private var focusAnimationEnabled = true
         private var mFocusAnimationMaxValue = 20
         private var mFocusAnimationStep = 1
-        private var mDelay: Long = 0
+        private var delay: Long = 0
 
 
         /**
@@ -706,7 +726,7 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
          */
         fun customView(@LayoutRes layoutResource: Int, listener: OnViewInflateListener?): Builder {
             mCustomViewRes = layoutResource
-            mViewInflateListener = listener
+            viewInflateListener = listener
             return this
         }
 
@@ -760,11 +780,11 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
         /**
          * This should be the same as root view's fitSystemWindows value
          *
-         * @param fitSystemWindows fitSystemWindows value
+         * @param _fitSystemWindows fitSystemWindows value
          * @return Builder
          */
-        fun fitSystemWindows(fitSystemWindows: Boolean): Builder {
-            mFitSystemWindows = fitSystemWindows
+        fun fitSystemWindows(_fitSystemWindows: Boolean): Builder {
+            fitSystemWindows = _fitSystemWindows
             return this
         }
 
@@ -827,7 +847,7 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
          * @return Builder
          */
         fun disableFocusAnimation(): Builder {
-            mFocusAnimationEnabled = false
+            focusAnimationEnabled = false
             return this
         }
 
@@ -842,7 +862,7 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
         }
 
         fun delay(delayInMillis: Int): Builder {
-            mDelay = delayInMillis.toLong()
+            delay = delayInMillis.toLong()
             return this
         }
 
@@ -853,10 +873,10 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
          */
         fun build(): FancyShowCaseView {
             return FancyShowCaseView(activity, focusedView, mId, mTitle, mSpannedTitle, mTitleGravity, mTitleStyle, mTitleSize, mTitleSizeUnit,
-                    focusCircleRadiusFactor, mBackgroundColor, mFocusBorderColor, mFocusBorderSize, mCustomViewRes, mViewInflateListener,
-                    mEnterAnimation, mExitAnimation, mAnimationListener, mCloseOnTouch, mEnableTouchOnFocusedView, mFitSystemWindows, mFocusShape, mDismissListener, mRoundRectRadius,
-                    mFocusPositionX, mFocusPositionY, mFocusCircleRadius, mFocusRectangleWidth, mFocusRectangleHeight, mFocusAnimationEnabled,
-                    mFocusAnimationMaxValue, mFocusAnimationStep, mDelay)
+                    focusCircleRadiusFactor, mBackgroundColor, mFocusBorderColor, mFocusBorderSize, mCustomViewRes, viewInflateListener,
+                    mEnterAnimation, mExitAnimation, mAnimationListener, mCloseOnTouch, mEnableTouchOnFocusedView, fitSystemWindows, mFocusShape, mDismissListener, mRoundRectRadius,
+                    mFocusPositionX, mFocusPositionY, mFocusCircleRadius, mFocusRectangleWidth, mFocusRectangleHeight, focusAnimationEnabled,
+                    mFocusAnimationMaxValue, mFocusAnimationStep, delay)
         }
     }
 
