@@ -1,4 +1,4 @@
-# FancyShowCaseView [![Status](https://travis-ci.org/faruktoptas/FancyShowCaseView.svg?branch=master)](https://travis-ci.org/faruktoptas/FancyShowCaseView) [![](https://jitpack.io/v/faruktoptas/FancyShowCaseView.svg)](https://jitpack.io/#faruktoptas/FancyShowCaseView)  [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-FancyShowCaseView-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/5440) [![API](https://img.shields.io/badge/API-10%2B-blue.svg?style=flat)](https://android-arsenal.com/api?level=10) [![Join the chat at https://gitter.im/faruktoptas/FancyShowCaseView](https://badges.gitter.im/faruktoptas/FancyShowCaseView.svg)](https://gitter.im/faruktoptas/FancyShowCaseView?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+# FancyShowCaseView [![Status](https://travis-ci.org/faruktoptas/FancyShowCaseView.svg?branch=master)](https://travis-ci.org/faruktoptas/FancyShowCaseView) [![](https://jitpack.io/v/faruktoptas/FancyShowCaseView.svg)](https://jitpack.io/#faruktoptas/FancyShowCaseView)  [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-FancyShowCaseView-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/5440) [![API](https://img.shields.io/badge/API-14%2B-blue.svg?style=flat)](https://android-arsenal.com/api?level=10) [![Join the chat at https://gitter.im/faruktoptas/FancyShowCaseView](https://badges.gitter.im/faruktoptas/FancyShowCaseView.svg)](https://gitter.im/faruktoptas/FancyShowCaseView?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 An easy-to-use customizable show case view with circular reveal animation.
 
 ![materialup](https://cloud.githubusercontent.com/assets/1595227/24761426/f80dbc64-1af3-11e7-9c99-bca3dd836a8e.png)
@@ -37,7 +37,7 @@ allprojects {
 Then, add the library to your module `build.gradle`
 ```gradle
 dependencies {
-    implementation 'com.github.faruktoptas:FancyShowCaseView:1.0.1'
+    implementation 'com.github.faruktoptas:FancyShowCaseView:1.0.2'
 }
 ```
 
@@ -57,7 +57,7 @@ Please see [wiki](https://github.com/faruktoptas/FancyShowCaseView/wiki) for mor
 * [Get Off Your Phone](https://play.google.com/store/apps/details?id=com.nephi.getoffyourphone)
 
 ## Sample App
- [fancyshowcaseview-sample-v1.0.1.apk](https://github.com/faruktoptas/FancyShowCaseView/releases/download/1.0.1/fancyshowcaseview-sample-v1.0.1.apk)
+ [Latest Release](https://github.com/faruktoptas/FancyShowCaseView/releases)
 
 ## Contribute
 You can contribute by opening a pull request to **dev** branch.
