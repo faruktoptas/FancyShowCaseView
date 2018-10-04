@@ -247,6 +247,8 @@ public class MainActivity extends BaseActivity {
     }
 
 
+    
+    
     /**
      * Shows a FancyShowCaseView view custom view inflation
      *
