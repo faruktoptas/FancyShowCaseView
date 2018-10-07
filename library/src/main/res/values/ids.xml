@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2018. Faruk Toptaş
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,10 +15,5 @@
   -->
 
 <resources>
-
-    <style name="FancyShowCaseDefaultTitleStyle" parent="@android:style/Widget.TextView">
-        <item name="android:textSize">30sp</item>
-        <item name="android:textColor">#ffffff</item>
-        <item name="android:textStyle">bold</item>
-    </style>
+    <item name="fcsv_id" type="id" />
 </resources>

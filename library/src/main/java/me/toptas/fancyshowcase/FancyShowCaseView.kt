@@ -276,6 +276,7 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
             isClickable = !mEnableTouchOnFocusedView
             if (visibleView == null) {
                 tag = CONTAINER_TAG
+                setId(R.id.fcsv_id)
                 if (mCloseOnTouch) {
                     setupTouchListener()
                 }
@@ -893,6 +894,7 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
          * @param context context that should be used to create the shared preference instance
          * @param id      id of the show once flag that should be reset
          */
+        @JvmStatic
         fun resetShowOnce(context: Context, id: String) = preferences(context)
                 .edit()
                 .remove(id)
@@ -904,6 +906,7 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
          *
          * @param context context that should be used to create the shared preference instance
          */
+        @JvmStatic
         fun resetAllShowOnce(context: Context) = preferences(context)
                 .edit()
                 .clear()
@@ -920,6 +923,7 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
          *
          * @param activity should be used to find FancyShowCaseView inside it
          */
+        @JvmStatic
         fun isVisible(activity: Activity): Boolean {
             val androidContent = activity.findViewById<View>(android.R.id.content) as ViewGroup
             val mRoot = androidContent.parent.parent as ViewGroup
@@ -931,6 +935,7 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
          *
          * @param activity should be used to hide FancyShowCaseView inside it
          */
+        @JvmStatic
         fun hideCurrent(activity: Activity) {
             val androidContent = activity.findViewById<View>(android.R.id.content) as ViewGroup
             val mRoot = androidContent.parent.parent as ViewGroup
