@@ -55,6 +55,10 @@ dependencies {
     compile "com.android.support:appcompat-v7:$support_version"
     compile "com.android.support:design:$support_version"
 
+    implementation "com.android.support:appcompat-v7:$support_version"
+    implementation "com.android.support:design:$support_version"
+    implementation "com.jakewharton:butterknife:$butterknife_version"
+    annotationProcessor "com.jakewharton:butterknife-compiler:$butterknife_version"
 
     compile project(':library')
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -64,4 +68,5 @@ dependencies {
 }
 repositories {
     mavenCentral()
+    implementation project(':library')
 }
