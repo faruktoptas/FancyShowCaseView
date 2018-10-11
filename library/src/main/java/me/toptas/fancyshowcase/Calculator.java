@@ -26,6 +26,7 @@ class Calculator {
     public void setCircleRadius(int mCircleRadius) {
         this.mCircleRadius = mCircleRadius;
     }
+
     Calculator(@NonNull Activity activity, FocusShape focusShape, @Nullable View view, double radiusFactor,
                boolean fitSystemWindows) {
 
@@ -53,12 +54,12 @@ class Calculator {
     }
 
     /**
-     *  Setting round rectangle focus at specific position
+     * Setting round rectangle focus at specific position
      *
-     * @param positionX       focus at specific position Y coordinate
-     * @param positionY       focus at specific position circle radius
-     * @param rectWidth   focus at specific position rectangle width
-     * @param rectHeight  focus at specific position rectangle height
+     * @param positionX  focus at specific position Y coordinate
+     * @param positionY  focus at specific position circle radius
+     * @param rectWidth  focus at specific position rectangle width
+     * @param rectHeight focus at specific position rectangle height
      */
 
     public void setRectPosition(int positionX, int positionY, int rectWidth, int rectHeight) {
@@ -71,11 +72,11 @@ class Calculator {
     }
 
     /**
-     *  Setting circle focus at specific position
+     * Setting circle focus at specific position
      *
-     * @param positionX       focus at specific position Y coordinate
-     * @param positionY       focus at specific position circle radius
-     * @param radius          focus at specific position circle radius
+     * @param positionX focus at specific position Y coordinate
+     * @param positionY focus at specific position circle radius
+     * @param radius    focus at specific position circle radius
      */
 
     public void setCirclePosition(int positionX, int positionY, int radius) {
@@ -87,30 +88,21 @@ class Calculator {
     }
 
     public void calcAutoTextPosition(final View view, final int padding) {
-        view.post(new Runnable() {
-            @Override
-            public void run() {
+        // calc target view position
+        float top = roundRectTop(0, 0);
+        float bottom = roundRectBottom(0, 0);
 
-                // calc target view position
-                float top = roundRectTop(0, 0);
-                float bottom = roundRectBottom(0, 0);
+        int hParent = ((View) view.getParent()).getHeight();
 
-                int hParent = ((View)view.getParent()).getHeight();
+        int spaceAbove = (int) top;
+        int spaceBelow = hParent - (int) bottom;
 
-                int spaceAbove = (int) top;
-                int spaceBelow = hParent - (int) bottom;
 
-                // TODO:
-                // 1) search for biggest rectangular space, currently only compares space above with space below
-                // 2) setter for padding
-                // for easiness, we position the text view view custom paddings
-                if (spaceAbove > spaceBelow) {
-                    view.setPadding(padding, padding, padding, hParent - (int)top);
-                } else {
-                    view.setPadding(padding, (int)bottom, padding, padding);
-                }
-            }
-        });
+        if (spaceAbove > spaceBelow) {
+            view.setPadding(padding, padding, padding, hParent - (int) top);
+        } else {
+            view.setPadding(padding, (int) bottom, padding, padding);
+        }
     }
 
 
@@ -193,7 +185,7 @@ class Calculator {
      * @return Bottom position of round rect
      */
     float roundRectLeft(int animCounter, double animMoveFactor) {
-        return (float) (mCircleCenterX - mFocusWidth / 2 - animCounter * animMoveFactor );
+        return (float) (mCircleCenterX - mFocusWidth / 2 - animCounter * animMoveFactor);
     }
 
     /**

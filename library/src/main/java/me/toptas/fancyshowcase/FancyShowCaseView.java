@@ -165,8 +165,8 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
                               FocusShape focusShape, DismissListener dismissListener, int roundRectRadius,
                               int focusPositionX, int focusPositionY, int focusCircleRadius, int focusRectangleWidth, int focusRectangleHeight,
                               final boolean animationEnabled, int focusAnimationMaxValue, int focusAnimationStep,
-                              long delay) {
-                              final boolean animationEnabled, final boolean autoPosText, final int autoTextPadding) {
+                              long delay, final boolean autoPosText, final int autoTextPadding) {
+
         super(activity);
         mId = id;
         mActivity = activity;
