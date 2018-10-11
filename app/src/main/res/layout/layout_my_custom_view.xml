@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2018. Faruk Toptaş
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,16 +21,17 @@
 
 
     <TextView
+        android:id="@+id/tv_custom_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/image"
+        android:layout_above="@+id/iv_custom_view"
         android:layout_centerHorizontal="true"
-        android:textColor="#fff"
         android:text="My Custom view"
+        android:textColor="#fff"
         android:textSize="20sp" />
 
     <ImageView
-        android:id="@+id/image"
+        android:id="@+id/iv_custom_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"

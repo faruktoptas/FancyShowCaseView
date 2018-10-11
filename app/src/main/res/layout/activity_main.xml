@@ -55,6 +55,21 @@
                 android:layout_height="wrap_content"
                 android:text="Rounded Rect" />
 
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_title_size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Title Size" />
+
             <Button
                 android:id="@+id/btn_spanned"
                 android:layout_width="wrap_content"

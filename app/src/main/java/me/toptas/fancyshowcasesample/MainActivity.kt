@@ -20,6 +20,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.text.*
+import android.util.TypedValue
 import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
@@ -54,16 +55,28 @@ class MainActivity : BaseActivity() {
         btn_focus.setOnClickListener {
             FancyShowCaseView.Builder(this)
                     .focusOn(it)
-                    .title("Focus on View")
+                    .title("Focus on View only once")
+                    .showOnce("id0")
                     .build()
                     .show()
         }
 
-        val spanned: Spanned = Html.fromHtml("<font color='#ff0000'>Spannable</font>")
+        // Set title with spanned
+        val spanned: Spanned = Html.fromHtml("<font color='#ff0000'>Spanned</font>")
         btn_spanned.setOnClickListener {
             FancyShowCaseView.Builder(this)
                     .focusOn(it)
                     .title(spanned)
+                    .build()
+                    .show()
+        }
+
+        // Set title size
+        btn_title_size.setOnClickListener {
+            FancyShowCaseView.Builder(this)
+                    .focusOn(it)
+                    .title("Title size")
+                    .titleSize(48, TypedValue.COMPLEX_UNIT_SP)
                     .build()
                     .show()
         }

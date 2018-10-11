@@ -26,7 +26,7 @@ import android.view.View
  * Geometric calculations for position, size and radius
  */
 
-internal class Calculator(activity: Activity, focusShape: FocusShape, view: View?, radiusFactor: Double,
+ class Calculator(activity: Activity, focusShape: FocusShape, view: View?, radiusFactor: Double,
                           fitSystemWindows: Boolean) {
 
     /**

@@ -276,7 +276,7 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
             isClickable = !mEnableTouchOnFocusedView
             if (visibleView == null) {
                 tag = CONTAINER_TAG
-                setId(R.id.fcsv_id)
+                setId(R.id.fscv_id)
                 if (mCloseOnTouch) {
                     setupTouchListener()
                 }

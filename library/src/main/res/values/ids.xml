@@ -15,5 +15,5 @@
   -->
 
 <resources>
-    <item name="fcsv_id" type="id" />
+    <item name="fscv_id" type="id" />
 </resources>

@@ -25,6 +25,7 @@ import android.graphics.Path
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
 import android.graphics.RectF
+import android.support.annotation.VisibleForTesting
 import android.support.v7.widget.AppCompatImageView
 import android.util.AttributeSet
 import android.view.View
@@ -33,7 +34,7 @@ import android.view.View
  * ImageView with focus area animation
  */
 
-internal class FancyImageView : AppCompatImageView {
+class FancyImageView : AppCompatImageView {
 
     private lateinit var calculator: Calculator
     private lateinit var backgroundPaint: Paint
@@ -146,7 +147,7 @@ internal class FancyImageView : AppCompatImageView {
             } else {
                 drawRoundedRectangle(canvas)
             }
-            if (focusAnimationEnabled) {
+            if (focusAnimationEnabled && !DISABLE_ANIMATIONS_FOR_TESTING) {
                 if (animCounter == focusAnimationMaxValue) {
                     step = -1 * focusAnimationStep
                 } else if (animCounter == 0) {
@@ -218,5 +219,8 @@ internal class FancyImageView : AppCompatImageView {
 
     companion object {
         private const val DEFAULT_ANIM_COUNTER = 20
+
+        @VisibleForTesting
+        var DISABLE_ANIMATIONS_FOR_TESTING = false
     }
 }

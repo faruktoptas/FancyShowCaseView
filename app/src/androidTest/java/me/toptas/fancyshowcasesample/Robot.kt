@@ -16,7 +16,10 @@
 
 package com.example.espressorobot
 
-import android.support.test.espresso.Espresso
+import android.app.Activity
+import android.content.Context
+import android.content.res.Resources
+import android.graphics.Color
 import android.support.test.espresso.Espresso.onData
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.ViewInteraction
@@ -24,9 +27,13 @@ import android.support.test.espresso.action.ViewActions
 import android.support.test.espresso.assertion.ViewAssertions
 import android.support.test.espresso.matcher.ViewMatchers
 import android.support.test.espresso.matcher.ViewMatchers.withId
+import android.view.Gravity
+import android.widget.TextView
+import me.toptas.fancyshowcase.FancyShowCaseView
 import me.toptas.fancyshowcasesample.R
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.anything
+import org.junit.Assert
 
 /**
  * Created by ftoptas on 21/12/17.
@@ -54,8 +61,32 @@ class Robot {
                 .atPosition(position).perform(ViewActions.click())
     }
 
+    fun isVisible(resId: Int) {
+        view(resId).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+    }
+
     fun checkFancyShowCase() {
-        view(R.id.fcsv_id).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        isVisible(R.id.fscv_id)
+    }
+
+    fun checkTextGravity(activity: Activity, gravity: Int) {
+        Assert.assertTrue(activity.findViewById<TextView>(R.id.fscv_title).gravity == gravity)
+    }
+
+    fun checkTextSize(activity: Activity, size: Int) {
+        Assert.assertTrue(activity.findViewById<TextView>(R.id.fscv_title).textSize == size * Resources.getSystem().displayMetrics.density)
+    }
+
+    fun checkTextColor(activity: Activity, color: Int) {
+        Assert.assertTrue(activity.findViewById<TextView>(R.id.fscv_title).currentTextColor == color)
+    }
+
+    fun checkFancyShowCaseNotVisible(activity: Activity) {
+        Assert.assertTrue(activity.findViewById<FancyShowCaseView>(R.id.fscv_id) == null)
+    }
+
+    fun resetAllShowOnce(context: Context) {
+        FancyShowCaseView.resetAllShowOnce(context)
     }
 
     fun sleep() = apply {

@@ -16,10 +16,16 @@
 
 package me.toptas.fancyshowcasesample
 
+import android.graphics.Color
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
 import android.test.suitebuilder.annotation.LargeTest
+import android.view.Gravity
 import com.example.espressorobot.robot
+import me.toptas.fancyshowcase.FancyImageView
+import me.toptas.fancyshowcase.FancyShowCaseView
+import org.junit.Assert
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -29,7 +35,12 @@ import org.junit.runner.RunWith
 class FancyShowCaseViewTest {
 
     @get:Rule
-    val mActivityTestRule: ActivityTestRule<MainActivity> = ActivityTestRule(MainActivity::class.java)
+    val rule: ActivityTestRule<MainActivity> = ActivityTestRule(MainActivity::class.java)
+
+    @Before
+    fun before() {
+        FancyImageView.DISABLE_ANIMATIONS_FOR_TESTING = true
+    }
 
     @Test
     fun noFocus() {
@@ -42,51 +53,88 @@ class FancyShowCaseViewTest {
 
     @Test
     fun focus() {
-
+        robot {
+            resetAllShowOnce(rule.activity)
+            clickButton(R.id.btn_focus)
+            checkFancyShowCase()
+            matchText(R.id.fscv_title, "Focus on View only once")
+        }
     }
 
     @Test
     fun titleSpanned() {
-
+        robot {
+            clickButton(R.id.btn_spanned)
+            checkFancyShowCase()
+            matchText(R.id.fscv_title, "Spanned")
+        }
     }
 
     @Test
     fun titleSize() {
+        robot {
+            clickButton(R.id.btn_title_size)
+            checkFancyShowCase()
+            checkTextSize(rule.activity, 48)
+        }
     }
 
-    @Test
-    fun titleStyle() {
-    }
 
     @Test
     fun titleGravity() {
+        robot {
+            clickButton(R.id.btn_focus2)
+            checkFancyShowCase()
+            checkTextGravity(rule.activity, Gravity.BOTTOM or Gravity.CENTER)
+        }
     }
 
-    @Test
-    fun focusBorderColor() {
-    }
 
     @Test
     fun focusBorderSize() {
+        robot {
+            clickButton(R.id.btn_focus_rect_color)
+            checkFancyShowCase()
+        }
     }
 
     @Test
     fun showOnce() {
+        robot {
+            resetAllShowOnce(rule.activity)
+            clickButton(R.id.btn_focus)
+            checkFancyShowCase()
+            matchText(R.id.fscv_title, "Focus on View only once")
+            clickButton(R.id.btn_focus)
+            sleep()
+            checkFancyShowCaseNotVisible(rule.activity)
+            Assert.assertTrue(FancyShowCaseView.isShownBefore(rule.activity, "id0"))
+        }
     }
 
     @Test
-    fun backgroundColor() {
+    fun backgroundAndTitleColor() {
+        robot {
+            clickButton(R.id.btn_background_color)
+            checkFancyShowCase()
+            checkTextColor(rule.activity, Color.parseColor("#00ff00"))
+            checkTextSize(rule.activity, 24)
+        }
     }
 
-    @Test
-    fun focusCircleRadiusFactor() {
-    }
 
     @Test
     fun customView() {
+        robot {
+            clickButton(R.id.btn_custom_view)
+            checkFancyShowCase()
+            isVisible(R.id.iv_custom_view)
+            matchText(R.id.tv_custom_view, "My Custom view")
+            clickButton(R.id.btn_action_1)
+        }
     }
 
-    @Test
+/*    @Test
     fun enterAnimation() {
     }
 
@@ -144,7 +192,7 @@ class FancyShowCaseViewTest {
 
     @Test
     fun delay() {
-    }
+    }*/
 
 
 }
