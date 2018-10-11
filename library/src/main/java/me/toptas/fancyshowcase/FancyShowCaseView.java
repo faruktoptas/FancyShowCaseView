@@ -122,6 +122,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
     private float[] mLastTouchDownXY = new float[2];
 
     private boolean mFocusAnimationEnabled;
+    FancyImageView mImageView;
 
     /**
      * Constructor for FancyShowCaseView
@@ -272,29 +273,29 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
                     mRoot.addView(FancyShowCaseView.this);
 
 
-                    FancyImageView imageView = new FancyImageView(mActivity);
-                    imageView.setFocusAnimationParameters(mFocusAnimationMaxValue, mFocusAnimationStep);
+                    mImageView = new FancyImageView(mActivity);
+                    mImageView.setFocusAnimationParameters(mFocusAnimationMaxValue, mFocusAnimationStep);
                     if (mCalculator.hasFocus()) {
                         mCenterX = mCalculator.getCircleCenterX();
                         mCenterY = mCalculator.getCircleCenterY();
                     }
-                    imageView.setParameters(mBackgroundColor, mCalculator);
+                    mImageView.setParameters(mBackgroundColor, mCalculator);
                     if (mFocusRectangleWidth > 0 && mFocusRectangleHeight > 0) {
                         mCalculator.setRectPosition(mFocusPositionX, mFocusPositionY, mFocusRectangleWidth, mFocusRectangleHeight);
                     }
                     if (mFocusCircleRadius > 0) {
                         mCalculator.setCirclePosition(mFocusPositionX, mFocusPositionY, mFocusCircleRadius);
                     }
-                    imageView.setAnimationEnabled(mFocusAnimationEnabled);
-                    imageView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                    mImageView.setAnimationEnabled(mFocusAnimationEnabled);
+                    mImageView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                             ViewGroup.LayoutParams.MATCH_PARENT));
                     if (mFocusBorderColor != 0 && mFocusBorderSize > 0) {
-                        imageView.setBorderParameters(mFocusBorderColor, mFocusBorderSize);
+                        mImageView.setBorderParameters(mFocusBorderColor, mFocusBorderSize);
                     }
                     if (mRoundRectRadius > 0) {
-                        imageView.setRoundRectRadius(mRoundRectRadius);
+                        mImageView.setRoundRectRadius(mRoundRectRadius);
                     }
-                    addView(imageView);
+                    addView(mImageView);
 
 
                     if (mCustomViewRes == 0) {
@@ -597,17 +598,19 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
      * Removes FancyShowCaseView view from activity root view
      */
     public void removeView() {
+        if (mImageView!=null)
+            mImageView=null;
         mRoot.removeView(this);
         if (mDismissListener != null) {
             mDismissListener.onDismiss(mId);
         }
     }
 
-    protected DismissListener getDismissListener() {
+    public DismissListener getDismissListener() {
         return mDismissListener;
     }
 
-    protected void setDismissListener(DismissListener dismissListener) {
+    public void setDismissListener(DismissListener dismissListener) {
         mDismissListener = dismissListener;
     }
 
