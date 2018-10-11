@@ -107,6 +107,8 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
     private DismissListener mDismissListener;
     private long mDelay;
 
+    private boolean mAutoPosText;
+    private int mAutoTextPadding;
 
     private int mAnimationDuration = 400;
     private int mFocusAnimationMaxValue;
@@ -164,6 +166,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
                               int focusPositionX, int focusPositionY, int focusCircleRadius, int focusRectangleWidth, int focusRectangleHeight,
                               final boolean animationEnabled, int focusAnimationMaxValue, int focusAnimationStep,
                               long delay) {
+                              final boolean animationEnabled, final boolean autoPosText, final int autoTextPadding) {
         super(activity);
         mId = id;
         mActivity = activity;
@@ -198,6 +201,8 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
         mFocusAnimationMaxValue = focusAnimationMaxValue;
         mFocusAnimationStep = focusAnimationStep;
         mDelay = delay;
+        mAutoPosText = autoPosText;
+        mAutoTextPadding = autoTextPadding;
 
         initializeParameters();
     }
@@ -492,6 +497,9 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
                 } else {
                     textView.setText(mTitle);
                 }
+                if (mAutoPosText) {
+                    mCalculator.calcAutoTextPosition(textView, mAutoTextPadding);
+                }
             }
         });
 
@@ -667,6 +675,8 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
         private int mFocusAnimationMaxValue = 20;
         private int mFocusAnimationStep = 1;
         private long mDelay;
+        private boolean mAutoPosText = false;
+        private int mAutoTextPadding = 0;
 
         /**
          * Constructor for Builder class
@@ -941,6 +951,25 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
             return this;
         }
 
+        /**
+         * enable automatic text positioning
+         *
+         * @return Builder
+         */
+        public Builder enableAutoTextPosition() {
+            mAutoPosText = true;
+            return this;
+        }
+
+        /**
+         * @param autoTextPadding padding size for automatically calculated text position
+         * @return Builder
+         */
+        public Builder autoTextPadding(int autoTextPadding) {
+            mAutoTextPadding = autoTextPadding;
+            return this;
+        }
+
         @NonNull
         public Builder focusAnimationMaxValue(int focusAnimationMaxValue) {
             mFocusAnimationMaxValue = focusAnimationMaxValue;
@@ -970,7 +999,7 @@ public class FancyShowCaseView extends FrameLayout implements ViewTreeObserver.O
                     mFocusCircleRadiusFactor, mBackgroundColor, mFocusBorderColor, mFocusBorderSize, mCustomViewRes, mViewInflateListener,
                     mEnterAnimation, mExitAnimation, mAnimationListener, mCloseOnTouch, mEnableTouchOnFocusedView, mFitSystemWindows, mFocusShape, mDismissListener, mRoundRectRadius,
                     mFocusPositionX, mFocusPositionY, mFocusCircleRadius, mFocusRectangleWidth, mFocusRectangleHeight, mFocusAnimationEnabled,
-                    mFocusAnimationMaxValue, mFocusAnimationStep, mDelay);
+                    mFocusAnimationMaxValue, mFocusAnimationStep, mDelay, mAutoPosText, mAutoTextPadding);
         }
     }
 }
