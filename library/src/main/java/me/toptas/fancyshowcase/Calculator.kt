@@ -21,13 +21,17 @@ import android.content.Context
 import android.os.Build
 import android.util.DisplayMetrics
 import android.view.View
+import android.widget.RelativeLayout
 
 /**
  * Geometric calculations for position, size and radius
  */
 
- class Calculator(activity: Activity, focusShape: FocusShape, view: View?, radiusFactor: Double,
-                          fitSystemWindows: Boolean) {
+class Calculator(activity: Activity,
+                 focusShape: FocusShape,
+                 view: View?,
+                 radiusFactor: Double,
+                 fitSystemWindows: Boolean) {
 
     /**
      * @return Width of background bitmap
@@ -129,6 +133,26 @@ import android.view.View
         circleCenterY = positionY
         focusShape = FocusShape.CIRCLE
         mHasFocus = true
+    }
+
+    fun calcAutoTextPosition(view: View) {
+        val top = roundRectTop(0, 0.0)
+        val bottom = roundRectBottom(0, 0.0)
+
+        val spaceAbove = top.toInt()
+        val spaceBelow = bitmapHeight - bottom.toInt()
+        val params = view.layoutParams as RelativeLayout.LayoutParams
+
+        if (spaceAbove > spaceBelow) {
+            params.bottomMargin = bitmapHeight - (circleCenterY + viewRadius)
+            params.topMargin = 0
+            params.height = top.toInt()
+        } else {
+            params.topMargin = circleCenterY + viewRadius
+            params.bottomMargin = 0
+            params.height = (bitmapHeight - top).toInt()
+        }
+        view.layoutParams = params
     }
 
     /**

@@ -67,6 +67,7 @@ class MainActivity : BaseActivity() {
             FancyShowCaseView.Builder(this)
                     .focusOn(it)
                     .title(spanned)
+                    .enableAutoTextPosition()
                     .build()
                     .show()
         }

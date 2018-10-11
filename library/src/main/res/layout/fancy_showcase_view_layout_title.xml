@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2018. Faruk Toptaş
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,8 +23,9 @@
     <TextView
         android:id="@+id/fscv_title"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:fontFamily="sans-serif-condensed"
+        android:gravity="center_vertical"
         android:padding="10dp"
         android:textSize="24sp"
         tools:text="Title" />

@@ -80,6 +80,7 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
     private var mFocusShape: FocusShape = FocusShape.CIRCLE
     private var viewInflateListener: OnViewInflateListener? = null
     private var delay: Long = 0
+    private var autoPosText = false
     private val mAnimationDuration = 400
     private var mFocusAnimationMaxValue = 20
     private var mFocusAnimationStep: Int = 1
@@ -183,7 +184,8 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
                         _animationEnabled: Boolean,
                         _focusAnimationMaxValue: Int,
                         _focusAnimationStep: Int,
-                        _delay: Long) : super(_activity) {
+                        _delay: Long,
+                        _autoPosText: Boolean) : super(_activity) {
 
         requireNotNull(_activity)
         id = _id
@@ -219,6 +221,7 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
         mFocusAnimationMaxValue = _focusAnimationMaxValue
         mFocusAnimationStep = _focusAnimationStep
         delay = _delay
+        autoPosText = _autoPosText
 
         initializeParameters()
     }
@@ -470,6 +473,10 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
                 } else {
                     textView.text = title
                 }
+
+                if (autoPosText) {
+                    calculator?.calcAutoTextPosition(textView)
+                }
             }
         })
 
@@ -611,6 +618,7 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
         private var mFocusAnimationMaxValue = 20
         private var mFocusAnimationStep = 1
         private var delay: Long = 0
+        private var autoPosText = false
 
 
         /**
@@ -867,6 +875,11 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
             return this
         }
 
+        fun enableAutoTextPosition(): Builder {
+            autoPosText = true
+            return this
+        }
+
         /**
          * builds the builder
          *
@@ -877,7 +890,7 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
                     focusCircleRadiusFactor, mBackgroundColor, mFocusBorderColor, mFocusBorderSize, mCustomViewRes, viewInflateListener,
                     mEnterAnimation, mExitAnimation, mAnimationListener, mCloseOnTouch, mEnableTouchOnFocusedView, fitSystemWindows, mFocusShape, mDismissListener, mRoundRectRadius,
                     mFocusPositionX, mFocusPositionY, mFocusCircleRadius, mFocusRectangleWidth, mFocusRectangleHeight, focusAnimationEnabled,
-                    mFocusAnimationMaxValue, mFocusAnimationStep, delay)
+                    mFocusAnimationMaxValue, mFocusAnimationStep, delay, autoPosText)
         }
     }
 
