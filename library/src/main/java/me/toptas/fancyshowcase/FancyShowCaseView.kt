@@ -559,6 +559,9 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
         }
     }
 
+    fun isShownBefore() = if (id != null) isShownBefore(context, id!!) else false
+
+
     /**
      * Removes FancyShowCaseView view from activity root view
      */
@@ -926,6 +929,7 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
                 .apply()
 
 
+        @JvmStatic
         fun isShownBefore(context: Context, id: String) = preferences(context).getBoolean(id, false)
 
         private fun preferences(context: Context) = context

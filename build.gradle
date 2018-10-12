@@ -22,7 +22,7 @@ buildscript {
     ext.build_tools_version = '27.0.3'
     ext.min_sdk_version = 14
     ext.target_sdk_version = 27
-    ext.version_name = '1.1.0'
+    ext.version_name = '1.1.1'
 
 
     ext.support_version = '27.1.1'
