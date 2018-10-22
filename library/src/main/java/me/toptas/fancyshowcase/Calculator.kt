@@ -83,7 +83,7 @@ class Calculator(activity: Activity,
         bitmapWidth = deviceWidth
         bitmapHeight = deviceHeight - if (fitSystemWindows) 0 else getStatusBarHeight(activity)
         if (view != null) {
-            val adjustHeight = if (fitSystemWindows && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            val adjustHeight = if (fitSystemWindows && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
                 0
             else
                 getStatusBarHeight(activity)
