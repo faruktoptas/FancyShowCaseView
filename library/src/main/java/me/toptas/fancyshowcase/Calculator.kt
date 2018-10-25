@@ -19,8 +19,10 @@ package me.toptas.fancyshowcase
 import android.app.Activity
 import android.content.Context
 import android.os.Build
+import android.support.v4.view.ViewCompat
 import android.util.DisplayMetrics
 import android.view.View
+import android.view.WindowManager
 import android.widget.RelativeLayout
 
 /**
@@ -72,18 +74,20 @@ class Calculator(activity: Activity,
     var viewRadius: Int = 0
         private set
     private var mHasFocus: Boolean = false
+    private var windowFlags: Int = activity.window.attributes.flags
 
 
     init {
-
         val displayMetrics = DisplayMetrics()
         activity.windowManager.defaultDisplay.getMetrics(displayMetrics)
         val deviceWidth = displayMetrics.widthPixels
         val deviceHeight = displayMetrics.heightPixels
         bitmapWidth = deviceWidth
         bitmapHeight = deviceHeight - if (fitSystemWindows) 0 else getStatusBarHeight(activity)
+        val shouldAdjustYPosition = (fitSystemWindows && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+                || (isFullScreen() && !fitSystemWindows))
         if (view != null) {
-            val adjustHeight = if (fitSystemWindows && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            val adjustHeight = if (shouldAdjustYPosition)
                 0
             else
                 getStatusBarHeight(activity)
@@ -216,6 +220,10 @@ class Calculator(activity: Activity,
     fun roundRectLeftCircleRadius(animCounter: Int, animMoveFactor: Double): Float {
         return (focusHeight / 2 + animCounter * animMoveFactor).toFloat()
     }
+
+    private fun isFullScreen(): Boolean =
+            (windowFlags and WindowManager.LayoutParams.FLAG_FULLSCREEN) != 0
+
 
     companion object {
         fun getStatusBarHeight(context: Context): Int {

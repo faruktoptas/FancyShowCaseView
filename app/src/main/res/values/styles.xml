@@ -24,6 +24,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="FullScreenTheme" parent="AppTheme">
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
     <style name="NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
