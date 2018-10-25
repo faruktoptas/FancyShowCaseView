@@ -19,11 +19,11 @@ package me.toptas.fancyshowcasesample
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
-
 import java.util.ArrayList
-
 import kotlinx.android.synthetic.main.activity_recycler_view.*
 import me.toptas.fancyshowcase.FancyShowCaseView
+import android.os.Build
+import android.view.ViewTreeObserver
 
 
 class RecyclerViewActivity : BaseActivity() {
@@ -37,18 +37,39 @@ class RecyclerViewActivity : BaseActivity() {
             modelList.add(MyModel("Item $i"))
         }
 
-
+        val layoutManager = LinearLayoutManager(this)
         val adapter = MyRecyclerViewAdapter(modelList)
         adapter.setClickListener(View.OnClickListener { v ->
-            FancyShowCaseView.Builder(this@RecyclerViewActivity)
-                    .focusOn(v)
-                    .title("Focus RecyclerView Items")
-                    .build()
-                    .show()
+            focus(v)
         })
 
         recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(this)
 
+        recyclerView.layoutManager = layoutManager
+
+        recyclerView.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                val width = recyclerView.width
+                val height = recyclerView.height
+                if (width > 0 && height > 0) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                        recyclerView.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                    } else {
+                        recyclerView.viewTreeObserver.removeGlobalOnLayoutListener(this)
+                    }
+                }
+
+                focus(layoutManager.findViewByPosition(2).findViewById(R.id.ivIcon))
+            }
+        })
+    }
+
+    private fun focus(v: View) {
+        FancyShowCaseView.Builder(this@RecyclerViewActivity)
+                .focusOn(v)
+                .title("Focus RecyclerView Items")
+                .enableAutoTextPosition()
+                .build()
+                .show()
     }
 }
