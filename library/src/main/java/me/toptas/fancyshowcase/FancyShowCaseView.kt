@@ -530,6 +530,7 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
      */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private fun doCircularExitAnimation() {
+        if (!isAttachedToWindow) return
         val revealRadius = Math.hypot(width.toDouble(), height.toDouble()).toInt()
         ViewAnimationUtils.createCircularReveal(this,
                 mCenterX,
