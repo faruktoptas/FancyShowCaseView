@@ -63,6 +63,10 @@ Please see [wiki](https://github.com/faruktoptas/FancyShowCaseView/wiki) for mor
 You can contribute by opening a pull request to **dev** branch.
 Please try to push one feature in one commit for a clean commit history.
 
+## Buy me a Coffe
+
+<a href="https://www.buymeacoffee.com/faruktoptas" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
+
 License
 =======
 
