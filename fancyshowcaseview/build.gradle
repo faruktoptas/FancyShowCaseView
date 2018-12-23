@@ -1,0 +1,67 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'com.github.dcendents.android-maven'
+
+ext {
+
+    bintrayRepo = "fancyshowcaseview"
+    bintrayName = "fancyshowcaseview"
+
+    publishedGroupId = 'me.toptas.fancyshowcase'
+    libraryName = 'fancyshowcaseview'
+    artifact = 'fancyshowcaseview'
+
+    libraryVersion = '1.1.4'
+
+    libraryDescription = 'An easy-to-use customisable show case view with circular reveal animation.'
+
+    siteUrl = 'https://github.com/faruktoptas/FancyShowCaseView'
+    gitUrl = 'https://github.com/faruktoptas/FancyShowCaseView'
+
+    developerId = 'faruktoptas'
+    developerName = 'Faruk Toptas'
+    developerEmail = 'faruktoptas@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
+
+android {
+    compileSdkVersion compile_sdk_version
+    buildToolsVersion "$build_tools_version"
+
+    defaultConfig {
+        minSdkVersion min_sdk_version
+        targetSdkVersion target_sdk_version
+        versionCode 1
+        versionName "$version_name"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile "com.android.support:appcompat-v7:$support_version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}
+
+
+
+repositories {
+    mavenCentral()
+}
+
+if (project.rootProject.file('local.properties').exists()) {
+    apply from: 'https://raw.githubusercontent.com/wajahatkarim3/JCenter-Gradle-Scripts/master/install.gradle'
+    apply from: 'https://raw.githubusercontent.com/wajahatkarim3/JCenter-Gradle-Scripts/master/bintray.gradle'
+}

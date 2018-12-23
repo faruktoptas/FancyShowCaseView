@@ -1,4 +1,4 @@
-# FancyShowCaseView [![Status](https://travis-ci.org/faruktoptas/FancyShowCaseView.svg?branch=master)](https://travis-ci.org/faruktoptas/FancyShowCaseView) [![](https://jitpack.io/v/faruktoptas/FancyShowCaseView.svg)](https://jitpack.io/#faruktoptas/FancyShowCaseView)  [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-FancyShowCaseView-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/5440) [![API](https://img.shields.io/badge/API-14%2B-blue.svg?style=flat)](https://android-arsenal.com/api?level=10) [![Join the chat at https://gitter.im/faruktoptas/FancyShowCaseView](https://badges.gitter.im/faruktoptas/FancyShowCaseView.svg)](https://gitter.im/faruktoptas/FancyShowCaseView?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+# FancyShowCaseView [![Status](https://travis-ci.org/faruktoptas/FancyShowCaseView.svg?branch=master)](https://travis-ci.org/faruktoptas/FancyShowCaseView) [ ![Download](https://api.bintray.com/packages/faruktoptas/fancyshowcaseview/fancyshowcaseview/images/download.svg?version=1.1.4) ](https://bintray.com/faruktoptas/fancyshowcaseview/fancyshowcaseview/1.1.4/link) [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-FancyShowCaseView-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/5440) [![API](https://img.shields.io/badge/API-14%2B-blue.svg?style=flat)](https://android-arsenal.com/api?level=10) [![Join the chat at https://gitter.im/faruktoptas/FancyShowCaseView](https://badges.gitter.im/faruktoptas/FancyShowCaseView.svg)](https://gitter.im/faruktoptas/FancyShowCaseView?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 An easy-to-use customizable show case view with circular reveal animation.
 
 ![materialup](https://cloud.githubusercontent.com/assets/1595227/24761426/f80dbc64-1af3-11e7-9c99-bca3dd836a8e.png)
@@ -21,24 +21,11 @@ Thanks to [DigitalSa1nt](https://github.com/DigitalSa1nt) for the Xamarin ported
 
 ![!gif](https://cloud.githubusercontent.com/assets/1595227/24331189/afec8d9e-1237-11e7-986d-0ab7c44db7c7.gif)
 
-# Gradle Dependency
-
-Add this in your root `build.gradle` file (**not** your module `build.gradle` file):
-
-```gradle
-allprojects {
-	repositories {
-		...
-		maven { url "https://jitpack.io" }
-	}
-}
-```
+# Download
 
 Then, add the library to your module `build.gradle`
 ```gradle
-dependencies {
-    implementation 'com.github.faruktoptas:FancyShowCaseView:1.1.2'
-}
+implementation 'me.toptas.fancyshowcase:fancyshowcaseview:1.1.4'
 ```
 
 ## Sample Usage
