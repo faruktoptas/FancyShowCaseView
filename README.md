@@ -22,8 +22,6 @@ Thanks to [DigitalSa1nt](https://github.com/DigitalSa1nt) for the Xamarin ported
 ![!gif](https://cloud.githubusercontent.com/assets/1595227/24331189/afec8d9e-1237-11e7-986d-0ab7c44db7c7.gif)
 
 # Download
-
-Then, add the library to your module `build.gradle`
 ```gradle
 implementation 'me.toptas.fancyshowcase:fancyshowcaseview:1.1.4'
 ```
