@@ -72,6 +72,7 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
     private var mEnterAnimation: Animation? = null
     private var mExitAnimation: Animation? = null
     private var mAnimationListener: AnimationListener? = null
+    private var mAnimationDuration: Long = ANIMATION_DURATION
     private var mCloseOnTouch: Boolean = false
     private var mEnableTouchOnFocusedView: Boolean = false
     private var fitSystemWindows = false
@@ -79,7 +80,6 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
     private var viewInflateListener: OnViewInflateListener? = null
     private var delay: Long = 0
     private var autoPosText = false
-    private val mAnimationDuration = 400
     private var mFocusAnimationMaxValue = 20
     private var mFocusAnimationStep: Int = 1
     private var mCenterX: Int = 0
@@ -118,6 +118,8 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
      * @param _viewInflateListener      inflate listener for custom view
      * @param _enterAnimation           enter animation for FancyShowCaseView
      * @param _exitAnimation            exit animation for FancyShowCaseView
+     * @param _animationListener        animation listener
+     * @param _animationDuration        animation duration
      * @param _closeOnTouch             closes on touch if enabled
      * @param _enableTouchOnFocusedView closes on touch of focused view if enabled
      * @param _fitSystemWindows         should be the same value of root view's fitSystemWindows value
@@ -150,6 +152,7 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
                         _enterAnimation: Animation?,
                         _exitAnimation: Animation?,
                         _animationListener: AnimationListener?,
+                        _animationDuration: Long,
                         _closeOnTouch: Boolean,
                         _enableTouchOnFocusedView: Boolean,
                         _fitSystemWindows: Boolean,
@@ -188,6 +191,7 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
         mEnterAnimation = _enterAnimation
         mExitAnimation = _exitAnimation
         mAnimationListener = _animationListener
+        mAnimationDuration = _animationDuration
         mCloseOnTouch = _closeOnTouch
         mEnableTouchOnFocusedView = _enableTouchOnFocusedView
         fitSystemWindows = _fitSystemWindows
@@ -394,19 +398,22 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
             mEnterAnimation != null -> startAnimation(mEnterAnimation)
             shouldShowCircularAnimation() -> doCircularEnterAnimation()
             else -> {
-                val fadeInAnimation = AnimationUtils.loadAnimation(activity, R.anim.fscv_fade_in)
-                fadeInAnimation.fillAfter = true
-                fadeInAnimation.setAnimationListener(object : Animation.AnimationListener {
+                AnimationUtils.loadAnimation(activity, R.anim.fscv_fade_in).apply {
+                    fillAfter = true
+                    duration = mAnimationDuration
+                    setAnimationListener(object : Animation.AnimationListener {
 
-                    override fun onAnimationEnd(animation: Animation) {
-                        mAnimationListener?.onEnterAnimationEnd()
-                    }
+                        override fun onAnimationEnd(animation: Animation) {
+                            mAnimationListener?.onEnterAnimationEnd()
+                        }
 
-                    override fun onAnimationRepeat(p0: Animation?) {}
+                        override fun onAnimationRepeat(p0: Animation?) {}
 
-                    override fun onAnimationStart(p0: Animation?) {}
-                })
-                startAnimation(fadeInAnimation)
+                        override fun onAnimationStart(p0: Animation?) {}
+                    })
+                }.also {
+                    startAnimation(it)
+                }
             }
         }
     }
@@ -419,19 +426,22 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
             mExitAnimation != null -> startAnimation(mExitAnimation)
             shouldShowCircularAnimation() -> doCircularExitAnimation()
             else -> {
-                val fadeOut = AnimationUtils.loadAnimation(activity, R.anim.fscv_fade_out)
-                fadeOut.setAnimationListener(object : Animation.AnimationListener {
-                    override fun onAnimationEnd(animation: Animation) {
-                        removeView()
-                        mAnimationListener?.onExitAnimationEnd()
-                    }
+                AnimationUtils.loadAnimation(activity, R.anim.fscv_fade_out).apply {
+                    fillAfter = true
+                    duration = mAnimationDuration
+                    setAnimationListener(object : Animation.AnimationListener {
+                        override fun onAnimationEnd(animation: Animation) {
+                            removeView()
+                            mAnimationListener?.onExitAnimationEnd()
+                        }
 
-                    override fun onAnimationRepeat(p0: Animation?) {}
+                        override fun onAnimationRepeat(p0: Animation?) {}
 
-                    override fun onAnimationStart(p0: Animation?) {}
-                })
-                fadeOut.fillAfter = true
-                startAnimation(fadeOut)
+                        override fun onAnimationStart(p0: Animation?) {}
+                    })
+                }.also {
+                    startAnimation(it)
+                }
             }
         }
     }
@@ -447,7 +457,6 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
             addView(this)
             viewInflateListener?.onViewInflated(this)
         }
-
     }
 
     /**
@@ -499,7 +508,7 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
                             viewTreeObserver.removeOnGlobalLayoutListener(this)
                         }
 
-                        val revealRadius = Math.hypot(width.toDouble(), height.toDouble()).toInt()
+                        val revealRadius = Math.hypot(width.toDouble(), height.toDouble())
                         var startRadius = 0
                         if (focusedView != null) {
                             startRadius = focusedView!!.width / 2
@@ -513,7 +522,7 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
                                 startRadius.toFloat(),
                                 revealRadius.toFloat()).apply {
 
-                            duration = mAnimationDuration.toLong()
+                            duration = mAnimationDuration
                             addListener(object : AnimatorListenerAdapter() {
                                 override fun onAnimationEnd(animation: Animator) {
                                     mAnimationListener?.onEnterAnimationEnd()
@@ -525,7 +534,6 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
                         }
                     }
                 })
-
     }
 
     /**
@@ -534,13 +542,13 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private fun doCircularExitAnimation() {
         if (!isAttachedToWindow) return
-        val revealRadius = Math.hypot(width.toDouble(), height.toDouble()).toInt()
+        val revealRadius = Math.hypot(width.toDouble(), height.toDouble())
         ViewAnimationUtils.createCircularReveal(this,
                 mCenterX,
                 mCenterY,
                 revealRadius.toFloat(),
                 0f).apply {
-            duration = mAnimationDuration.toLong()
+            duration = mAnimationDuration
             interpolator = AnimationUtils.loadInterpolator(activity,
                     android.R.interpolator.decelerate_cubic)
             addListener(object : AnimatorListenerAdapter() {
@@ -565,7 +573,6 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
 
     fun isShownBefore() = if (id != null) isShownBefore(context, id!!) else false
 
-
     /**
      * Removes FancyShowCaseView view from activity root view
      */
@@ -587,7 +594,6 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
     private fun shouldShowCircularAnimation(): Boolean {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
     }
-
 
     /**
      * Builder class for [FancyShowCaseView]
@@ -611,6 +617,7 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
         private var mEnterAnimation: Animation? = null
         private var mExitAnimation: Animation? = null
         private var mAnimationListener: AnimationListener? = null
+        private var mAnimationDuration: Long = ANIMATION_DURATION
         private var mCloseOnTouch = true
         private var mEnableTouchOnFocusedView: Boolean = false
         private var fitSystemWindows: Boolean = false
@@ -777,6 +784,17 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
         }
 
         /**
+         * Animation duration for default animation
+         *
+         * @param duration animation duration
+         * @return Builder
+         */
+        fun animationDuration(duration: Long): Builder {
+            mAnimationDuration = duration
+            return this
+        }
+
+        /**
          * @param exitAnimation exit animation for FancyShowCaseView
          * @return Builder
          */
@@ -905,9 +923,9 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
         fun build(): FancyShowCaseView {
             return FancyShowCaseView(activity, focusedView, clickableView, mId, mTitle, mSpannedTitle, mTitleGravity, mTitleStyle, mTitleSize, mTitleSizeUnit,
                     focusCircleRadiusFactor, mBackgroundColor, mFocusBorderColor, mFocusBorderSize, mCustomViewRes, viewInflateListener,
-                    mEnterAnimation, mExitAnimation, mAnimationListener, mCloseOnTouch, mEnableTouchOnFocusedView, fitSystemWindows, mFocusShape, mDismissListener, mRoundRectRadius,
-                    mFocusPositionX, mFocusPositionY, mFocusCircleRadius, mFocusRectangleWidth, mFocusRectangleHeight, focusAnimationEnabled,
-                    mFocusAnimationMaxValue, mFocusAnimationStep, delay, autoPosText)
+                    mEnterAnimation, mExitAnimation, mAnimationListener, mAnimationDuration, mCloseOnTouch, mEnableTouchOnFocusedView, fitSystemWindows,
+                    mFocusShape, mDismissListener, mRoundRectRadius, mFocusPositionX, mFocusPositionY, mFocusCircleRadius, mFocusRectangleWidth,
+                    mFocusRectangleHeight, focusAnimationEnabled, mFocusAnimationMaxValue, mFocusAnimationStep, delay, autoPosText)
         }
     }
 
@@ -917,6 +935,8 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
         private const val CONTAINER_TAG = "ShowCaseViewTag"
         // SharedPreferences name
         private const val PREF_NAME = "PrefShowCaseView"
+
+        private const val ANIMATION_DURATION = 400L
 
         /**
          * Resets the show once flag
