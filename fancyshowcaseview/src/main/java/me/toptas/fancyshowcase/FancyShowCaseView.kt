@@ -32,12 +32,8 @@ import android.support.v4.content.ContextCompat
 import android.text.Spanned
 import android.util.AttributeSet
 import android.util.DisplayMetrics
-import android.view.Gravity
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewAnimationUtils
-import android.view.ViewGroup
-import android.view.ViewTreeObserver
+import android.view.*
+import android.view.View.OnTouchListener
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
@@ -51,7 +47,8 @@ import me.toptas.fancyshowcase.listener.OnViewInflateListener
  * FancyShowCaseView class
  */
 
-class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
+class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, @AttrRes defStyleAttr: Int = 0)
+    : FrameLayout(context, attrs, defStyleAttr), ViewTreeObserver.OnGlobalLayoutListener {
 
     /**
      * Builder parameters
@@ -98,26 +95,22 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
     private var fancyImageView: FancyImageView? = null
     var dismissListener: DismissListener? = null
 
-    val focusCenterX = calculator?.circleCenterX ?: 0
+    private val focusCenterX
+        get() = calculator?.circleCenterX ?: 0
 
-    val focusCenterY = calculator?.circleCenterY ?: 0
+    private val focusCenterY
+        get() = calculator?.circleCenterY ?: 0
 
-    val focusRadius = if (FocusShape.CIRCLE == mFocusShape)
-        calculator?.circleRadius(0, 1.0) ?: 0f
-    else 0f
+    private val focusRadius
+        get() = if (FocusShape.CIRCLE == mFocusShape)
+            calculator?.circleRadius(0, 1.0) ?: 0f
+        else 0f
 
-    val focusWidth = calculator?.focusWidth ?: 0
+    private val focusWidth
+        get() = calculator?.focusWidth ?: 0
 
-    val focusHeight = calculator?.focusHeight ?: 0
-
-    internal constructor(context: Context) : super(context)
-
-    internal constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
-
-    internal constructor(context: Context, attrs: AttributeSet?, @AttrRes defStyleAttr: Int) : super(context, attrs, defStyleAttr)
-
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    internal constructor(context: Context, attrs: AttributeSet?, @AttrRes defStyleAttr: Int, @StyleRes defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes)
+    private val focusHeight
+        get() = calculator?.focusHeight ?: 0
 
     /**
      * Constructor for FancyShowCaseView
@@ -185,7 +178,7 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
                         _focusAnimationMaxValue: Int,
                         _focusAnimationStep: Int,
                         _delay: Long,
-                        _autoPosText: Boolean) : super(_activity) {
+                        _autoPosText: Boolean) : this(_activity) {
 
         requireNotNull(_activity)
         id = _id
