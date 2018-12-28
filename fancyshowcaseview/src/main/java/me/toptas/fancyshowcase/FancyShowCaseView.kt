@@ -32,12 +32,8 @@ import android.support.v4.content.ContextCompat
 import android.text.Spanned
 import android.util.AttributeSet
 import android.util.DisplayMetrics
-import android.view.Gravity
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewAnimationUtils
-import android.view.ViewGroup
-import android.view.ViewTreeObserver
+import android.view.*
+import android.view.View.OnTouchListener
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
@@ -335,17 +331,13 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
         setOnTouchListener(OnTouchListener { _, event ->
             if (event.actionMasked == MotionEvent.ACTION_DOWN) {
                 when {
-                    mEnableTouchOnFocusedView -> {
-                        if (isWithinZone(event, focusCalculator)) {
-                            // Check if there is a clickable view within the focusable view
-                            // Let the touch event pass through to clickable zone only if clicking within, otherwise return true to ignore event
-                            // If there is no clickable view we let through the click to the focusable view
-                            clickableView?.let {
-                                return@OnTouchListener !isWithinZone(event, clickableCalculator)
-                            } ?: return@OnTouchListener false
-                        } else if (mCloseOnTouch) {
-                            hide()
-                        }
+                    mEnableTouchOnFocusedView && isWithinZone(event, focusCalculator) -> {
+                        // Check if there is a clickable view within the focusable view
+                        // Let the touch event pass through to clickable zone only if clicking within, otherwise return true to ignore event
+                        // If there is no clickable view we let through the click to the focusable view
+                        clickableView?.let {
+                            return@OnTouchListener !isWithinZone(event, clickableCalculator)
+                        } ?: return@OnTouchListener false
                     }
                     mCloseOnTouch -> hide()
                 }
