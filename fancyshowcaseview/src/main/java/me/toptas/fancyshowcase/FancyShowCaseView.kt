@@ -32,12 +32,8 @@ import android.support.v4.content.ContextCompat
 import android.text.Spanned
 import android.util.AttributeSet
 import android.util.DisplayMetrics
-import android.view.Gravity
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewAnimationUtils
-import android.view.ViewGroup
-import android.view.ViewTreeObserver
+import android.view.*
+import android.view.View.OnTouchListener
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
@@ -51,7 +47,8 @@ import me.toptas.fancyshowcase.listener.OnViewInflateListener
  * FancyShowCaseView class
  */
 
-class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
+class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, @AttrRes defStyleAttr: Int = 0)
+    : FrameLayout(context, attrs, defStyleAttr), ViewTreeObserver.OnGlobalLayoutListener {
 
     /**
      * Builder parameters
@@ -62,6 +59,7 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
     private var id: String? = null
     private var focusCircleRadiusFactor: Double = 1.0
     private var focusedView: View? = null
+    private var clickableView: View? = null
     private var mBackgroundColor: Int = 0
     private var mFocusBorderColor: Int = 0
     private var mTitleGravity: Int = -1
@@ -88,7 +86,8 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
     private var mCenterY: Int = 0
     private var mRoot: ViewGroup? = null
     private var sharedPreferences: SharedPreferences? = null
-    private var calculator: Calculator? = null
+    private var focusCalculator: Calculator? = null
+    private var clickableCalculator: Calculator? = null
     private var mFocusPositionX: Int = 0
     private var mFocusPositionY: Int = 0
     private var mFocusCircleRadius: Int = 0
@@ -98,32 +97,12 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
     private var fancyImageView: FancyImageView? = null
     var dismissListener: DismissListener? = null
 
-    val focusCenterX = calculator?.circleCenterX ?: 0
-
-    val focusCenterY = calculator?.circleCenterY ?: 0
-
-    val focusRadius = if (FocusShape.CIRCLE == mFocusShape)
-        calculator?.circleRadius(0, 1.0) ?: 0f
-    else 0f
-
-    val focusWidth = calculator?.focusWidth ?: 0
-
-    val focusHeight = calculator?.focusHeight ?: 0
-
-    internal constructor(context: Context) : super(context)
-
-    internal constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
-
-    internal constructor(context: Context, attrs: AttributeSet?, @AttrRes defStyleAttr: Int) : super(context, attrs, defStyleAttr)
-
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    internal constructor(context: Context, attrs: AttributeSet?, @AttrRes defStyleAttr: Int, @StyleRes defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes)
-
     /**
      * Constructor for FancyShowCaseView
      *
      * @param _activity                 Activity to show FancyShowCaseView in
-     * @param _view                     view to focus
+     * @param _focusView                view to focus
+     * @param _clickableView            view to be clickable
      * @param _id                       unique identifier for FancyShowCaseView
      * @param _title                    title text
      * @param _spannedTitle             title text if spanned text should be used
@@ -153,7 +132,8 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
      * @param _animationEnabled         flag to enable/disable animation
      */
     private constructor(_activity: Activity,
-                        _view: View?,
+                        _focusView: View?,
+                        _clickableView: View?,
                         _id: String?,
                         _title: String?,
                         _spannedTitle: Spanned?,
@@ -185,12 +165,13 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
                         _focusAnimationMaxValue: Int,
                         _focusAnimationStep: Int,
                         _delay: Long,
-                        _autoPosText: Boolean) : super(_activity) {
+                        _autoPosText: Boolean) : this(_activity) {
 
         requireNotNull(_activity)
         id = _id
         activity = _activity
-        focusedView = _view
+        focusedView = _focusView
+        clickableView = _clickableView
         title = _title
         spannedTitle = _spannedTitle
         focusCircleRadiusFactor = _focusCircleRadiusFactor
@@ -263,9 +244,15 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
     }
 
     private fun focus() {
-        calculator = Calculator(activity,
+        focusCalculator = Calculator(activity,
                 mFocusShape,
                 focusedView,
+                focusCircleRadiusFactor,
+                fitSystemWindows)
+
+        clickableCalculator = Calculator(activity,
+                mFocusShape,
+                clickableView,
                 focusCircleRadiusFactor,
                 fitSystemWindows)
 
@@ -280,12 +267,12 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
             if (visibleView == null) {
                 tag = CONTAINER_TAG
                 setId(R.id.fscv_id)
-                if (mCloseOnTouch) {
-                    setupTouchListener()
-                }
+
                 layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT)
                 mRoot?.addView(this)
+
+                setupTouchListener()
 
                 setCalculatorParams()
 
@@ -301,7 +288,7 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
     }
 
     private fun setCalculatorParams() {
-        calculator?.apply {
+        focusCalculator?.apply {
             if (hasFocus()) {
                 mCenterX = circleCenterX
                 mCenterY = circleCenterY
@@ -318,7 +305,7 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
     private fun addFancyImageView() {
         FancyImageView(activity).apply {
             setFocusAnimationParameters(mFocusAnimationMaxValue, mFocusAnimationStep)
-            setParameters(mBackgroundColor, calculator!!)
+            setParameters(mBackgroundColor, focusCalculator!!)
             focusAnimationEnabled = this@FancyShowCaseView.focusAnimationEnabled
             layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT)
@@ -341,46 +328,62 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
     }
 
     private fun setupTouchListener() {
-        if (mEnableTouchOnFocusedView) {
-            setOnTouchListener(OnTouchListener { _, event ->
-                if (event.actionMasked == MotionEvent.ACTION_DOWN) {
-                    var isWithin = false
-                    val x = event.x
-                    val y = event.y
-
-                    when (mFocusShape) {
-                        FocusShape.CIRCLE -> {
-                            val distance = Math.sqrt(
-                                    Math.pow((focusCenterX - x).toDouble(), 2.0) + Math.pow((focusCenterY - y).toDouble(), 2.0))
-
-                            isWithin = Math.abs(distance) < focusRadius
-                        }
-                        FocusShape.ROUNDED_RECTANGLE -> {
-                            val rect = Rect()
-                            val left = focusCenterX - focusWidth / 2
-                            val right = focusCenterX + focusWidth / 2
-                            val top = focusCenterY - focusHeight / 2
-                            val bottom = focusCenterY + focusHeight / 2
-                            rect.set(left, top, right, bottom)
-                            isWithin = rect.contains(x.toInt(), y.toInt())
-                        }
+        setOnTouchListener(OnTouchListener { _, event ->
+            if (event.actionMasked == MotionEvent.ACTION_DOWN) {
+                when {
+                    mEnableTouchOnFocusedView && isWithinZone(event, focusCalculator) -> {
+                        // Check if there is a clickable view within the focusable view
+                        // Let the touch event pass through to clickable zone only if clicking within, otherwise return true to ignore event
+                        // If there is no clickable view we let through the click to the focusable view
+                        clickableView?.let {
+                            return@OnTouchListener !isWithinZone(event, clickableCalculator)
+                        } ?: return@OnTouchListener false
                     }
-
-                    // let the touch event pass on to whoever needs it
-                    if (isWithin) {
-                        return@OnTouchListener false
-                    } else {
-                        if (mCloseOnTouch) {
-                            hide()
-                        }
-                    }
+                    mCloseOnTouch -> hide()
                 }
-                true
-            })
-        } else {
-            setOnClickListener { hide() }
+            }
+            true
+        })
+    }
+
+    /**
+     * Check whether the event is within the provided zone that was already computed with the provided calculator
+     *
+     * @param event         The event from onTouch callback
+     * @param calculator    The calculator that holds the zone's position
+     */
+    private fun isWithinZone(event: MotionEvent, calculator: Calculator?): Boolean {
+        var isWithin = false
+        val x = event.x
+        val y = event.y
+        val focusCenterX = calculator?.circleCenterX ?: 0
+        val focusCenterY = calculator?.circleCenterY ?: 0
+        val focusWidth = calculator?.focusWidth ?: 0
+        val focusHeight = calculator?.focusHeight ?: 0
+        val focusRadius =
+                if (FocusShape.CIRCLE == mFocusShape)
+                    calculator?.circleRadius(0, 1.0) ?: 0f
+                else 0f
+
+        when (mFocusShape) {
+            FocusShape.CIRCLE -> {
+                val distance = Math.sqrt(
+                        Math.pow((focusCenterX - x).toDouble(), 2.0) + Math.pow((focusCenterY - y).toDouble(), 2.0))
+
+                isWithin = Math.abs(distance) < focusRadius
+            }
+            FocusShape.ROUNDED_RECTANGLE -> {
+                val rect = Rect()
+                val left = focusCenterX - focusWidth / 2
+                val right = focusCenterX + focusWidth / 2
+                val top = focusCenterY - focusHeight / 2
+                val bottom = focusCenterY + focusHeight / 2
+                rect.set(left, top, right, bottom)
+                isWithin = rect.contains(x.toInt(), y.toInt())
+            }
         }
 
+        return isWithin
     }
 
     /**
@@ -475,7 +478,7 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
                 }
 
                 if (autoPosText) {
-                    calculator?.calcAutoTextPosition(textView)
+                    focusCalculator?.calcAutoTextPosition(textView)
                 }
             }
         })
@@ -591,6 +594,7 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
      */
     class Builder(private val activity: Activity) {
         private var focusedView: View? = null
+        private var clickableView: View? = null
         private var mId: String? = null
         private var mTitle: String? = null
         private var mSpannedTitle: Spanned? = null
@@ -702,6 +706,15 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
          */
         fun showOnce(id: String): Builder {
             mId = id
+            return this
+        }
+
+        /**
+         * @param view view to focus
+         * @return Builder
+         */
+        fun clickableOn(view: View): Builder {
+            clickableView = view
             return this
         }
 
@@ -890,7 +903,7 @@ class FancyShowCaseView : FrameLayout, ViewTreeObserver.OnGlobalLayoutListener {
          * @return [FancyShowCaseView] with given parameters
          */
         fun build(): FancyShowCaseView {
-            return FancyShowCaseView(activity, focusedView, mId, mTitle, mSpannedTitle, mTitleGravity, mTitleStyle, mTitleSize, mTitleSizeUnit,
+            return FancyShowCaseView(activity, focusedView, clickableView, mId, mTitle, mSpannedTitle, mTitleGravity, mTitleStyle, mTitleSize, mTitleSizeUnit,
                     focusCircleRadiusFactor, mBackgroundColor, mFocusBorderColor, mFocusBorderSize, mCustomViewRes, viewInflateListener,
                     mEnterAnimation, mExitAnimation, mAnimationListener, mCloseOnTouch, mEnableTouchOnFocusedView, fitSystemWindows, mFocusShape, mDismissListener, mRoundRectRadius,
                     mFocusPositionX, mFocusPositionY, mFocusCircleRadius, mFocusRectangleWidth, mFocusRectangleHeight, focusAnimationEnabled,

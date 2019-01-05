@@ -19,7 +19,8 @@ package me.toptas.fancyshowcasesample
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.text.*
+import android.text.Html
+import android.text.Spanned
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.Menu
@@ -28,17 +29,20 @@ import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Toast
-
 import kotlinx.android.synthetic.main.activity_main.*
-import me.toptas.fancyshowcase.*
+import me.toptas.fancyshowcase.FancyShowCaseView
+import me.toptas.fancyshowcase.FocusShape
 import me.toptas.fancyshowcase.listener.DismissListener
 import me.toptas.fancyshowcase.listener.OnViewInflateListener
 
 class MainActivity : BaseActivity() {
 
-    private lateinit var mFancyShowCaseView: FancyShowCaseView
+    private var mFancyShowCaseView: FancyShowCaseView? = null
 
-    private var mClickListener: View.OnClickListener = View.OnClickListener { mFancyShowCaseView.hide() }
+    private var mClickListener: View.OnClickListener = View.OnClickListener {
+        mFancyShowCaseView?.hide()
+        mFancyShowCaseView = null
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -223,16 +227,19 @@ class MainActivity : BaseActivity() {
 
         //Shows a FancyShowCaseView view custom view inflation
         btn_custom_view.setOnClickListener {
-            mFancyShowCaseView = FancyShowCaseView.Builder(this)
-                    .focusOn(it)
-                    .customView(R.layout.layout_my_custom_view, object : OnViewInflateListener {
-                        override fun onViewInflated(view: View) {
-                            view.findViewById<View>(R.id.btn_action_1).setOnClickListener(mClickListener)
-                        }
-                    })
-                    .closeOnTouch(false)
-                    .build()
-            mFancyShowCaseView.show()
+            if (mFancyShowCaseView == null) {
+                mFancyShowCaseView = FancyShowCaseView.Builder(this)
+                        .focusOn(it)
+                        .enableTouchOnFocusedView(true)
+                        .customView(R.layout.layout_my_custom_view, object : OnViewInflateListener {
+                            override fun onViewInflated(view: View) {
+                                view.findViewById<View>(R.id.btn_action_1).setOnClickListener(mClickListener)
+                            }
+                        })
+                        .closeOnTouch(false)
+                        .build()
+                mFancyShowCaseView?.show()
+            }
         }
 
         btn_custom_view2.setOnClickListener {
@@ -240,11 +247,13 @@ class MainActivity : BaseActivity() {
         }
 
         btn_no_anim.setOnClickListener {
-            mFancyShowCaseView = FancyShowCaseView.Builder(this)
-                    .focusOn(it)
-                    .disableFocusAnimation()
-                    .build()
-            mFancyShowCaseView.show()
+            if (mFancyShowCaseView == null) {
+                mFancyShowCaseView = FancyShowCaseView.Builder(this)
+                        .focusOn(it)
+                        .disableFocusAnimation()
+                        .build()
+                mFancyShowCaseView?.show()
+            }
         }
 
         btn_queue.setOnClickListener {
