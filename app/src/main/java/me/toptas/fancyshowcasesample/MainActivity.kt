@@ -55,7 +55,7 @@ class MainActivity : BaseActivity() {
                     .show()
         }
 
-        //Shows a FancyShowCaseView that focus on a view
+        //Shows a FancyShowCaseView that focus on a vie
         btn_focus.setOnClickListener {
             FancyShowCaseView.Builder(this)
                     .focusOn(it)
@@ -227,19 +227,18 @@ class MainActivity : BaseActivity() {
 
         //Shows a FancyShowCaseView view custom view inflation
         btn_custom_view.setOnClickListener {
-            if (mFancyShowCaseView == null) {
-                mFancyShowCaseView = FancyShowCaseView.Builder(this)
-                        .focusOn(it)
-                        .enableTouchOnFocusedView(true)
-                        .customView(R.layout.layout_my_custom_view, object : OnViewInflateListener {
-                            override fun onViewInflated(view: View) {
-                                view.findViewById<View>(R.id.btn_action_1).setOnClickListener(mClickListener)
-                            }
-                        })
-                        .closeOnTouch(false)
-                        .build()
-                mFancyShowCaseView?.show()
-            }
+            mFancyShowCaseView = FancyShowCaseView.Builder(this)
+                    .focusOn(it)
+                    .enableTouchOnFocusedView(true)
+                    .customView(R.layout.layout_my_custom_view, object : OnViewInflateListener {
+                        override fun onViewInflated(view: View) {
+                            view.findViewById<View>(R.id.btn_action_1).setOnClickListener(mClickListener)
+                        }
+                    })
+                    .closeOnTouch(false)
+                    .build()
+            mFancyShowCaseView?.show()
+
         }
 
         btn_custom_view2.setOnClickListener {
@@ -247,13 +246,12 @@ class MainActivity : BaseActivity() {
         }
 
         btn_no_anim.setOnClickListener {
-            if (mFancyShowCaseView == null) {
-                mFancyShowCaseView = FancyShowCaseView.Builder(this)
-                        .focusOn(it)
-                        .disableFocusAnimation()
-                        .build()
-                mFancyShowCaseView?.show()
-            }
+            mFancyShowCaseView = FancyShowCaseView.Builder(this)
+                    .focusOn(it)
+                    .disableFocusAnimation()
+                    .build()
+            mFancyShowCaseView?.show()
+
         }
 
         btn_queue.setOnClickListener {
