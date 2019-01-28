@@ -23,7 +23,7 @@ Thanks to [DigitalSa1nt](https://github.com/DigitalSa1nt) for the Xamarin ported
 
 # Download
 ```gradle
-implementation 'me.toptas.fancyshowcase:fancyshowcaseview:1.1.4'
+implementation 'me.toptas.fancyshowcase:fancyshowcaseview:1.1.5'
 ```
 
 ## Sample Usage
