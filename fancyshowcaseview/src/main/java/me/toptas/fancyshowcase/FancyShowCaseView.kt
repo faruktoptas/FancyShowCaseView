@@ -41,6 +41,7 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import me.toptas.fancyshowcase.listener.AnimationListener
 import me.toptas.fancyshowcase.listener.DismissListener
+import me.toptas.fancyshowcase.listener.OnQueueListener
 import me.toptas.fancyshowcase.listener.OnViewInflateListener
 
 /**
@@ -86,7 +87,7 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
     private var mCenterY: Int = 0
     private var mRoot: ViewGroup? = null
     private var sharedPreferences: SharedPreferences? = null
-    private var focusCalculator: Calculator? = null
+    var focusCalculator: Calculator? = null
     private var clickableCalculator: Calculator? = null
     private var mFocusPositionX: Int = 0
     private var mFocusPositionY: Int = 0
@@ -96,6 +97,7 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
     private var focusAnimationEnabled: Boolean = true
     private var fancyImageView: FancyImageView? = null
     var dismissListener: DismissListener? = null
+    var queueListener: OnQueueListener? = null
 
     /**
      * Constructor for FancyShowCaseView
@@ -573,6 +575,7 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
         if (fancyImageView != null) fancyImageView = null
         mRoot?.removeView(this)
         dismissListener?.onDismiss(id)
+        queueListener?.onNext()
     }
 
     override fun onGlobalLayout() {

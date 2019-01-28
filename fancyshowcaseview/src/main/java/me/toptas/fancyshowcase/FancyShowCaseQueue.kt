@@ -18,6 +18,7 @@ package me.toptas.fancyshowcase
 
 import me.toptas.fancyshowcase.listener.DismissListener
 import me.toptas.fancyshowcase.listener.OnCompleteListener
+import me.toptas.fancyshowcase.listener.OnQueueListener
 import java.util.LinkedList
 import java.util.Queue
 
@@ -25,7 +26,7 @@ import java.util.Queue
  * Handles queues of [FancyShowCaseView] so that they are shown one after another
  * takes care to skip views that should not be shown because of their one shot id
  */
-class FancyShowCaseQueue : DismissListener {
+class FancyShowCaseQueue : OnQueueListener {
 
     private val queue: Queue<FancyShowCaseView> = LinkedList()
     var current: FancyShowCaseView? = null
@@ -49,7 +50,7 @@ class FancyShowCaseQueue : DismissListener {
     fun show() {
         if (queue.isNotEmpty()) {
             current = queue.poll().apply {
-                dismissListener = this@FancyShowCaseQueue
+                queueListener = this@FancyShowCaseQueue
                 show()
             }
         } else {
@@ -67,8 +68,7 @@ class FancyShowCaseQueue : DismissListener {
         if (queue.isNotEmpty()) queue.clear()
     }
 
-    override fun onDismiss(id: String?) = show()
-
-    override fun onSkipped(id: String?) = show()
-
+    override fun onNext() {
+        show()
+    }
 }

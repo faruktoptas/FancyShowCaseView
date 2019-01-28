@@ -23,6 +23,7 @@ import android.view.View
 import kotlinx.android.synthetic.main.activity_queue.*
 import me.toptas.fancyshowcase.FancyShowCaseQueue
 import me.toptas.fancyshowcase.FancyShowCaseView
+import me.toptas.fancyshowcase.listener.DismissListener
 import me.toptas.fancyshowcase.listener.OnViewInflateListener
 
 class CustomQueueActivity : BaseActivity() {
@@ -32,6 +33,17 @@ class CustomQueueActivity : BaseActivity() {
     private var mClickListener: View.OnClickListener = View.OnClickListener {
         Log.d("", "onClick: ")
         queue.current?.hide()
+    }
+
+    private var dismissListener = object:DismissListener{
+        override fun onDismiss(id: String?) {
+            Log.v("asd","dismiss")
+        }
+
+        override fun onSkipped(id: String?) {
+            Log.v("asd","skipped")
+        }
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,6 +59,7 @@ class CustomQueueActivity : BaseActivity() {
                     }
                 })
                 .closeOnTouch(false)
+                .dismissListener(dismissListener)
                 .build()
 
         val fancyShowCaseView2 = FancyShowCaseView.Builder(this)
@@ -58,6 +71,7 @@ class CustomQueueActivity : BaseActivity() {
                     }
                 })
                 .closeOnTouch(false)
+                .dismissListener(dismissListener)
                 .build()
 
         val fancyShowCaseView3 = FancyShowCaseView.Builder(this)
@@ -69,6 +83,7 @@ class CustomQueueActivity : BaseActivity() {
                     }
                 })
                 .closeOnTouch(false)
+                .dismissListener(dismissListener)
                 .build()
 
         queue = FancyShowCaseQueue()
