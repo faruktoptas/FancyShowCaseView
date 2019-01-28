@@ -12,7 +12,7 @@ ext {
     libraryName = 'fancyshowcaseview'
     artifact = 'fancyshowcaseview'
 
-    libraryVersion = '1.1.4'
+    libraryVersion = "$version_name"
 
     libraryDescription = 'An easy-to-use customisable show case view with circular reveal animation.'
 
