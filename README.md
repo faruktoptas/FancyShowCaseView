@@ -36,7 +36,6 @@ Please see [wiki](https://github.com/faruktoptas/FancyShowCaseView/wiki) for mor
 
 ## Already in use in following apps
 (feel free to send me new projects)
-* [Nearby Friend Search For WhatsApp](https://play.google.com/store/apps/details?id=com.regrex.realnumbers)
 * [News - Newspaper & Magazine](https://play.google.com/store/apps/details?id=com.moblino.countrynews)
 * [XMusic Pro](https://play.google.com/store/apps/details?id=com.riseapps.xmusic)
 * [Umíme česky](https://play.google.com/store/apps/details?id=cz.muni.fi.umimecesky)
