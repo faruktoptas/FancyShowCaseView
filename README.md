@@ -36,7 +36,7 @@ Please see [wiki](https://github.com/faruktoptas/FancyShowCaseView/wiki) for mor
 (feel free to send me new projects)
 * [News - Newspaper & Magazine](https://play.google.com/store/apps/details?id=com.moblino.countrynews)
 * [XMusic Pro](https://play.google.com/store/apps/details?id=com.riseapps.xmusic)
-- [Muqabla -Free Online Live Quiz Game Show](https://play.google.com/store/apps/details?id=com.es.triv)
+* [Muqabla -Free Online Live Quiz Game Show](https://play.google.com/store/apps/details?id=com.es.triv)
 * [Umíme česky](https://play.google.com/store/apps/details?id=cz.muni.fi.umimecesky)
 * [Get Off Your Phone](https://play.google.com/store/apps/details?id=com.nephi.getoffyourphone)
 
