@@ -5,8 +5,6 @@ An easy-to-use customizable show case view with circular reveal animation.
 
 [@MaterialUp Best of the Day](https://material.uplabs.com/posts/fancyshowcaseview)
 
-Thanks to [DigitalSa1nt](https://github.com/DigitalSa1nt) for the Xamarin ported version [Xamarin.ShowcaseView](https://github.com/DigitalSa1nt/Xamarin.ShowcaseView)
-
 ## Features
 - Circular reveal animation (API Level 21+)
 - Background color
@@ -19,7 +17,7 @@ Thanks to [DigitalSa1nt](https://github.com/DigitalSa1nt) for the Xamarin ported
 
 ![!gif](https://cloud.githubusercontent.com/assets/1595227/24331187/ad143b80-1237-11e7-919c-36111c1ce559.gif)![!gif](https://cloud.githubusercontent.com/assets/1595227/24331189/afec8d9e-1237-11e7-986d-0ab7c44db7c7.gif)
 
-# Download
+## Download
 ```gradle
 implementation 'me.toptas.fancyshowcase:fancyshowcaseview:1.1.5'
 ```
@@ -38,11 +36,15 @@ Please see [wiki](https://github.com/faruktoptas/FancyShowCaseView/wiki) for mor
 (feel free to send me new projects)
 * [News - Newspaper & Magazine](https://play.google.com/store/apps/details?id=com.moblino.countrynews)
 * [XMusic Pro](https://play.google.com/store/apps/details?id=com.riseapps.xmusic)
+- [Muqabla -Free Online Live Quiz Game Show](https://play.google.com/store/apps/details?id=com.es.triv)
 * [Umíme česky](https://play.google.com/store/apps/details?id=cz.muni.fi.umimecesky)
 * [Get Off Your Phone](https://play.google.com/store/apps/details?id=com.nephi.getoffyourphone)
 
 ## Sample App
  [Latest Release](https://github.com/faruktoptas/FancyShowCaseView/releases)
+ 
+## Xamarin Port
+Thanks to [DigitalSa1nt](https://github.com/DigitalSa1nt) for the Xamarin ported version [Xamarin.ShowcaseView](https://github.com/DigitalSa1nt/Xamarin.ShowcaseView)
 
 ## Contribute
 You can contribute by opening a pull request to **dev** branch.
@@ -55,7 +57,7 @@ Please try to push one feature in one commit for a clean commit history.
 License
 =======
 
-    Copyright 2017 Faruk Toptaş
+    Copyright 2019 Faruk Toptaş
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
