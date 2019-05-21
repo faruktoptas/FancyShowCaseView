@@ -31,7 +31,6 @@ ext {
 
 android {
     compileSdkVersion compile_sdk_version
-    buildToolsVersion "$build_tools_version"
 
     defaultConfig {
         minSdkVersion min_sdk_version
@@ -39,7 +38,7 @@ android {
         versionCode 1
         versionName "$version_name"
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
     }
     buildTypes {
@@ -51,11 +50,9 @@ android {
 }
 
 dependencies {
-    implementation "com.android.support:appcompat-v7:$support_version"
+    implementation "androidx.appcompat:appcompat:$appcompat"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
-
-
 
 repositories {
     mavenCentral()

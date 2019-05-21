@@ -17,13 +17,13 @@
 package me.toptas.fancyshowcasesample
 
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import java.util.ArrayList
 import kotlinx.android.synthetic.main.activity_recycler_view.*
 import me.toptas.fancyshowcase.FancyShowCaseView
 import android.os.Build
 import android.view.ViewTreeObserver
+import androidx.recyclerview.widget.LinearLayoutManager
 
 
 class RecyclerViewActivity : BaseActivity() {
@@ -59,7 +59,7 @@ class RecyclerViewActivity : BaseActivity() {
                     }
                 }
 
-                focus(layoutManager.findViewByPosition(2).findViewById(R.id.ivIcon))
+                focus(layoutManager.findViewByPosition(2)!!.findViewById(R.id.ivIcon))
             }
         })
     }

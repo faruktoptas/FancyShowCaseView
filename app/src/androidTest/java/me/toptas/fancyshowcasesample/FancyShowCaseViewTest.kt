@@ -17,8 +17,8 @@
 package me.toptas.fancyshowcasesample
 
 import android.graphics.Color
-import android.support.test.rule.ActivityTestRule
-import android.support.test.runner.AndroidJUnit4
+import androidx.test.rule.ActivityTestRule
+import androidx.test.runner.AndroidJUnit4
 import android.test.suitebuilder.annotation.LargeTest
 import android.view.Gravity
 import com.example.espressorobot.robot
