@@ -146,14 +146,14 @@ class Calculator(activity: Activity,
         val spaceBelow = bitmapHeight - bottom.toInt()
         val params = view.layoutParams as RelativeLayout.LayoutParams
 
-        val viewHeight = if (focusShape == FocusShape.ROUNDED_RECTANGLE) focusHeight else viewRadius
+        val halfViewHeight = if (focusShape == FocusShape.ROUNDED_RECTANGLE) focusHeight / 2 else viewRadius
 
         if (spaceAbove > spaceBelow) {
-            params.bottomMargin = bitmapHeight - (circleCenterY + viewHeight)
+            params.bottomMargin = bitmapHeight - (circleCenterY + halfViewHeight)
             params.topMargin = 0
             params.height = top.toInt()
         } else {
-            params.topMargin = circleCenterY + viewHeight
+            params.topMargin = circleCenterY + halfViewHeight
             params.bottomMargin = 0
             params.height = (bitmapHeight - top).toInt()
         }
