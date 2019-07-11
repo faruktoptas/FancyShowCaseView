@@ -25,10 +25,10 @@ import android.graphics.Path
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
 import android.graphics.RectF
-import android.support.annotation.VisibleForTesting
-import android.support.v7.widget.AppCompatImageView
 import android.util.AttributeSet
 import android.view.View
+import androidx.annotation.VisibleForTesting
+import androidx.appcompat.widget.AppCompatImageView
 
 /**
  * ImageView with focus area animation

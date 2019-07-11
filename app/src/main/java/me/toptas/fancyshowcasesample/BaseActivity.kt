@@ -16,7 +16,7 @@
 
 package me.toptas.fancyshowcasesample
 
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 
 import me.toptas.fancyshowcase.FancyShowCaseView
 
