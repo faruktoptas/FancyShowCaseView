@@ -27,8 +27,13 @@ import android.os.Build
 import android.text.Spanned
 import android.util.AttributeSet
 import android.util.DisplayMetrics
-import android.view.*
+import android.view.Gravity
+import android.view.MotionEvent
+import android.view.View
 import android.view.View.OnTouchListener
+import android.view.ViewAnimationUtils
+import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
@@ -314,7 +319,7 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
             if (mFocusBorderColor != 0 && mFocusBorderSize > 0) {
                 setBorderParameters(mFocusBorderColor, mFocusBorderSize)
             }
-            if (mRoundRectRadius > 0) {
+            if (mRoundRectRadius >= 0) {
                 roundRectRadius = mRoundRectRadius
             }
             addView(this)
@@ -392,23 +397,11 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
      * Starts enter animation of FancyShowCaseView
      */
     private fun startEnterAnimation() {
-        when {
-            mEnterAnimation != null -> startAnimation(mEnterAnimation)
-            shouldShowCircularAnimation() -> doCircularEnterAnimation()
-            else -> {
-                val fadeInAnimation = AnimationUtils.loadAnimation(activity, R.anim.fscv_fade_in)
-                fadeInAnimation.fillAfter = true
-                fadeInAnimation.setAnimationListener(object : Animation.AnimationListener {
-
-                    override fun onAnimationEnd(animation: Animation) {
-                        mAnimationListener?.onEnterAnimationEnd()
-                    }
-
-                    override fun onAnimationRepeat(p0: Animation?) {}
-
-                    override fun onAnimationStart(p0: Animation?) {}
-                })
-                startAnimation(fadeInAnimation)
+        if (mEnterAnimation != null) {
+            if (mEnterAnimation is FadeInAnimation && shouldShowCircularAnimation()) {
+                doCircularEnterAnimation()
+            } else {
+                startAnimation(mEnterAnimation)
             }
         }
     }
@@ -417,24 +410,27 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
      * Hides FancyShowCaseView with animation
      */
     fun hide() {
-        when {
-            mExitAnimation != null -> startAnimation(mExitAnimation)
-            shouldShowCircularAnimation() -> doCircularExitAnimation()
-            else -> {
-                val fadeOut = AnimationUtils.loadAnimation(activity, R.anim.fscv_fade_out)
-                fadeOut.setAnimationListener(object : Animation.AnimationListener {
-                    override fun onAnimationEnd(animation: Animation) {
+        if (mExitAnimation != null) {
+            if (mExitAnimation is FadeOutAnimation && shouldShowCircularAnimation()) {
+                doCircularExitAnimation()
+            } else {
+                mExitAnimation?.setAnimationListener(object : Animation.AnimationListener {
+                    override fun onAnimationRepeat(animation: Animation?) {
+
+                    }
+
+                    override fun onAnimationEnd(animation: Animation?) {
                         removeView()
                         mAnimationListener?.onExitAnimationEnd()
                     }
 
-                    override fun onAnimationRepeat(p0: Animation?) {}
-
-                    override fun onAnimationStart(p0: Animation?) {}
+                    override fun onAnimationStart(animation: Animation?) {
+                    }
                 })
-                fadeOut.fillAfter = true
-                startAnimation(fadeOut)
+                startAnimation(mExitAnimation)
             }
+        } else {
+            removeView()
         }
     }
 
@@ -611,8 +607,8 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
         private var mCustomViewRes: Int = 0
         private var mRoundRectRadius: Int = 0
         private var viewInflateListener: OnViewInflateListener? = null
-        private var mEnterAnimation: Animation? = null
-        private var mExitAnimation: Animation? = null
+        private var mEnterAnimation: Animation? = FadeInAnimation()
+        private var mExitAnimation: Animation? = FadeOutAnimation()
         private var mAnimationListener: AnimationListener? = null
         private var mCloseOnTouch = true
         private var mEnableTouchOnFocusedView: Boolean = false
@@ -763,7 +759,7 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
          * @param enterAnimation enter animation for FancyShowCaseView
          * @return Builder
          */
-        fun enterAnimation(enterAnimation: Animation): Builder {
+        fun enterAnimation(enterAnimation: Animation?): Builder {
             mEnterAnimation = enterAnimation
             return this
         }
@@ -783,7 +779,7 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
          * @param exitAnimation exit animation for FancyShowCaseView
          * @return Builder
          */
-        fun exitAnimation(exitAnimation: Animation): Builder {
+        fun exitAnimation(exitAnimation: Animation?): Builder {
             mExitAnimation = exitAnimation
             return this
         }

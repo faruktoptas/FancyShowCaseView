@@ -21,7 +21,7 @@ An easy-to-use customizable show case view with circular reveal animation.
 
 ## Download
 ```gradle
-implementation 'me.toptas.fancyshowcase:fancyshowcaseview:1.2.0'
+implementation 'me.toptas.fancyshowcase:fancyshowcaseview:1.2.1'
 ```
 
 ## Download (For non-androidx projects)

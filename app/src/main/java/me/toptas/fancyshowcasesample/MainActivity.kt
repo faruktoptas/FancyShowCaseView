@@ -22,13 +22,36 @@ import android.os.Bundle
 import android.text.Html
 import android.text.Spanned
 import android.util.TypedValue
-import android.view.*
+import android.view.Gravity
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.Toast
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.btn_anim
+import kotlinx.android.synthetic.main.activity_main.btn_another_activity
+import kotlinx.android.synthetic.main.activity_main.btn_background_color
+import kotlinx.android.synthetic.main.activity_main.btn_border_color
+import kotlinx.android.synthetic.main.activity_main.btn_custom_queue
+import kotlinx.android.synthetic.main.activity_main.btn_custom_view
+import kotlinx.android.synthetic.main.activity_main.btn_custom_view2
+import kotlinx.android.synthetic.main.activity_main.btn_focus
+import kotlinx.android.synthetic.main.activity_main.btn_focus2
+import kotlinx.android.synthetic.main.activity_main.btn_focus_delay
+import kotlinx.android.synthetic.main.activity_main.btn_focus_dismiss_on_focus_area
+import kotlinx.android.synthetic.main.activity_main.btn_focus_rect_color
+import kotlinx.android.synthetic.main.activity_main.btn_no_anim
+import kotlinx.android.synthetic.main.activity_main.btn_queue
+import kotlinx.android.synthetic.main.activity_main.btn_rect_position
+import kotlinx.android.synthetic.main.activity_main.btn_recycler_view
+import kotlinx.android.synthetic.main.activity_main.btn_rounded_rect
+import kotlinx.android.synthetic.main.activity_main.btn_rounded_rect_dismiss_on_focus_area
+import kotlinx.android.synthetic.main.activity_main.btn_simple
+import kotlinx.android.synthetic.main.activity_main.btn_spanned
+import kotlinx.android.synthetic.main.activity_main.btn_title_size
 import me.toptas.fancyshowcase.FancyShowCaseView
 import me.toptas.fancyshowcase.FocusShape
 import me.toptas.fancyshowcase.listener.DismissListener
@@ -70,6 +93,8 @@ class MainActivity : BaseActivity() {
             FancyShowCaseView.Builder(this)
                     .focusOn(it)
                     .title(spanned)
+                    .enterAnimation(null)
+                    .exitAnimation(null)
                     .enableAutoTextPosition()
                     .build()
                     .show()
