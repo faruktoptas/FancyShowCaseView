@@ -46,6 +46,8 @@ Please see [wiki](https://github.com/faruktoptas/FancyShowCaseView/wiki) for mor
 * [Muqabla -Free Online Live Quiz Game Show](https://play.google.com/store/apps/details?id=com.es.triv)
 * [Umíme česky](https://play.google.com/store/apps/details?id=cz.muni.fi.umimecesky)
 * [Get Off Your Phone](https://play.google.com/store/apps/details?id=com.nephi.getoffyourphone)
+* [Travel Weather - Forecast plan for your trip](https://play.google.com/store/apps/details?id=pozzo.apps.travelweather)
+* [muSync for Spotify](https://play.google.com/store/apps/details?id=com.kloczl.musync.android)
 
 ## Sample App
  [Latest Release](https://github.com/faruktoptas/FancyShowCaseView/releases)
