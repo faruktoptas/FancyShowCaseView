@@ -1,11 +1,21 @@
 ![FancyShowCaseView](https://user-images.githubusercontent.com/1595227/56747421-9aafc580-6786-11e9-9344-e3216f7aa660.png)
-An easy-to-use customizable show case view with circular reveal animation.
+<p align="center">An easy-to-use customizable show case view with circular reveal animation.</p>
 
-[![Status](https://travis-ci.org/faruktoptas/FancyShowCaseView.svg?branch=master)](https://travis-ci.org/faruktoptas/FancyShowCaseView) [ ![Download](https://api.bintray.com/packages/faruktoptas/fancyshowcaseview/fancyshowcaseview/images/download.svg) ](https://bintray.com/faruktoptas/fancyshowcaseview/fancyshowcaseview) [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-FancyShowCaseView-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/5440) [![API](https://img.shields.io/badge/API-14%2B-blue.svg?style=flat)](https://android-arsenal.com/api?level=10) [![Join the chat at https://gitter.im/faruktoptas/FancyShowCaseView](https://badges.gitter.im/faruktoptas/FancyShowCaseView.svg)](https://gitter.im/faruktoptas/FancyShowCaseView?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+<p align="center">
+        <a href="https://travis-ci.org/faruktoptas/FancyShowCaseView"><img src="https://travis-ci.org/faruktoptas/FancyShowCaseView.svg?branch=master" alt="Status"/></a>
+        <a href="https://bintray.com/faruktoptas/fancyshowcaseview/fancyshowcaseview"><img src="https://api.bintray.com/packages/faruktoptas/fancyshowcaseview/fancyshowcaseview/images/download.svg" alt="Download"/></a>
+        <a href="https://android-arsenal.com/details/1/5440"><img src="https://img.shields.io/badge/Android%20Arsenal-FancyShowCaseView-brightgreen.svg?style=flat" alt=""/></a>
+        <a href="https://android-arsenal.com/api?level=10"><img src="https://img.shields.io/badge/API-14%2B-blue.svg?style=flat" alt=""/></a>
+        <a href="https://gitter.im/faruktoptas/FancyShowCaseView?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge"><img src="https://badges.gitter.im/faruktoptas/FancyShowCaseView.svg" alt=""/></a>
+</p>
 
-![materialup](https://cloud.githubusercontent.com/assets/1595227/24761426/f80dbc64-1af3-11e7-9c99-bca3dd836a8e.png)
+<p align="center">
+        <img src="https://cloud.githubusercontent.com/assets/1595227/24761426/f80dbc64-1af3-11e7-9c99-bca3dd836a8e.png"/>
+</p>
+<p align="center">
+        <a href="https://material.uplabs.com/posts/fancyshowcaseview">@MaterialUp Best of the Day</a>
+</p>
 
-[@MaterialUp Best of the Day](https://material.uplabs.com/posts/fancyshowcaseview)
 
 ## Features
 - Circular reveal animation (API Level 21+)
