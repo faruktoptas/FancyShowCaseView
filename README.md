@@ -54,6 +54,7 @@ Please see [wiki](https://github.com/faruktoptas/FancyShowCaseView/wiki) for mor
 * [News - Newspaper & Magazine](https://play.google.com/store/apps/details?id=com.moblino.countrynews)
 * [XMusic Pro](https://play.google.com/store/apps/details?id=com.riseapps.xmusic)
 * [Muqabla -Free Online Live Quiz Game Show](https://play.google.com/store/apps/details?id=com.es.triv)
+* [NN Senin Mobilin](https://play.google.com/store/apps/details?id=com.eteration.ing.mobile.android)
 * [Umíme česky](https://play.google.com/store/apps/details?id=cz.muni.fi.umimecesky)
 * [Get Off Your Phone](https://play.google.com/store/apps/details?id=com.nephi.getoffyourphone)
 * [Travel Weather - Forecast plan for your trip](https://play.google.com/store/apps/details?id=pozzo.apps.travelweather)
