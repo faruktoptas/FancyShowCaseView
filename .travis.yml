@@ -21,7 +21,7 @@ before_script:
 
 script:
     - ./gradlew assembleDebug
-
+    - ./gradlew FancyShowCaseViewTest
 
 deploy:
   provider: releases
