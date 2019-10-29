@@ -1,5 +1,18 @@
 language: android
 jdk: oraclejdk8
+
+env:
+  global:
+  - ABI="google_apis;armeabi-v7a"
+  - BUILD_TOOLS_VERSION=28.0.3
+  - ADB_INSTALL_TIMEOUT=25
+  - QEMU_AUDIO_DRV=none
+  - TERM=dumb
+  matrix:
+    - EMULATOR_API=16
+    - EMULATOR_API=19
+    - EMULATOR_API=24
+
 android:
   components:
     - platform-tools
@@ -12,7 +25,6 @@ android:
     - extra-android-m2repository
     - addon-google_apis-google-19
 
-
 before_install:
   - yes | sdkmanager "platforms;android-28"
 
@@ -21,7 +33,7 @@ before_script:
 
 script:
     - ./gradlew assembleDebug
-    - ./gradlew FancyShowCaseViewTest
+    - ./gradlew connectedAndroidTest
 
 deploy:
   provider: releases
