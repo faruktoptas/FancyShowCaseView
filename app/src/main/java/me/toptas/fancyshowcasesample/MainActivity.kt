@@ -21,6 +21,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.text.Html
 import android.text.Spanned
+import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.Menu
@@ -251,27 +252,33 @@ class MainActivity : BaseActivity() {
 
         //Shows a FancyShowCaseView view custom view inflation
         btn_custom_view.setOnClickListener {
-            mFancyShowCaseView = FancyShowCaseView.Builder(this)
-                    .focusOn(it)
-                    .enableTouchOnFocusedView(true)
-                    .customView(R.layout.layout_my_custom_view_arrow, object : OnViewInflateListener {
-                        override fun onViewInflated(view: View) {
-                            val image = (view as RelativeLayout).findViewById<ImageView>(R.id.iv_custom_view)
-                            val params = image.layoutParams as RelativeLayout.LayoutParams
-                            val calculator = mFancyShowCaseView!!.focusCalculator!!
+            if(FancyShowCaseView.isVisible(this)){
+                FancyShowCaseView.hideCurrent(this);
+            }
+            else {
+                mFancyShowCaseView = FancyShowCaseView.Builder(this)
+                        .focusOn(it)
+                        .enableTouchOnFocusedView(true)
+                        .customView(R.layout.layout_my_custom_view_arrow, object : OnViewInflateListener {
+                            override fun onViewInflated(view: View) {
+                                val image = (view as RelativeLayout).findViewById<ImageView>(R.id.iv_custom_view)
+                                val params = image.layoutParams as RelativeLayout.LayoutParams
+                                val calculator = mFancyShowCaseView!!.focusCalculator!!
 
-                            image.post {
-                                params.leftMargin = calculator.circleCenterX - image.width / 2
-                                params.topMargin = calculator.circleCenterY - calculator.focusHeight - image.height
-                                image.layoutParams = params
+                                image.post {
+                                    params.leftMargin = calculator.circleCenterX - image.width / 2
+                                    params.topMargin = calculator.circleCenterY - calculator.focusHeight - image.height
+                                    image.layoutParams = params
+                                }
+
+                                view.findViewById<View>(R.id.btn_action_1).setOnClickListener(mClickListener)
                             }
+                        })
+                        .closeOnTouch(false)
+                        .build()
 
-                            view.findViewById<View>(R.id.btn_action_1).setOnClickListener(mClickListener)
-                        }
-                    })
-                    .closeOnTouch(false)
-                    .build()
-            mFancyShowCaseView?.show()
+                mFancyShowCaseView?.show()
+            }
 
         }
 
