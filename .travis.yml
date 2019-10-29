@@ -15,11 +15,11 @@ android:
   components:
     - build-tools-28.0.3
     - android-28
-
     - extra-google-google_play_services
     - extra-google-m2repository
     - extra-android-m2repository
     - addon-google_apis-google-19
+    - sys-img-armeabi-v7a-android-$EMULATOR_API_LEVEL
 
 install:
   - export ANDROID_HOME=~/android-sdk-linux
@@ -42,8 +42,8 @@ install:
 before_script:
   - echo no | avdmanager create avd --force -n test -k "system-images;android-$EMULATOR_API;$ABI"
   - $ANDROID_HOME/emulator/emulator -avd test -no-window &
-  - bash android-wait-for-emulator
-  - adb shell input keyevent 82
+  - android-wait-for-emulator
+  - adb shell input keyevent 82 &
 
 script:
     - ./gradlew assembleDebug
