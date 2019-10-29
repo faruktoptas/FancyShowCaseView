@@ -9,8 +9,6 @@ env:
   - QEMU_AUDIO_DRV=none
   - TERM=dumb
   matrix:
-    - EMULATOR_API=16
-    - EMULATOR_API=19
     - EMULATOR_API=24
 
 android:
@@ -42,11 +40,6 @@ install:
   - mkdir "$ANDROID_HOME/licenses" || true
   - echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
   - echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
-
-before_install:
-  - yes | sdkmanager "platforms;android-28"
-  - echo no | avdmanager create avd --force -n emulatorApi24 -k "system-images;android-24;default;armeabi-v7a"
-  - $ANDROID_HOME/emulator/emulator -avd emulatorApi24 -no-audio -no-window &
 
 before_script:
   - echo no | avdmanager create avd --force -n test -k "system-images;android-$EMULATOR_API;$ABI"
