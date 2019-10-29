@@ -25,6 +25,24 @@ android:
     - extra-android-m2repository
     - addon-google_apis-google-19
 
+install:
+  - export ANDROID_HOME=~/android-sdk-linux
+  - wget -q "https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip" -O android-sdk-tools.zip
+  - unzip -q android-sdk-tools.zip -d ${ANDROID_HOME}
+  - rm android-sdk-tools.zip
+  - PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools
+  - yes | sdkmanager --update
+  - yes | sdkmanager --licenses
+  - ./gradlew dependencies || true
+  - sdkmanager "emulator" "tools" "platform-tools" > /dev/null
+  - sdkmanager --list | head -20
+  - sdkmanager "build-tools;$BUILD_TOOLS_VERSION" "platforms;android-$28" > /dev/null
+  - sdkmanager "system-images;android-$EMULATOR_API;$ABI" > /dev/null
+  - sdkmanager --list | head -15
+  - mkdir "$ANDROID_HOME/licenses" || true
+  - echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
+  - echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
+
 before_install:
   - yes | sdkmanager "platforms;android-28"
   - echo no | avdmanager create avd --force -n emulatorApi24 -k "system-images;android-24;default;armeabi-v7a"
