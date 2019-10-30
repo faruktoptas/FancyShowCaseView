@@ -27,7 +27,6 @@ import android.graphics.PorterDuffXfermode
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
-import androidx.annotation.VisibleForTesting
 import androidx.appcompat.widget.AppCompatImageView
 
 /**
@@ -147,7 +146,7 @@ class FancyImageView : AppCompatImageView {
             } else {
                 drawRoundedRectangle(canvas)
             }
-            if (focusAnimationEnabled && !DISABLE_ANIMATIONS_FOR_TESTING) {
+            if (focusAnimationEnabled && !Calculator.DISABLE_ANIMATIONS_FOR_TESTING) {
                 if (animCounter == focusAnimationMaxValue) {
                     step = -1 * focusAnimationStep
                 } else if (animCounter == 0) {
@@ -219,8 +218,5 @@ class FancyImageView : AppCompatImageView {
 
     companion object {
         private const val DEFAULT_ANIM_COUNTER = 20
-
-        @VisibleForTesting
-        var DISABLE_ANIMATIONS_FOR_TESTING = false
     }
 }

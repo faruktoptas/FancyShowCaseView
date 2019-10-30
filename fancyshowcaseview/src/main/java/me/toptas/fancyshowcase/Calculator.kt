@@ -23,6 +23,7 @@ import android.util.DisplayMetrics
 import android.view.View
 import android.view.WindowManager
 import android.widget.RelativeLayout
+import androidx.annotation.VisibleForTesting
 
 /**
  * Geometric calculations for position, size and radius
@@ -235,5 +236,8 @@ class Calculator(activity: Activity,
             }
             return result
         }
+		
+		@VisibleForTesting
+        var DISABLE_ANIMATIONS_FOR_TESTING = false
     }
 }
