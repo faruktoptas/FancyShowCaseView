@@ -33,7 +33,7 @@ import androidx.appcompat.widget.AppCompatImageView
  * ImageView with focus area animation
  */
 
-class FancyImageView : AppCompatImageView {
+internal class FancyImageView : AppCompatImageView {
 
     private lateinit var calculator: Calculator
     private lateinit var backgroundPaint: Paint
