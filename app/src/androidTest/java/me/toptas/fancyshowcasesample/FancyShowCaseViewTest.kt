@@ -22,7 +22,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import android.view.Gravity
 import androidx.test.filters.LargeTest
 import com.example.espressorobot.robot
-import me.toptas.fancyshowcase.FancyImageView
+import me.toptas.fancyshowcase.Calculator
 import me.toptas.fancyshowcase.FancyShowCaseView
 import org.junit.Assert
 import org.junit.Before
@@ -39,7 +39,7 @@ class FancyShowCaseViewTest {
 
     @Before
     fun before() {
-        FancyImageView.DISABLE_ANIMATIONS_FOR_TESTING = true
+        Calculator.DISABLE_ANIMATIONS_FOR_TESTING = true
     }
 
     @Test
