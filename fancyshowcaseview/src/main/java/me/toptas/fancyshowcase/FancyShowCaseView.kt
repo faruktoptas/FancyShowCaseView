@@ -902,6 +902,9 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
          * @return [FancyShowCaseView] with given parameters
          */
         fun build(): FancyShowCaseView {
+            if(isVisible(activity)){
+                hideCurrent(activity)
+            }
             return FancyShowCaseView(activity, focusedView, clickableView, mId, mTitle, mSpannedTitle, mTitleGravity, mTitleStyle, mTitleSize, mTitleSizeUnit,
                     focusCircleRadiusFactor, mBackgroundColor, mFocusBorderColor, mFocusBorderSize, mCustomViewRes, viewInflateListener,
                     mEnterAnimation, mExitAnimation, mAnimationListener, mCloseOnTouch, mEnableTouchOnFocusedView, fitSystemWindows, mFocusShape, mDismissListener, mRoundRectRadius,

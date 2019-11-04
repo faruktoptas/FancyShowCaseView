@@ -125,25 +125,21 @@ class MainActivity : BaseActivity() {
 
         //Shows a FancyShowCaseView that focus on a view
         btn_focus_dismiss_on_focus_area.setOnClickListener {
-            if (FancyShowCaseView.isVisible(this)) {
-                Toast.makeText(this, "Clickable button", Toast.LENGTH_SHORT).show()
-                FancyShowCaseView.hideCurrent(this)
-            } else {
-                FancyShowCaseView.Builder(this)
+            Toast.makeText(this, "Clickable button", Toast.LENGTH_SHORT).show()
+
+            FancyShowCaseView.Builder(this)
                         .focusOn(findViewById(R.id.btn_focus_dismiss_on_focus_area))
                         .enableTouchOnFocusedView(true)
                         .title("Focus on View \n(dismiss on focus area)")
                         .build()
                         .show()
-            }
+
         }
 
         //Shows a FancyShowCaseView with rounded rect focus shape
         btn_rounded_rect_dismiss_on_focus_area.setOnClickListener {
-            if (FancyShowCaseView.isVisible(this)) {
-                Toast.makeText(this, "Clickable button", Toast.LENGTH_SHORT).show()
-                FancyShowCaseView.hideCurrent(this)
-            } else {
+            Toast.makeText(this, "Clickable button", Toast.LENGTH_SHORT).show()
+
                 FancyShowCaseView.Builder(this)
                         .focusOn(it)
                         .focusShape(FocusShape.ROUNDED_RECTANGLE)
@@ -152,7 +148,7 @@ class MainActivity : BaseActivity() {
                         .title("Focus on View \n(dismiss on focus area)")
                         .build()
                         .show()
-            }
+
         }
 
         //Shows FancyShowCaseView with focusCircleRadiusFactor 1.5 and title gravity
@@ -252,33 +248,28 @@ class MainActivity : BaseActivity() {
 
         //Shows a FancyShowCaseView view custom view inflation
         btn_custom_view.setOnClickListener {
-            if(FancyShowCaseView.isVisible(this)){
-                FancyShowCaseView.hideCurrent(this);
-            }
-            else {
-                mFancyShowCaseView = FancyShowCaseView.Builder(this)
-                        .focusOn(it)
-                        .enableTouchOnFocusedView(true)
-                        .customView(R.layout.layout_my_custom_view_arrow, object : OnViewInflateListener {
-                            override fun onViewInflated(view: View) {
-                                val image = (view as RelativeLayout).findViewById<ImageView>(R.id.iv_custom_view)
-                                val params = image.layoutParams as RelativeLayout.LayoutParams
-                                val calculator = mFancyShowCaseView!!.focusCalculator!!
+            mFancyShowCaseView = FancyShowCaseView.Builder(this)
+                    .focusOn(it)
+                    .enableTouchOnFocusedView(true)
+                    .customView(R.layout.layout_my_custom_view_arrow, object : OnViewInflateListener {
+                        override fun onViewInflated(view: View) {
+                            val image = (view as RelativeLayout).findViewById<ImageView>(R.id.iv_custom_view)
+                            val params = image.layoutParams as RelativeLayout.LayoutParams
+                            val calculator = mFancyShowCaseView!!.focusCalculator!!
 
-                                image.post {
-                                    params.leftMargin = calculator.circleCenterX - image.width / 2
-                                    params.topMargin = calculator.circleCenterY - calculator.focusHeight - image.height
-                                    image.layoutParams = params
-                                }
-
-                                view.findViewById<View>(R.id.btn_action_1).setOnClickListener(mClickListener)
+                            image.post {
+                                params.leftMargin = calculator.circleCenterX - image.width / 2
+                                params.topMargin = calculator.circleCenterY - calculator.focusHeight - image.height
+                                image.layoutParams = params
                             }
-                        })
-                        .closeOnTouch(false)
-                        .build()
 
-                mFancyShowCaseView?.show()
-            }
+                            view.findViewById<View>(R.id.btn_action_1).setOnClickListener(mClickListener)
+                        }
+                    })
+                    .closeOnTouch(false)
+                    .build()
+
+            mFancyShowCaseView?.show()
 
         }
 
