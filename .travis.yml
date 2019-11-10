@@ -3,51 +3,53 @@ jdk: oraclejdk8
 
 env:
   global:
-  - ABI="google_apis;armeabi-v7a"
-  - BUILD_TOOLS_VERSION=28.0.3
-  - ADB_INSTALL_TIMEOUT=25
-  - QEMU_AUDIO_DRV=none
-  - TERM=dumb
+    - ADB_INSTALL_TIMEOUT=8
+    - ABI=armeabi-v7a
+    - EMU_FLAVOR=default
+    - ANDROID_HOME=/usr/local/android-sdk
+    - TOOLS=${ANDROID_HOME}/tools
+    - PATH=${ANDROID_HOME}:${ANDROID_HOME}/emulator:${TOOLS}:${TOOLS}/bin:${ANDROID_HOME}/platform-tools:${PATH}
   matrix:
-    - EMULATOR_API=24
-
+    - API=21 ABI=x86_64
+    - API=22 ABI=x86_64
+    - API=23 ABI=x86_64
+    - API=24 ABI=x86_64
+    - API=25 ABI=x86_64 
+    - API=27 ABI=x86_64
+  
 android:
   components:
+    - platform-tools
+    - tools
     - build-tools-28.0.3
     - android-28
+
     - extra-google-google_play_services
     - extra-google-m2repository
     - extra-android-m2repository
     - addon-google_apis-google-19
-    - sys-img-armeabi-v7a-android-$EMULATOR_API_LEVEL
 
 install:
-  - export ANDROID_HOME=~/android-sdk-linux
-  - wget -q "https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip" -O android-sdk-tools.zip
-  - unzip -q android-sdk-tools.zip -d ${ANDROID_HOME}
-  - rm android-sdk-tools.zip
-  - PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools
-  - yes | sdkmanager --update
-  - yes | sdkmanager --licenses
-  - ./gradlew dependencies || true
-  - sdkmanager "emulator" "tools" "platform-tools" > /dev/null
-  - sdkmanager --list | head -20
-  - sdkmanager "build-tools;$BUILD_TOOLS_VERSION" "platforms;android-$28" > /dev/null
-  - sdkmanager "system-images;android-$EMULATOR_API;$ABI" > /dev/null
-  - sdkmanager --list | head -15
-  - mkdir "$ANDROID_HOME/licenses" || true
-  - echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
-  - echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
 
-before_script:
-  - echo no | avdmanager create avd --force -n test -k "system-images;android-$EMULATOR_API;$ABI"
-  - $ANDROID_HOME/emulator/emulator -avd test -no-window &
+  - echo y | sdkmanager "platforms;android-$API" >/dev/null
+  - echo y | sdkmanager "platforms;android-28" >/dev/null
+  - echo y | sdkmanager "emulator" > /dev/null
+  - echo y | sdkmanager "extras;android;m2repository" >/dev/null
+  - echo y | sdkmanager "system-images;android-$API;$EMU_FLAVOR;$ABI"
+
+  - echo no | avdmanager create avd --force -n test -k "system-images;android-$API;$EMU_FLAVOR;$ABI" -c 10M
+
+  - emulator -verbose -avd test -no-accel -no-snapshot -no-window $AUDIO -camera-back none -camera-front none -selinux permissive -qemu -m 2048 &
+
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
 
+before_script:
+  - chmod +x gradlew
+
 script:
-    - ./gradlew assembleDebug
-    - ./gradlew connectedAndroidTest
+  - ./gradlew assembleDebug
+  - ./gradlew connectedAndroidTest --stacktrace
 
 deploy:
   provider: releases
