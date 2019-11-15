@@ -16,7 +16,6 @@
         <a href="https://material.uplabs.com/posts/fancyshowcaseview">@MaterialUp Best of the Day</a>
 </p>
 
-
 ## Features
 - Circular reveal animation (API Level 21+)
 - Background color
@@ -47,10 +46,12 @@ new FancyShowCaseView.Builder(this)
         .build()
         .show();
 ```
-Please see [wiki](https://github.com/faruktoptas/FancyShowCaseView/wiki) for more samples. 
+
+Please see [wiki](https://github.com/faruktoptas/FancyShowCaseView/wiki) for more samples.  
 
 ## Already in use in following apps
 (feel free to send me new projects)
+
 * [News - Newspaper & Magazine](https://play.google.com/store/apps/details?id=com.moblino.countrynews)
 * [XMusic Pro](https://play.google.com/store/apps/details?id=com.riseapps.xmusic)
 * [Muqabla -Free Online Live Quiz Game Show](https://play.google.com/store/apps/details?id=com.es.triv)
@@ -62,7 +63,7 @@ Please see [wiki](https://github.com/faruktoptas/FancyShowCaseView/wiki) for mor
 
 ## Sample App
  [Latest Release](https://github.com/faruktoptas/FancyShowCaseView/releases)
- 
+
 ## Xamarin Port
 Thanks to [DigitalSa1nt](https://github.com/DigitalSa1nt) for the Xamarin ported version [Xamarin.ShowcaseView](https://github.com/DigitalSa1nt/Xamarin.ShowcaseView)
 
