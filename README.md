@@ -16,8 +16,8 @@
         <a href="https://material.uplabs.com/posts/fancyshowcaseview">@MaterialUp Best of the Day</a>
 </p>
 
-
 ## Features
+
 - Circular reveal animation (API Level 21+)
 - Background color
 - Circle and Rounded Rectangle focus shapes
@@ -30,16 +30,19 @@
 ![!gif](https://cloud.githubusercontent.com/assets/1595227/24331187/ad143b80-1237-11e7-919c-36111c1ce559.gif)![!gif](https://cloud.githubusercontent.com/assets/1595227/24331189/afec8d9e-1237-11e7-986d-0ab7c44db7c7.gif)
 
 ## Download
+
 ```gradle
 implementation 'me.toptas.fancyshowcase:fancyshowcaseview:1.2.1'
 ```
 
 ## Download (For non-androidx projects)
+
 ```gradle
 implementation 'me.toptas.fancyshowcase:fancyshowcaseview:1.1.5'
 ```
 
 ## Sample Usage
+
 ```java
 new FancyShowCaseView.Builder(this)
         .focusOn(view)
@@ -47,10 +50,13 @@ new FancyShowCaseView.Builder(this)
         .build()
         .show();
 ```
-Please see [wiki](https://github.com/faruktoptas/FancyShowCaseView/wiki) for more samples. 
+
+Please see [wiki](https://github.com/faruktoptas/FancyShowCaseView/wiki) for more samples.  
 
 ## Already in use in following apps
+
 (feel free to send me new projects)
+
 * [News - Newspaper & Magazine](https://play.google.com/store/apps/details?id=com.moblino.countrynews)
 * [XMusic Pro](https://play.google.com/store/apps/details?id=com.riseapps.xmusic)
 * [Muqabla -Free Online Live Quiz Game Show](https://play.google.com/store/apps/details?id=com.es.triv)
@@ -61,12 +67,15 @@ Please see [wiki](https://github.com/faruktoptas/FancyShowCaseView/wiki) for mor
 * [muSync for Spotify](https://play.google.com/store/apps/details?id=com.kloczl.musync.android)
 
 ## Sample App
+
  [Latest Release](https://github.com/faruktoptas/FancyShowCaseView/releases)
- 
+
 ## Xamarin Port
+
 Thanks to [DigitalSa1nt](https://github.com/DigitalSa1nt) for the Xamarin ported version [Xamarin.ShowcaseView](https://github.com/DigitalSa1nt/Xamarin.ShowcaseView)
 
 ## Contribute
+
 You can contribute by opening a pull request to **dev** branch.
 Please try to push one feature in one commit for a clean commit history.
 
