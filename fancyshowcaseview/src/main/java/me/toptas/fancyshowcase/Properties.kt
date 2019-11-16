@@ -11,11 +11,8 @@ import me.toptas.fancyshowcase.listener.OnViewInflateListener
 
 internal data class Properties(
         var title: String? = null,
-        var spannedTitle: Spanned? = null,
         var fancyId: String? = null,
         var focusCircleRadiusFactor: Double = 1.0,
-        var focusedView: View? = null,
-        var clickableView: View? = null,
         var backgroundColor: Int = 0,
         var focusBorderColor: Int = 0,
         var titleGravity: Int = -1,
@@ -36,7 +33,6 @@ internal data class Properties(
         var focusAnimationStep: Int = 1,
         var centerX: Int = 0,
         var centerY: Int = 0,
-        var mRoot: ViewGroup? = null,
         var focusPositionX: Int = 0,
         var focusPositionY: Int = 0,
         var focusCircleRadius: Int = 0,
@@ -44,10 +40,17 @@ internal data class Properties(
         var focusRectangleHeight: Int = 0,
         var focusAnimationEnabled: Boolean = true,
         var viewInflateListener: OnViewInflateListener? = null,
-        var enterAnimation: Animation? = FadeInAnimation(),
-        var exitAnimation: Animation? = FadeOutAnimation(),
         var animationListener: AnimationListener? = null,
         var fancyImageView: FancyImageView? = null,
         var dismissListener: DismissListener? = null,
         var queueListener: OnQueueListener? = null
+)
+
+internal data class AndroidProperties(
+        var spannedTitle: Spanned? = null,
+        var focusedView: View? = null,
+        var clickableView: View? = null,
+        var mRoot: ViewGroup? = null,
+        var enterAnimation: Animation? = FadeInAnimation(),
+        var exitAnimation: Animation? = FadeOutAnimation()
 )

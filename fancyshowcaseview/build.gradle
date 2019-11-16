@@ -52,6 +52,8 @@ android {
 dependencies {
     implementation "androidx.appcompat:appcompat:$appcompat"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    testImplementation 'junit:junit:4.12'
 }
 
 repositories {
