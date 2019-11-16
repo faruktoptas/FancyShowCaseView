@@ -16,8 +16,6 @@
 
 package me.toptas.fancyshowcase
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.annotation.TargetApi
 import android.app.Activity
 import android.content.Context
@@ -31,11 +29,9 @@ import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
 import android.view.View.OnTouchListener
-import android.view.ViewAnimationUtils
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
@@ -44,6 +40,11 @@ import androidx.annotation.LayoutRes
 import androidx.annotation.RequiresApi
 import androidx.annotation.StyleRes
 import androidx.core.content.ContextCompat
+import me.toptas.fancyshowcase.ext.attachedShowCase
+import me.toptas.fancyshowcase.ext.cantFocus
+import me.toptas.fancyshowcase.ext.circularEnterAnimation
+import me.toptas.fancyshowcase.ext.circularExitAnimation
+import me.toptas.fancyshowcase.ext.rootView
 import me.toptas.fancyshowcase.listener.AnimationListener
 import me.toptas.fancyshowcase.listener.DismissListener
 import me.toptas.fancyshowcase.listener.OnQueueListener
@@ -59,157 +60,24 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
     /**
      * Builder parameters
      */
+    var focusCalculator: Calculator? = null
+
     private lateinit var activity: Activity
-    private var title: String? = null
-    private var spannedTitle: Spanned? = null
-    private var id: String? = null
-    private var focusCircleRadiusFactor: Double = 1.0
-    private var focusedView: View? = null
-    private var clickableView: View? = null
-    private var mBackgroundColor: Int = 0
-    private var mFocusBorderColor: Int = 0
-    private var mTitleGravity: Int = -1
-    private var mTitleStyle: Int = 0
-    private var mTitleSize: Int = -1
-    private var mTitleSizeUnit: Int = -1
-    private var mCustomViewRes: Int = 0
-    private var mFocusBorderSize: Int = 0
-    private var mRoundRectRadius: Int = 0
-    private var mEnterAnimation: Animation? = null
-    private var mExitAnimation: Animation? = null
-    private var mAnimationListener: AnimationListener? = null
-    private var mCloseOnTouch: Boolean = false
-    private var mEnableTouchOnFocusedView: Boolean = false
-    private var fitSystemWindows = false
-    private var mFocusShape: FocusShape = FocusShape.CIRCLE
-    private var viewInflateListener: OnViewInflateListener? = null
-    private var delay: Long = 0
-    private var autoPosText = false
+    private var clickableCalculator: Calculator? = null
+    private var sharedPreferences: SharedPreferences? = null
+    private var props = Properties()
+
     private val mAnimationDuration = 400
-    private var mFocusAnimationMaxValue = 20
-    private var mFocusAnimationStep: Int = 1
     private var mCenterX: Int = 0
     private var mCenterY: Int = 0
     private var mRoot: ViewGroup? = null
-    private var sharedPreferences: SharedPreferences? = null
-    var focusCalculator: Calculator? = null
-    private var clickableCalculator: Calculator? = null
-    private var mFocusPositionX: Int = 0
-    private var mFocusPositionY: Int = 0
-    private var mFocusCircleRadius: Int = 0
-    private var mFocusRectangleWidth: Int = 0
-    private var mFocusRectangleHeight: Int = 0
-    private var focusAnimationEnabled: Boolean = true
     private var fancyImageView: FancyImageView? = null
-    var dismissListener: DismissListener? = null
     var queueListener: OnQueueListener? = null
 
-    /**
-     * Constructor for FancyShowCaseView
-     *
-     * @param _activity                 Activity to show FancyShowCaseView in
-     * @param _focusView                view to focus
-     * @param _clickableView            view to be clickable
-     * @param _id                       unique identifier for FancyShowCaseView
-     * @param _title                    title text
-     * @param _spannedTitle             title text if spanned text should be used
-     * @param _titleGravity             title gravity
-     * @param _titleStyle               title text style
-     * @param _titleSize                title text size
-     * @param _titleSizeUnit            title text size unit
-     * @param _focusCircleRadiusFactor  focus circle radius factor (default value = 1)
-     * @param _backgroundColor          background color of FancyShowCaseView
-     * @param _focusBorderColor         focus border color of FancyShowCaseView
-     * @param _focusBorderSize          focus border size of FancyShowCaseView
-     * @param _customViewRes            custom view layout resource
-     * @param _viewInflateListener      inflate listener for custom view
-     * @param _enterAnimation           enter animation for FancyShowCaseView
-     * @param _exitAnimation            exit animation for FancyShowCaseView
-     * @param _closeOnTouch             closes on touch if enabled
-     * @param _enableTouchOnFocusedView closes on touch of focused view if enabled
-     * @param _fitSystemWindows         should be the same value of root view's fitSystemWindows value
-     * @param _focusShape               shape of focus, can be circle or rounded rectangle
-     * @param _dismissListener          listener that gets notified when showcase is dismissed
-     * @param _roundRectRadius          round rectangle radius
-     * @param _focusPositionX           focus at specific position X coordinate
-     * @param _focusPositionY           focus at specific position Y coordinate
-     * @param _focusCircleRadius        focus at specific position circle radius
-     * @param _focusRectangleWidth      focus at specific position rectangle width
-     * @param _focusRectangleHeight     focus at specific position rectangle height
-     * @param _animationEnabled         flag to enable/disable animation
-     */
-    private constructor(_activity: Activity,
-                        _focusView: View?,
-                        _clickableView: View?,
-                        _id: String?,
-                        _title: String?,
-                        _spannedTitle: Spanned?,
-                        _titleGravity: Int,
-                        _titleStyle: Int,
-                        _titleSize: Int,
-                        _titleSizeUnit: Int,
-                        _focusCircleRadiusFactor: Double,
-                        _backgroundColor: Int,
-                        _focusBorderColor: Int,
-                        _focusBorderSize: Int,
-                        _customViewRes: Int,
-                        _viewInflateListener: OnViewInflateListener?,
-                        _enterAnimation: Animation?,
-                        _exitAnimation: Animation?,
-                        _animationListener: AnimationListener?,
-                        _closeOnTouch: Boolean,
-                        _enableTouchOnFocusedView: Boolean,
-                        _fitSystemWindows: Boolean,
-                        _focusShape: FocusShape,
-                        _dismissListener: DismissListener?,
-                        _roundRectRadius: Int,
-                        _focusPositionX: Int,
-                        _focusPositionY: Int,
-                        _focusCircleRadius: Int,
-                        _focusRectangleWidth: Int,
-                        _focusRectangleHeight: Int,
-                        _animationEnabled: Boolean,
-                        _focusAnimationMaxValue: Int,
-                        _focusAnimationStep: Int,
-                        _delay: Long,
-                        _autoPosText: Boolean) : this(_activity) {
 
-        requireNotNull(_activity)
-        id = _id
+    private constructor(_activity: Activity, _props: Properties) : this(_activity) {
+        props = _props
         activity = _activity
-        focusedView = _focusView
-        clickableView = _clickableView
-        title = _title
-        spannedTitle = _spannedTitle
-        focusCircleRadiusFactor = _focusCircleRadiusFactor
-        mBackgroundColor = _backgroundColor
-        mFocusBorderColor = _focusBorderColor
-        mFocusBorderSize = _focusBorderSize
-        mTitleGravity = _titleGravity
-        mTitleStyle = _titleStyle
-        mTitleSize = _titleSize
-        mTitleSizeUnit = _titleSizeUnit
-        mRoundRectRadius = _roundRectRadius
-        mCustomViewRes = _customViewRes
-        viewInflateListener = _viewInflateListener
-        mEnterAnimation = _enterAnimation
-        mExitAnimation = _exitAnimation
-        mAnimationListener = _animationListener
-        mCloseOnTouch = _closeOnTouch
-        mEnableTouchOnFocusedView = _enableTouchOnFocusedView
-        fitSystemWindows = _fitSystemWindows
-        mFocusShape = _focusShape
-        dismissListener = _dismissListener
-        mFocusPositionX = _focusPositionX
-        mFocusPositionY = _focusPositionY
-        mFocusCircleRadius = _focusCircleRadius
-        mFocusRectangleWidth = _focusRectangleWidth
-        mFocusRectangleHeight = _focusRectangleHeight
-        focusAnimationEnabled = _animationEnabled
-        mFocusAnimationMaxValue = _focusAnimationMaxValue
-        mFocusAnimationStep = _focusAnimationStep
-        delay = _delay
-        autoPosText = _autoPosText
 
         initializeParameters()
     }
@@ -218,12 +86,12 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
      * Calculates and set initial parameters
      */
     private fun initializeParameters() {
-        mBackgroundColor = if (mBackgroundColor != 0)
-            mBackgroundColor
+        props.backgroundColor = if (props.backgroundColor != 0)
+            props.backgroundColor
         else
             ContextCompat.getColor(activity, R.color.fancy_showcase_view_default_background_color)
-        mTitleGravity = if (mTitleGravity >= 0) mTitleGravity else Gravity.CENTER
-        mTitleStyle = if (mTitleStyle != 0) mTitleStyle else R.style.FancyShowCaseDefaultTitleStyle
+        props.titleGravity = if (props.titleGravity >= 0) props.titleGravity else Gravity.CENTER
+        props.titleStyle = if (props.titleStyle != 0) props.titleStyle else R.style.FancyShowCaseDefaultTitleStyle
 
         val displayMetrics = DisplayMetrics()
         activity.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
@@ -238,13 +106,13 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
      * Shows FancyShowCaseView
      */
     fun show() {
-        if (id != null && isShownBefore(context, id!!)) {
-            dismissListener?.onSkipped(id)
+        if (isShownBefore()) {
+            props.dismissListener?.onSkipped(props.fancyId)
             return
         }
-        // if view is not laid out get width/height values in onGlobalLayout
-        if (focusedView != null && focusedView?.width == 0 && focusedView?.height == 0) {
-            focusedView?.viewTreeObserver?.addOnGlobalLayoutListener(this)
+        // if view is not laid out get, width/height values in onGlobalLayout
+        if (props.focusedView?.cantFocus() == true) {
+            props.focusedView?.viewTreeObserver?.addOnGlobalLayoutListener(this)
         } else {
             focus()
         }
@@ -252,28 +120,28 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
 
     private fun focus() {
         focusCalculator = Calculator(activity,
-                mFocusShape,
-                focusedView,
-                focusCircleRadiusFactor,
-                fitSystemWindows)
+                props.focusShape,
+                props.focusedView,
+                props.focusCircleRadiusFactor,
+                props.fitSystemWindows)
 
         clickableCalculator = Calculator(activity,
-                mFocusShape,
-                clickableView,
-                focusCircleRadiusFactor,
-                fitSystemWindows)
+                props.focusShape,
+                props.clickableView,
+                props.focusCircleRadiusFactor,
+                props.fitSystemWindows)
 
-        val androidContent = activity.findViewById<View>(android.R.id.content) as ViewGroup
-        mRoot = androidContent.parent.parent as ViewGroup?
+
+        mRoot = activity.rootView()
         mRoot?.postDelayed(Runnable {
             if (activity.isFinishing) {
                 return@Runnable
             }
-            val visibleView = mRoot?.findViewWithTag<View>(CONTAINER_TAG) as FancyShowCaseView?
-            isClickable = !mEnableTouchOnFocusedView
+            val visibleView = activity.attachedShowCase()
+            isClickable = !props.enableTouchOnFocusedView
             if (visibleView == null) {
                 tag = CONTAINER_TAG
-                setId(R.id.fscv_id)
+                id = R.id.fscv_id
 
                 layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT)
@@ -291,7 +159,7 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
 
                 writeShown()
             }
-        }, delay)
+        }, props.delay)
     }
 
     private fun setCalculatorParams() {
@@ -300,37 +168,37 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
                 mCenterX = circleCenterX
                 mCenterY = circleCenterY
             }
-            if (mFocusRectangleWidth > 0 && mFocusRectangleHeight > 0) {
-                setRectPosition(mFocusPositionX, mFocusPositionY, mFocusRectangleWidth, mFocusRectangleHeight)
+            if (props.focusRectangleWidth > 0 && props.focusRectangleHeight > 0) {
+                setRectPosition(props.focusPositionX, props.focusPositionY, props.focusRectangleWidth, props.focusRectangleHeight)
             }
-            if (mFocusCircleRadius > 0) {
-                setCirclePosition(mFocusPositionX, mFocusPositionY, mFocusCircleRadius)
+            if (props.focusCircleRadius > 0) {
+                setCirclePosition(props.focusPositionX, props.focusPositionY, props.focusCircleRadius)
             }
         }
     }
 
     private fun addFancyImageView() {
         FancyImageView(activity).apply {
-            setFocusAnimationParameters(mFocusAnimationMaxValue, mFocusAnimationStep)
-            setParameters(mBackgroundColor, focusCalculator!!)
-            focusAnimationEnabled = this@FancyShowCaseView.focusAnimationEnabled
-            layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+            setFocusAnimationParameters(props.focusAnimationMaxValue, props.focusAnimationStep)
+            setParameters(props.backgroundColor, focusCalculator!!)
+            focusAnimationEnabled = props.focusAnimationEnabled
+            layoutParams = LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT)
-            if (mFocusBorderColor != 0 && mFocusBorderSize > 0) {
-                setBorderParameters(mFocusBorderColor, mFocusBorderSize)
+            if (props.focusBorderColor != 0 && props.focusBorderSize > 0) {
+                setBorderParameters(props.focusBorderColor, props.focusBorderSize)
             }
-            if (mRoundRectRadius >= 0) {
-                roundRectRadius = mRoundRectRadius
+            if (props.roundRectRadius >= 0) {
+                roundRectRadius = props.roundRectRadius
             }
             addView(this)
         }
     }
 
     private fun inflateContent() {
-        if (mCustomViewRes == 0) {
+        if (props.customViewRes == 0) {
             inflateTitleView()
         } else {
-            inflateCustomView(mCustomViewRes, viewInflateListener)
+            inflateCustomView(props.customViewRes, props.viewInflateListener)
         }
     }
 
@@ -338,15 +206,15 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
         setOnTouchListener(OnTouchListener { _, event ->
             if (event.actionMasked == MotionEvent.ACTION_DOWN) {
                 when {
-                    mEnableTouchOnFocusedView && isWithinZone(event, focusCalculator) -> {
+                    props.enableTouchOnFocusedView && isWithinZone(event, focusCalculator) -> {
                         // Check if there is a clickable view within the focusable view
                         // Let the touch event pass through to clickable zone only if clicking within, otherwise return true to ignore event
                         // If there is no clickable view we let through the click to the focusable view
-                        clickableView?.let {
+                        props.clickableView?.let {
                             return@OnTouchListener !isWithinZone(event, clickableCalculator)
                         } ?: return@OnTouchListener false
                     }
-                    mCloseOnTouch -> hide()
+                    props.closeOnTouch -> hide()
                 }
             }
             true
@@ -368,11 +236,11 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
         val focusWidth = calculator?.focusWidth ?: 0
         val focusHeight = calculator?.focusHeight ?: 0
         val focusRadius =
-                if (FocusShape.CIRCLE == mFocusShape)
+                if (FocusShape.CIRCLE == props.focusShape)
                     calculator?.circleRadius(0, 1.0) ?: 0f
                 else 0f
 
-        when (mFocusShape) {
+        when (props.focusShape) {
             FocusShape.CIRCLE -> {
                 val distance = Math.sqrt(
                         Math.pow((focusCenterX - x).toDouble(), 2.0) + Math.pow((focusCenterY - y).toDouble(), 2.0))
@@ -397,11 +265,11 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
      * Starts enter animation of FancyShowCaseView
      */
     private fun startEnterAnimation() {
-        if (mEnterAnimation != null) {
-            if (mEnterAnimation is FadeInAnimation && shouldShowCircularAnimation()) {
+        if (props.enterAnimation != null) {
+            if (props.enterAnimation is FadeInAnimation && shouldShowCircularAnimation()) {
                 doCircularEnterAnimation()
             } else {
-                startAnimation(mEnterAnimation)
+                startAnimation(props.enterAnimation)
             }
         }
     }
@@ -410,24 +278,24 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
      * Hides FancyShowCaseView with animation
      */
     fun hide() {
-        if (mExitAnimation != null) {
-            if (mExitAnimation is FadeOutAnimation && shouldShowCircularAnimation()) {
+        if (props.exitAnimation != null) {
+            if (props.exitAnimation is FadeOutAnimation && shouldShowCircularAnimation()) {
                 doCircularExitAnimation()
             } else {
-                mExitAnimation?.setAnimationListener(object : Animation.AnimationListener {
+                props.exitAnimation?.setAnimationListener(object : Animation.AnimationListener {
                     override fun onAnimationRepeat(animation: Animation?) {
 
                     }
 
                     override fun onAnimationEnd(animation: Animation?) {
                         removeView()
-                        mAnimationListener?.onExitAnimationEnd()
+                        props.animationListener?.onExitAnimationEnd()
                     }
 
                     override fun onAnimationStart(animation: Animation?) {
                     }
                 })
-                startAnimation(mExitAnimation)
+                startAnimation(props.exitAnimation)
             }
         } else {
             removeView()
@@ -441,7 +309,7 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
      * @param viewInflateListener inflate listener for custom view
      */
     private fun inflateCustomView(@LayoutRes layout: Int, viewInflateListener: OnViewInflateListener?) {
-        activity.layoutInflater?.inflate(layout, this, false)?.apply {
+        activity.layoutInflater.inflate(layout, this, false)?.apply {
             addView(this)
             viewInflateListener?.onViewInflated(this)
         }
@@ -457,25 +325,25 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
                 val textView = view.findViewById<View>(R.id.fscv_title) as TextView
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    textView.setTextAppearance(mTitleStyle)
+                    textView.setTextAppearance(props.titleStyle)
                 } else {
-                    textView.setTextAppearance(activity, mTitleStyle)
+                    textView.setTextAppearance(activity, props.titleStyle)
                 }
-                if (mTitleSize != -1) {
-                    textView.setTextSize(mTitleSizeUnit, mTitleSize.toFloat())
+                if (props.titleSize != -1) {
+                    textView.setTextSize(props.titleSizeUnit, props.titleSize.toFloat())
                 }
-                textView.gravity = mTitleGravity
-                if (fitSystemWindows) {
+                textView.gravity = props.titleGravity
+                if (props.fitSystemWindows) {
                     val params = textView.layoutParams as RelativeLayout.LayoutParams
                     params.setMargins(0, Calculator.getStatusBarHeight(context), 0, 0)
                 }
-                if (spannedTitle != null) {
-                    textView.text = spannedTitle
+                if (props.spannedTitle != null) {
+                    textView.text = props.spannedTitle
                 } else {
-                    textView.text = title
+                    textView.text = props.title
                 }
 
-                if (autoPosText) {
+                if (props.autoPosText) {
                     focusCalculator?.calcAutoTextPosition(textView)
                 }
             }
@@ -499,27 +367,14 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
 
                         val revealRadius = Math.hypot(width.toDouble(), height.toDouble()).toInt()
                         var startRadius = 0
-                        if (focusedView != null) {
-                            startRadius = focusedView!!.width / 2
-                        } else if (mFocusCircleRadius > 0 || mFocusRectangleWidth > 0 || mFocusRectangleHeight > 0) {
-                            mCenterX = mFocusPositionX
-                            mCenterY = mFocusPositionY
+                        if (props.focusedView != null) {
+                            startRadius = props.focusedView!!.width / 2
+                        } else if (props.focusCircleRadius > 0 || props.focusRectangleWidth > 0 || props.focusRectangleHeight > 0) {
+                            mCenterX = props.focusPositionX
+                            mCenterY = props.focusPositionY
                         }
-                        ViewAnimationUtils.createCircularReveal(this@FancyShowCaseView,
-                                mCenterX,
-                                mCenterY,
-                                startRadius.toFloat(),
-                                revealRadius.toFloat()).apply {
-
-                            duration = mAnimationDuration.toLong()
-                            addListener(object : AnimatorListenerAdapter() {
-                                override fun onAnimationEnd(animation: Animator) {
-                                    mAnimationListener?.onEnterAnimationEnd()
-                                }
-                            })
-                            interpolator = AnimationUtils.loadInterpolator(activity,
-                                    android.R.interpolator.accelerate_cubic)
-                            start()
+                        circularEnterAnimation(activity, mCenterX, mCenterY, startRadius, revealRadius, mAnimationDuration) {
+                            props.animationListener?.onEnterAnimationEnd()
                         }
                     }
                 })
@@ -531,23 +386,9 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
      */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private fun doCircularExitAnimation() {
-        if (!isAttachedToWindow) return
-        val revealRadius = Math.hypot(width.toDouble(), height.toDouble()).toInt()
-        ViewAnimationUtils.createCircularReveal(this,
-                mCenterX,
-                mCenterY,
-                revealRadius.toFloat(),
-                0f).apply {
-            duration = mAnimationDuration.toLong()
-            interpolator = AnimationUtils.loadInterpolator(activity,
-                    android.R.interpolator.decelerate_cubic)
-            addListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator) {
-                    removeView()
-                    mAnimationListener?.onExitAnimationEnd()
-                }
-            })
-            start()
+        circularExitAnimation(activity, mCenterX, mCenterY, mAnimationDuration) {
+            removeView()
+            props.animationListener?.onExitAnimationEnd()
         }
     }
 
@@ -556,12 +397,12 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
      */
     private fun writeShown() {
         sharedPreferences?.edit()?.apply {
-            putBoolean(id, true)
+            putBoolean(props.fancyId, true)
             apply()
         }
     }
 
-    fun isShownBefore() = if (id != null) isShownBefore(context, id!!) else false
+    fun isShownBefore() = if (props.fancyId != null) isShownBefore(context, props.fancyId!!) else false
 
 
     /**
@@ -570,15 +411,15 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
     fun removeView() {
         if (fancyImageView != null) fancyImageView = null
         mRoot?.removeView(this)
-        dismissListener?.onDismiss(id)
+        props.dismissListener?.onDismiss(props.fancyId)
         queueListener?.onNext()
     }
 
     override fun onGlobalLayout() {
         if (Build.VERSION.SDK_INT < 16) {
-            focusedView?.viewTreeObserver?.removeGlobalOnLayoutListener(this)
+            props.focusedView?.viewTreeObserver?.removeGlobalOnLayoutListener(this)
         } else {
-            focusedView?.viewTreeObserver?.removeOnGlobalLayoutListener(this)
+            props.focusedView?.viewTreeObserver?.removeOnGlobalLayoutListener(this)
         }
         focus()
     }
@@ -592,60 +433,24 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
      * Builder class for [FancyShowCaseView]
      */
     class Builder(private val activity: Activity) {
-        private var focusedView: View? = null
-        private var clickableView: View? = null
-        private var mId: String? = null
-        private var mTitle: String? = null
-        private var mSpannedTitle: Spanned? = null
-        private var focusCircleRadiusFactor = 1.0
-        private var mBackgroundColor: Int = 0
-        private var mFocusBorderColor: Int = 0
-        private var mTitleGravity = -1
-        private var mTitleSize = -1
-        private var mTitleSizeUnit = -1
-        private var mTitleStyle: Int = 0
-        private var mCustomViewRes: Int = 0
-        private var mRoundRectRadius: Int = 0
-        private var viewInflateListener: OnViewInflateListener? = null
-        private var mEnterAnimation: Animation? = FadeInAnimation()
-        private var mExitAnimation: Animation? = FadeOutAnimation()
-        private var mAnimationListener: AnimationListener? = null
-        private var mCloseOnTouch = true
-        private var mEnableTouchOnFocusedView: Boolean = false
-        private var fitSystemWindows: Boolean = false
-        private var mFocusShape = FocusShape.CIRCLE
-        private var mDismissListener: DismissListener? = null
-        private var mFocusBorderSize: Int = 0
-        private var mFocusPositionX: Int = 0
-        private var mFocusPositionY: Int = 0
-        private var mFocusCircleRadius: Int = 0
-        private var mFocusRectangleWidth: Int = 0
-        private var mFocusRectangleHeight: Int = 0
-        private var focusAnimationEnabled = true
-        private var mFocusAnimationMaxValue = 20
-        private var mFocusAnimationStep = 1
-        private var delay: Long = 0
-        private var autoPosText = false
-
+        private val props = Properties()
 
         /**
          * @param title title text
          * @return Builder
          */
-        fun title(title: String): Builder {
-            mTitle = title
-            mSpannedTitle = null
-            return this
+        fun title(title: String) = apply {
+            props.title = title
+            props.spannedTitle = null
         }
 
         /**
          * @param title title text
          * @return Builder
          */
-        fun title(title: Spanned): Builder {
-            mSpannedTitle = title
-            mTitle = null
-            return this
+        fun title(title: Spanned) = apply {
+            props.spannedTitle = title
+            props.title = null
         }
 
         /**
@@ -653,38 +458,29 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
          * @param titleGravity title gravity
          * @return Builder
          */
-        fun titleStyle(@StyleRes style: Int, titleGravity: Int): Builder {
-            mTitleGravity = titleGravity
-            mTitleStyle = style
-            return this
+        fun titleStyle(@StyleRes style: Int, titleGravity: Int) = apply {
+            props.titleGravity = titleGravity
+            props.titleStyle = style
         }
 
         /**
          * @param focusBorderColor Border color for focus shape
          * @return Builder
          */
-        fun focusBorderColor(focusBorderColor: Int): Builder {
-            mFocusBorderColor = focusBorderColor
-            return this
-        }
+        fun focusBorderColor(focusBorderColor: Int) = apply { props.focusBorderColor = focusBorderColor }
 
         /**
          * @param focusBorderSize Border size for focus shape
          * @return Builder
          */
-        fun focusBorderSize(focusBorderSize: Int): Builder {
-            mFocusBorderSize = focusBorderSize
-            return this
-        }
+        fun focusBorderSize(focusBorderSize: Int) = apply { props.focusBorderSize = focusBorderSize }
+
 
         /**
          * @param titleGravity title gravity
          * @return Builder
          */
-        fun titleGravity(titleGravity: Int): Builder {
-            mTitleGravity = titleGravity
-            return this
-        }
+        fun titleGravity(titleGravity: Int) = apply { props.titleGravity = titleGravity }
 
         /**
          * the defined text size overrides any defined size in the default or provided style
@@ -693,76 +489,56 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
          * @param unit      title text unit
          * @return Builder
          */
-        fun titleSize(titleSize: Int, unit: Int): Builder {
-            mTitleSize = titleSize
-            mTitleSizeUnit = unit
-            return this
+        fun titleSize(titleSize: Int, unit: Int) = apply {
+            props.titleSize = titleSize
+            props.titleSizeUnit = unit
         }
 
         /**
          * @param id unique identifier for FancyShowCaseView
          * @return Builder
          */
-        fun showOnce(id: String): Builder {
-            mId = id
-            return this
-        }
+        fun showOnce(id: String) = apply { props.fancyId = id }
 
         /**
          * @param view view to focus
          * @return Builder
          */
-        fun clickableOn(view: View): Builder {
-            clickableView = view
-            return this
-        }
+        fun clickableOn(view: View) = apply { props.clickableView = view }
 
         /**
          * @param view view to focus
          * @return Builder
          */
-        fun focusOn(view: View): Builder {
-            focusedView = view
-            return this
-        }
+        fun focusOn(view: View) = apply { props.focusedView = view }
 
         /**
          * @param backgroundColor background color of FancyShowCaseView
          * @return Builder
          */
-        fun backgroundColor(backgroundColor: Int): Builder {
-            mBackgroundColor = backgroundColor
-            return this
-        }
+        fun backgroundColor(backgroundColor: Int) = apply { props.backgroundColor = backgroundColor }
 
         /**
          * @param factor focus circle radius factor (default value = 1)
          * @return Builder
          */
-        fun focusCircleRadiusFactor(factor: Double): Builder {
-            focusCircleRadiusFactor = factor
-            return this
-        }
+        fun focusCircleRadiusFactor(factor: Double) = apply { props.focusCircleRadiusFactor = factor }
 
         /**
          * @param layoutResource custom view layout resource
          * @param listener       inflate listener for custom view
          * @return Builder
          */
-        fun customView(@LayoutRes layoutResource: Int, listener: OnViewInflateListener?): Builder {
-            mCustomViewRes = layoutResource
-            viewInflateListener = listener
-            return this
+        fun customView(@LayoutRes layoutResource: Int, listener: OnViewInflateListener?) = apply {
+            props.customViewRes = layoutResource
+            props.viewInflateListener = listener
         }
 
         /**
          * @param enterAnimation enter animation for FancyShowCaseView
          * @return Builder
          */
-        fun enterAnimation(enterAnimation: Animation?): Builder {
-            mEnterAnimation = enterAnimation
-            return this
-        }
+        fun enterAnimation(enterAnimation: Animation?) = apply { props.enterAnimation = enterAnimation }
 
         /**
          * Listener for enter/exit animations
@@ -770,36 +546,26 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
          * @param listener animation listener
          * @return Builder
          */
-        fun animationListener(listener: AnimationListener): Builder {
-            mAnimationListener = listener
-            return this
-        }
+        fun animationListener(listener: AnimationListener) = apply { props.animationListener = listener }
 
         /**
          * @param exitAnimation exit animation for FancyShowCaseView
          * @return Builder
          */
-        fun exitAnimation(exitAnimation: Animation?): Builder {
-            mExitAnimation = exitAnimation
-            return this
-        }
+        fun exitAnimation(exitAnimation: Animation?) = apply { props.exitAnimation = exitAnimation }
 
         /**
          * @param closeOnTouch closes on touch if enabled
          * @return Builder
          */
-        fun closeOnTouch(closeOnTouch: Boolean): Builder {
-            mCloseOnTouch = closeOnTouch
-            return this
-        }
+        fun closeOnTouch(closeOnTouch: Boolean) = apply { props.closeOnTouch = closeOnTouch }
 
         /**
          * @param enableTouchOnFocusedView closes on touch of focused view if enabled
          * @return Builder
          */
-        fun enableTouchOnFocusedView(enableTouchOnFocusedView: Boolean): Builder {
-            mEnableTouchOnFocusedView = enableTouchOnFocusedView
-            return this
+        fun enableTouchOnFocusedView(enableTouchOnFocusedView: Boolean) = apply {
+            props.enableTouchOnFocusedView = enableTouchOnFocusedView
         }
 
         /**
@@ -808,15 +574,9 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
          * @param _fitSystemWindows fitSystemWindows value
          * @return Builder
          */
-        fun fitSystemWindows(_fitSystemWindows: Boolean): Builder {
-            fitSystemWindows = _fitSystemWindows
-            return this
-        }
+        fun fitSystemWindows(_fitSystemWindows: Boolean) = apply { props.fitSystemWindows = _fitSystemWindows }
 
-        fun focusShape(focusShape: FocusShape): Builder {
-            mFocusShape = focusShape
-            return this
-        }
+        fun focusShape(focusShape: FocusShape) = apply { props.focusShape = focusShape }
 
         /**
          * Focus round rectangle at specific position
@@ -828,12 +588,11 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
          * @return Builder
          */
 
-        fun focusRectAtPosition(positionX: Int, positionY: Int, positionWidth: Int, positionHeight: Int): Builder {
-            mFocusPositionX = positionX
-            mFocusPositionY = positionY
-            mFocusRectangleWidth = positionWidth
-            mFocusRectangleHeight = positionHeight
-            return this
+        fun focusRectAtPosition(positionX: Int, positionY: Int, positionWidth: Int, positionHeight: Int) = apply {
+            props.focusPositionX = positionX
+            props.focusPositionY = positionY
+            props.focusRectangleWidth = positionWidth
+            props.focusRectangleHeight = positionHeight
         }
 
         /**
@@ -845,56 +604,38 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
          * @return Builder
          */
 
-        fun focusCircleAtPosition(positionX: Int, positionY: Int, radius: Int): Builder {
-            mFocusPositionX = positionX
-            mFocusPositionY = positionY
-            mFocusCircleRadius = radius
-            return this
+        fun focusCircleAtPosition(positionX: Int, positionY: Int, radius: Int) = apply {
+            props.focusPositionX = positionX
+            props.focusPositionY = positionY
+            props.focusCircleRadius = radius
         }
 
         /**
          * @param dismissListener the dismiss listener
          * @return Builder
          */
-        fun dismissListener(dismissListener: DismissListener): Builder {
-            mDismissListener = dismissListener
-            return this
+        fun dismissListener(dismissListener: DismissListener) = apply {
+            props.dismissListener = dismissListener
         }
 
-        fun roundRectRadius(roundRectRadius: Int): Builder {
-            mRoundRectRadius = roundRectRadius
-            return this
-        }
+        fun roundRectRadius(roundRectRadius: Int) = apply { props.roundRectRadius = roundRectRadius }
 
         /**
          * disable Focus Animation
          *
          * @return Builder
          */
-        fun disableFocusAnimation(): Builder {
-            focusAnimationEnabled = false
-            return this
+        fun disableFocusAnimation() = apply { props.focusAnimationEnabled = false }
+
+        fun focusAnimationMaxValue(focusAnimationMaxValue: Int) = apply {
+            props.focusAnimationMaxValue = focusAnimationMaxValue
         }
 
-        fun focusAnimationMaxValue(focusAnimationMaxValue: Int): Builder {
-            mFocusAnimationMaxValue = focusAnimationMaxValue
-            return this
-        }
+        fun focusAnimationStep(focusAnimationStep: Int) = apply { props.focusAnimationStep = focusAnimationStep }
 
-        fun focusAnimationStep(focusAnimationStep: Int): Builder {
-            mFocusAnimationStep = focusAnimationStep
-            return this
-        }
+        fun delay(delayInMillis: Int) = apply { props.delay = delayInMillis.toLong() }
 
-        fun delay(delayInMillis: Int): Builder {
-            delay = delayInMillis.toLong()
-            return this
-        }
-
-        fun enableAutoTextPosition(): Builder {
-            autoPosText = true
-            return this
-        }
+        fun enableAutoTextPosition() = apply { props.autoPosText = true }
 
         /**
          * builds the builder
@@ -902,18 +643,14 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
          * @return [FancyShowCaseView] with given parameters
          */
         fun build(): FancyShowCaseView {
-            return FancyShowCaseView(activity, focusedView, clickableView, mId, mTitle, mSpannedTitle, mTitleGravity, mTitleStyle, mTitleSize, mTitleSizeUnit,
-                    focusCircleRadiusFactor, mBackgroundColor, mFocusBorderColor, mFocusBorderSize, mCustomViewRes, viewInflateListener,
-                    mEnterAnimation, mExitAnimation, mAnimationListener, mCloseOnTouch, mEnableTouchOnFocusedView, fitSystemWindows, mFocusShape, mDismissListener, mRoundRectRadius,
-                    mFocusPositionX, mFocusPositionY, mFocusCircleRadius, mFocusRectangleWidth, mFocusRectangleHeight, focusAnimationEnabled,
-                    mFocusAnimationMaxValue, mFocusAnimationStep, delay, autoPosText)
+            return FancyShowCaseView(activity, props)
         }
     }
 
     companion object {
 
         // Tag for container view
-        private const val CONTAINER_TAG = "ShowCaseViewTag"
+        internal const val CONTAINER_TAG = "ShowCaseViewTag"
         // SharedPreferences name
         private const val PREF_NAME = "PrefShowCaseView"
 
@@ -954,11 +691,7 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
          * @param activity should be used to find FancyShowCaseView inside it
          */
         @JvmStatic
-        fun isVisible(activity: Activity): Boolean {
-            val androidContent = activity.findViewById<View>(android.R.id.content) as ViewGroup
-            val mRoot = androidContent.parent.parent as ViewGroup
-            return mRoot.findViewWithTag<View>(CONTAINER_TAG) as FancyShowCaseView? != null
-        }
+        fun isVisible(activity: Activity) = activity.attachedShowCase() != null
 
         /**
          * Hide  FancyShowCaseView
@@ -966,10 +699,6 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
          * @param activity should be used to hide FancyShowCaseView inside it
          */
         @JvmStatic
-        fun hideCurrent(activity: Activity) {
-            val androidContent = activity.findViewById<View>(android.R.id.content) as ViewGroup
-            val mRoot = androidContent.parent.parent as ViewGroup
-            (mRoot.findViewWithTag<View>(CONTAINER_TAG) as FancyShowCaseView?)?.hide()
-        }
+        fun hideCurrent(activity: Activity) = activity.attachedShowCase()?.hide()
     }
 }
