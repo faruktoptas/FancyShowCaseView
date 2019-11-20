@@ -17,14 +17,15 @@
 </p>
 
 ## Features
-- Circular reveal animation (API Level 21+)
-- Background color
-- Circle and Rounded Rectangle focus shapes
-- Title style and position 
-- Custom view inflation
-- Custom enter/exit animations
-- Chaining multiple FancyShowCaseView instances
-- Showing only one time
+*   Circular reveal animation (API Level 21+)
+*   Focus on a specific view or position
+*   Background color
+*   Circle and Rounded Rectangle focus shapes
+*   Title style and position 
+*   Custom view inflation
+*   Custom enter/exit animations
+*   Chaining multiple FancyShowCaseView instances
+*   Showing only one time
 
 ![!gif](https://cloud.githubusercontent.com/assets/1595227/24331187/ad143b80-1237-11e7-919c-36111c1ce559.gif)![!gif](https://cloud.githubusercontent.com/assets/1595227/24331189/afec8d9e-1237-11e7-986d-0ab7c44db7c7.gif)
 
@@ -58,6 +59,7 @@ Please see [wiki](https://github.com/faruktoptas/FancyShowCaseView/wiki) for mor
 * [NN Senin Mobilin](https://play.google.com/store/apps/details?id=com.eteration.ing.mobile.android)
 * [Umíme česky](https://play.google.com/store/apps/details?id=cz.muni.fi.umimecesky)
 * [Get Off Your Phone](https://play.google.com/store/apps/details?id=com.nephi.getoffyourphone)
+* [DHIS2 Capture](https://play.google.com/store/apps/details?id=com.dhis2)
 * [Travel Weather - Forecast plan for your trip](https://play.google.com/store/apps/details?id=pozzo.apps.travelweather)
 * [muSync for Spotify](https://play.google.com/store/apps/details?id=com.kloczl.musync.android)
 
