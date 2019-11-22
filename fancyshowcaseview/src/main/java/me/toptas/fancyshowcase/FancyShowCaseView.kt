@@ -19,18 +19,14 @@ package me.toptas.fancyshowcase
 import android.annotation.TargetApi
 import android.app.Activity
 import android.content.Context
-import android.content.SharedPreferences
 import android.graphics.Rect
 import android.os.Build
 import android.text.Spanned
 import android.util.AttributeSet
-import android.util.DisplayMetrics
-import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
 import android.view.View.OnTouchListener
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
 import android.view.animation.Animation
 import android.widget.FrameLayout
 import android.widget.RelativeLayout
@@ -39,23 +35,36 @@ import androidx.annotation.AttrRes
 import androidx.annotation.LayoutRes
 import androidx.annotation.RequiresApi
 import androidx.annotation.StyleRes
-import androidx.core.content.ContextCompat
+import me.toptas.fancyshowcase.ext.AnimationEndListener
 import me.toptas.fancyshowcase.ext.attachedShowCase
-import me.toptas.fancyshowcase.ext.cantFocus
 import me.toptas.fancyshowcase.ext.circularEnterAnimation
 import me.toptas.fancyshowcase.ext.circularExitAnimation
+import me.toptas.fancyshowcase.ext.globalLayoutListener
 import me.toptas.fancyshowcase.ext.rootView
+import me.toptas.fancyshowcase.internal.AndroidProperties
+import me.toptas.fancyshowcase.internal.DeviceParamsImpl
+import me.toptas.fancyshowcase.internal.FadeInAnimation
+import me.toptas.fancyshowcase.internal.FadeOutAnimation
+import me.toptas.fancyshowcase.internal.FancyImageView
+import me.toptas.fancyshowcase.internal.FocusedView
+import me.toptas.fancyshowcase.internal.Presenter
+import me.toptas.fancyshowcase.internal.Properties
+import me.toptas.fancyshowcase.internal.SharedPrefImpl
 import me.toptas.fancyshowcase.listener.AnimationListener
 import me.toptas.fancyshowcase.listener.DismissListener
 import me.toptas.fancyshowcase.listener.OnQueueListener
 import me.toptas.fancyshowcase.listener.OnViewInflateListener
+import kotlin.math.hypot
+import kotlin.math.pow
+import kotlin.math.sqrt
 
 /**
  * FancyShowCaseView class
  */
 
 class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, @AttrRes defStyleAttr: Int = 0)
-    : FrameLayout(context, attrs, defStyleAttr), ViewTreeObserver.OnGlobalLayoutListener {
+    : FrameLayout(context, attrs, defStyleAttr) {
+
 
     /**
      * Builder parameters
@@ -63,8 +72,8 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
     var focusCalculator: Calculator? = null
 
     private lateinit var activity: Activity
+    private lateinit var presenter: Presenter
     private var clickableCalculator: Calculator? = null
-    private var sharedPreferences: SharedPreferences? = null
     private var props = Properties()
     private var androidProps = AndroidProperties()
 
@@ -80,50 +89,24 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
         props = _props
         activity = _activity
         androidProps = _androidProps
+        presenter = Presenter(preferences(activity), DeviceParamsImpl(activity, this), props)
 
-        initializeParameters()
-    }
-
-    /**
-     * Calculates and set initial parameters
-     */
-    private fun initializeParameters() {
-        props.backgroundColor = if (props.backgroundColor != 0)
-            props.backgroundColor
-        else
-            ContextCompat.getColor(activity, R.color.fancy_showcase_view_default_background_color)
-        props.titleGravity = if (props.titleGravity >= 0) props.titleGravity else Gravity.CENTER
-        props.titleStyle = if (props.titleStyle != 0) props.titleStyle else R.style.FancyShowCaseDefaultTitleStyle
-
-        val displayMetrics = DisplayMetrics()
-        activity.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
-        val deviceWidth = displayMetrics.widthPixels
-        val deviceHeight = displayMetrics.heightPixels
-        mCenterX = deviceWidth / 2
-        mCenterY = deviceHeight / 2
-        sharedPreferences = activity.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        presenter.initialize()
+        mCenterX = presenter.centerX
+        mCenterY = presenter.centerY
     }
 
     /**
      * Shows FancyShowCaseView
      */
     fun show() {
-        if (isShownBefore()) {
-            props.dismissListener?.onSkipped(props.fancyId)
-            return
-        }
-        // if view is not laid out get, width/height values in onGlobalLayout
-        if (androidProps.focusedView?.cantFocus() == true) {
-            androidProps.focusedView?.viewTreeObserver?.addOnGlobalLayoutListener(this)
-        } else {
-            focus()
-        }
+        presenter.show { focus() }
     }
 
-    private fun focus() {
+    internal fun focus() {
         focusCalculator = Calculator(activity,
                 props.focusShape,
-                androidProps.focusedView,
+                props.focusedView,
                 props.focusCircleRadiusFactor,
                 props.fitSystemWindows)
 
@@ -153,7 +136,7 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
 
                 setCalculatorParams()
 
-                addFancyImageView()
+                addView(FancyImageView.instance(activity, props, focusCalculator!!))
 
                 inflateContent()
 
@@ -179,22 +162,6 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
         }
     }
 
-    private fun addFancyImageView() {
-        FancyImageView(activity).apply {
-            setFocusAnimationParameters(props.focusAnimationMaxValue, props.focusAnimationStep)
-            setParameters(props.backgroundColor, focusCalculator!!)
-            focusAnimationEnabled = props.focusAnimationEnabled
-            layoutParams = LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT)
-            if (props.focusBorderColor != 0 && props.focusBorderSize > 0) {
-                setBorderParameters(props.focusBorderColor, props.focusBorderSize)
-            }
-            if (props.roundRectRadius >= 0) {
-                roundRectRadius = props.roundRectRadius
-            }
-            addView(this)
-        }
-    }
 
     private fun inflateContent() {
         if (props.customViewRes == 0) {
@@ -244,8 +211,8 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
 
         when (props.focusShape) {
             FocusShape.CIRCLE -> {
-                val distance = Math.sqrt(
-                        Math.pow((focusCenterX - x).toDouble(), 2.0) + Math.pow((focusCenterY - y).toDouble(), 2.0))
+                val distance = sqrt(
+                        (focusCenterX - x).toDouble().pow(2.0) + Math.pow((focusCenterY - y).toDouble(), 2.0))
 
                 isWithin = Math.abs(distance) < focusRadius
             }
@@ -284,18 +251,9 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
             if (androidProps.exitAnimation is FadeOutAnimation && shouldShowCircularAnimation()) {
                 doCircularExitAnimation()
             } else {
-                androidProps.exitAnimation?.setAnimationListener(object : Animation.AnimationListener {
-                    override fun onAnimationRepeat(animation: Animation?) {
-
-                    }
-
-                    override fun onAnimationEnd(animation: Animation?) {
-                        removeView()
-                        props.animationListener?.onExitAnimationEnd()
-                    }
-
-                    override fun onAnimationStart(animation: Animation?) {
-                    }
+                androidProps.exitAnimation?.setAnimationListener(AnimationEndListener {
+                    removeView()
+                    props.animationListener?.onExitAnimationEnd()
                 })
                 startAnimation(androidProps.exitAnimation)
             }
@@ -315,7 +273,6 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
             addView(this)
             viewInflateListener?.onViewInflated(this)
         }
-
     }
 
     /**
@@ -358,29 +315,19 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
      */
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private fun doCircularEnterAnimation() {
-        viewTreeObserver.addOnGlobalLayoutListener(
-                object : ViewTreeObserver.OnGlobalLayoutListener {
-                    override fun onGlobalLayout() {
-                        if (Build.VERSION.SDK_INT < 16) {
-                            viewTreeObserver.removeGlobalOnLayoutListener(this)
-                        } else {
-                            viewTreeObserver.removeOnGlobalLayoutListener(this)
-                        }
-
-                        val revealRadius = Math.hypot(width.toDouble(), height.toDouble()).toInt()
-                        var startRadius = 0
-                        if (androidProps.focusedView != null) {
-                            startRadius = androidProps.focusedView!!.width / 2
-                        } else if (props.focusCircleRadius > 0 || props.focusRectangleWidth > 0 || props.focusRectangleHeight > 0) {
-                            mCenterX = props.focusPositionX
-                            mCenterY = props.focusPositionY
-                        }
-                        circularEnterAnimation(activity, mCenterX, mCenterY, startRadius, revealRadius, mAnimationDuration) {
-                            props.animationListener?.onEnterAnimationEnd()
-                        }
-                    }
-                })
-
+        globalLayoutListener {
+            val revealRadius = hypot(width.toDouble(), height.toDouble()).toInt()
+            var startRadius = 0
+            if (props.focusedView != null) {
+                startRadius = props.focusedView!!.width() / 2
+            } else if (props.focusCircleRadius > 0 || props.focusRectangleWidth > 0 || props.focusRectangleHeight > 0) {
+                mCenterX = props.focusPositionX
+                mCenterY = props.focusPositionY
+            }
+            circularEnterAnimation(activity, mCenterX, mCenterY, startRadius, revealRadius, mAnimationDuration) {
+                props.animationListener?.onEnterAnimationEnd()
+            }
+        }
     }
 
     /**
@@ -398,10 +345,7 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
      * Saves the FancyShowCaseView id to SharedPreferences that is shown once
      */
     private fun writeShown() {
-        sharedPreferences?.edit()?.apply {
-            putBoolean(props.fancyId, true)
-            apply()
-        }
+        presenter.writeShown(props.fancyId)
     }
 
     fun isShownBefore() = if (props.fancyId != null) isShownBefore(context, props.fancyId!!) else false
@@ -415,15 +359,6 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
         mRoot?.removeView(this)
         props.dismissListener?.onDismiss(props.fancyId)
         queueListener?.onNext()
-    }
-
-    override fun onGlobalLayout() {
-        if (Build.VERSION.SDK_INT < 16) {
-            androidProps.focusedView?.viewTreeObserver?.removeGlobalOnLayoutListener(this)
-        } else {
-            androidProps.focusedView?.viewTreeObserver?.removeOnGlobalLayoutListener(this)
-        }
-        focus()
     }
 
     private fun shouldShowCircularAnimation(): Boolean {
@@ -507,13 +442,13 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
          * @param view view to focus
          * @return Builder
          */
-        fun clickableOn(view: View) = apply { androidProps.clickableView = view }
+        fun clickableOn(view: View) = apply { androidProps.clickableView = FocusedView(view) }
 
         /**
          * @param view view to focus
          * @return Builder
          */
-        fun focusOn(view: View) = apply { androidProps.focusedView = view }
+        fun focusOn(view: View) = apply { props.focusedView = FocusedView(view) }
 
         /**
          * @param backgroundColor background color of FancyShowCaseView
@@ -670,8 +605,6 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
 
         // Tag for container view
         internal const val CONTAINER_TAG = "ShowCaseViewTag"
-        // SharedPreferences name
-        private const val PREF_NAME = "PrefShowCaseView"
 
         /**
          * Resets the show once flag
@@ -680,10 +613,7 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
          * @param id      id of the show once flag that should be reset
          */
         @JvmStatic
-        fun resetShowOnce(context: Context, id: String) = preferences(context)
-                .edit()
-                .remove(id)
-                .apply()
+        fun resetShowOnce(context: Context, id: String) = preferences(context).reset(id)
 
 
         /**
@@ -692,17 +622,11 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
          * @param context context that should be used to create the shared preference instance
          */
         @JvmStatic
-        fun resetAllShowOnce(context: Context) = preferences(context)
-                .edit()
-                .clear()
-                .apply()
+        fun resetAllShowOnce(context: Context) = preferences(context).resetAll()
 
 
         @JvmStatic
-        fun isShownBefore(context: Context, id: String) = preferences(context).getBoolean(id, false)
-
-        private fun preferences(context: Context) = context
-                .getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        fun isShownBefore(context: Context, id: String) = SharedPrefImpl(context).isShownBefore(id)
 
         /**
          * Check is FancyShowCaseView visible
@@ -719,5 +643,7 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
          */
         @JvmStatic
         fun hideCurrent(activity: Activity) = activity.attachedShowCase()?.hide()
+
+        private fun preferences(context: Context) = SharedPrefImpl(context)
     }
 }

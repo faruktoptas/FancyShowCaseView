@@ -1,5 +1,6 @@
 package me.toptas.fancyshowcase
 
+import me.toptas.fancyshowcase.internal.Properties
 import org.junit.Test
 
 class PropertiesTest {

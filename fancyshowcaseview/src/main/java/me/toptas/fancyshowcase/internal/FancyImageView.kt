@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package me.toptas.fancyshowcase
+package me.toptas.fancyshowcase.internal
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -27,8 +28,12 @@ import android.graphics.PorterDuffXfermode
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
+import android.view.ViewGroup
+import android.widget.FrameLayout
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.widget.AppCompatImageView
+import me.toptas.fancyshowcase.Calculator
+import me.toptas.fancyshowcase.FocusShape
 
 /**
  * ImageView with focus area animation
@@ -39,20 +44,28 @@ class FancyImageView : AppCompatImageView {
     private lateinit var calculator: Calculator
     private lateinit var backgroundPaint: Paint
     private lateinit var erasePaint: Paint
-    private lateinit var circleBorderPaint: Paint
+    private var circleBorderPaint: Paint? = null
     private lateinit var path: Path
     private lateinit var rectF: RectF
 
     private var bitmap: Bitmap? = null
-    private val focusBorderColor = Color.TRANSPARENT
-    private var bgColor = Color.TRANSPARENT
-    private var focusBorderSize: Int = 0
+    var bgColor = Color.TRANSPARENT
+    var focusBorderColor = Color.TRANSPARENT
+        set(value) {
+            field = value
+            circleBorderPaint?.color = focusBorderColor
+        }
+    var focusBorderSize: Int = 0
+        set(value) {
+            field = value
+            circleBorderPaint?.strokeWidth = field.toFloat()
+        }
 
     private var animCounter = 0
     private var step = 1
     private var animMoveFactor = 1.0
-    private var focusAnimationMaxValue: Int = 0
-    private var focusAnimationStep: Int = 0
+    var focusAnimationMaxValue: Int = 0
+    var focusAnimationStep: Int = 0
 
     var roundRectRadius = 20
     var focusAnimationEnabled = true
@@ -104,27 +117,11 @@ class FancyImageView : AppCompatImageView {
     /**
      * Setting parameters for background an animation
      *
-     * @param _backgroundColor background color
      * @param _calculator      calculator object for calculations
      */
-    fun setParameters(_backgroundColor: Int, _calculator: Calculator) {
-        bgColor = _backgroundColor
+    fun setParameters(_calculator: Calculator) {
         animMoveFactor = 1.0
         calculator = _calculator
-    }
-
-    /**
-     * Setting parameters for focus border
-     *
-     * @param focusBorderColor
-     * @param _focusBorderSize
-     */
-    fun setBorderParameters(focusBorderColor: Int, _focusBorderSize: Int) {
-        focusBorderSize = _focusBorderSize
-        circleBorderPaint.apply {
-            color = focusBorderColor
-            strokeWidth = focusBorderSize.toFloat()
-        }
     }
 
 
@@ -204,10 +201,6 @@ class FancyImageView : AppCompatImageView {
         }
     }
 
-    fun setFocusAnimationParameters(maxValue: Int, step: Int) {
-        focusAnimationMaxValue = maxValue
-        focusAnimationStep = step
-    }
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
@@ -222,5 +215,21 @@ class FancyImageView : AppCompatImageView {
 
         @VisibleForTesting
         var DISABLE_ANIMATIONS_FOR_TESTING = false
+
+        internal fun instance(activity: Activity, props: Properties, calc: Calculator) =
+                FancyImageView(activity).apply {
+                    setParameters(calc)
+                    bgColor = props.backgroundColor
+                    focusAnimationMaxValue = props.focusAnimationMaxValue
+                    focusAnimationStep = props.focusAnimationStep
+                    focusAnimationEnabled = props.focusAnimationEnabled
+                    focusBorderColor = props.focusBorderColor
+                    focusBorderSize = props.focusBorderSize
+                    roundRectRadius = props.roundRectRadius
+
+                    layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.MATCH_PARENT)
+
+                }
     }
 }

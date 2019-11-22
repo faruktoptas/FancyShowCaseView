@@ -23,6 +23,7 @@ import android.util.DisplayMetrics
 import android.view.View
 import android.view.WindowManager
 import android.widget.RelativeLayout
+import me.toptas.fancyshowcase.internal.IFocusedView
 
 /**
  * Geometric calculations for position, size and radius
@@ -30,7 +31,7 @@ import android.widget.RelativeLayout
 
 class Calculator(activity: Activity,
                  focusShape: FocusShape,
-                 view: View?,
+                 view: IFocusedView?,
                  radiusFactor: Double,
                  fitSystemWindows: Boolean) {
 
@@ -92,12 +93,12 @@ class Calculator(activity: Activity,
                 getStatusBarHeight(activity)
             val viewPoint = IntArray(2)
             view.getLocationInWindow(viewPoint)
-            focusWidth = view.width
-            focusHeight = view.height
+            focusWidth = view.width()
+            focusHeight = view.height()
             this.focusShape = focusShape
             circleCenterX = viewPoint[0] + focusWidth / 2
             circleCenterY = viewPoint[1] + focusHeight / 2 - adjustHeight
-            viewRadius = ((Math.hypot(view.width.toDouble(), view.height.toDouble()) / 2).toInt() * radiusFactor).toInt()
+            viewRadius = ((Math.hypot(view.width().toDouble(), view.height().toDouble()) / 2).toInt() * radiusFactor).toInt()
             mHasFocus = true
         } else {
             mHasFocus = false

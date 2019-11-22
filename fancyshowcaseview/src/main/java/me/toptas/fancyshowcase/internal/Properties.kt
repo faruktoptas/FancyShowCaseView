@@ -1,9 +1,9 @@
-package me.toptas.fancyshowcase
+package me.toptas.fancyshowcase.internal
 
 import android.text.Spanned
-import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
+import me.toptas.fancyshowcase.FocusShape
 import me.toptas.fancyshowcase.listener.AnimationListener
 import me.toptas.fancyshowcase.listener.DismissListener
 import me.toptas.fancyshowcase.listener.OnQueueListener
@@ -21,7 +21,7 @@ internal data class Properties(
         var titleSizeUnit: Int = -1,
         var customViewRes: Int = 0,
         var focusBorderSize: Int = 0,
-        var roundRectRadius: Int = 0,
+        var roundRectRadius: Int = 20,
         var closeOnTouch: Boolean = true,
         var enableTouchOnFocusedView: Boolean = false,
         var fitSystemWindows: Boolean = false,
@@ -43,13 +43,13 @@ internal data class Properties(
         var animationListener: AnimationListener? = null,
         var fancyImageView: FancyImageView? = null,
         var dismissListener: DismissListener? = null,
-        var queueListener: OnQueueListener? = null
+        var queueListener: OnQueueListener? = null,
+        var focusedView: IFocusedView? = null
 )
 
 internal data class AndroidProperties(
         var spannedTitle: Spanned? = null,
-        var focusedView: View? = null,
-        var clickableView: View? = null,
+        var clickableView: IFocusedView? = null,
         var mRoot: ViewGroup? = null,
         var enterAnimation: Animation? = FadeInAnimation(),
         var exitAnimation: Animation? = FadeOutAnimation()
