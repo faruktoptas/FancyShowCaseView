@@ -21,6 +21,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.text.Html
 import android.text.Spanned
+import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.Menu
@@ -124,25 +125,21 @@ class MainActivity : BaseActivity() {
 
         //Shows a FancyShowCaseView that focus on a view
         btn_focus_dismiss_on_focus_area.setOnClickListener {
-            if (FancyShowCaseView.isVisible(this)) {
-                Toast.makeText(this, "Clickable button", Toast.LENGTH_SHORT).show()
-                FancyShowCaseView.hideCurrent(this)
-            } else {
-                FancyShowCaseView.Builder(this)
+            Toast.makeText(this, "Clickable button", Toast.LENGTH_SHORT).show()
+
+            FancyShowCaseView.Builder(this)
                         .focusOn(findViewById(R.id.btn_focus_dismiss_on_focus_area))
                         .enableTouchOnFocusedView(true)
                         .title("Focus on View \n(dismiss on focus area)")
                         .build()
                         .show()
-            }
+
         }
 
         //Shows a FancyShowCaseView with rounded rect focus shape
         btn_rounded_rect_dismiss_on_focus_area.setOnClickListener {
-            if (FancyShowCaseView.isVisible(this)) {
-                Toast.makeText(this, "Clickable button", Toast.LENGTH_SHORT).show()
-                FancyShowCaseView.hideCurrent(this)
-            } else {
+            Toast.makeText(this, "Clickable button", Toast.LENGTH_SHORT).show()
+
                 FancyShowCaseView.Builder(this)
                         .focusOn(it)
                         .focusShape(FocusShape.ROUNDED_RECTANGLE)
@@ -151,7 +148,7 @@ class MainActivity : BaseActivity() {
                         .title("Focus on View \n(dismiss on focus area)")
                         .build()
                         .show()
-            }
+
         }
 
         //Shows FancyShowCaseView with focusCircleRadiusFactor 1.5 and title gravity
@@ -271,6 +268,7 @@ class MainActivity : BaseActivity() {
                     })
                     .closeOnTouch(false)
                     .build()
+
             mFancyShowCaseView?.show()
 
         }
