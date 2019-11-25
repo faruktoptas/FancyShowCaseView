@@ -1,42 +1,12 @@
 package me.toptas.fancyshowcase.internal
 
-import android.app.Activity
-import android.util.DisplayMetrics
 import android.view.Gravity
-import android.view.View
-import androidx.core.content.ContextCompat
 import me.toptas.fancyshowcase.R
-
-
-interface DeviceParams {
-    fun currentBackgroundColor(): Int
-    fun deviceWidth(): Int
-    fun deviceHeight(): Int
-}
-
-class DeviceParamsImpl(private val activity: Activity, view: View) : DeviceParams {
-
-    private val metrics = DisplayMetrics()
-
-    init {
-        activity.windowManager.defaultDisplay.getMetrics(metrics)
-    }
-
-    override fun currentBackgroundColor() = ContextCompat
-            .getColor(activity, R.color.fancy_showcase_view_default_background_color)
-
-    override fun deviceWidth() = metrics.widthPixels
-
-    override fun deviceHeight() = metrics.heightPixels
-
-
-}
 
 
 internal class Presenter(private val pref: SharedPref,
                          private val device: DeviceParams,
-                         private val props: Properties/*,
-                         private val androidProps: AndroidProperties*/) {
+                         private val props: Properties) {
 
     var centerX: Int = 0
     var centerY: Int = 0
