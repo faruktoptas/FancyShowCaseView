@@ -19,7 +19,6 @@ package me.toptas.fancyshowcase
 import android.annotation.TargetApi
 import android.app.Activity
 import android.content.Context
-import android.graphics.Rect
 import android.os.Build
 import android.text.Spanned
 import android.util.AttributeSet
@@ -50,13 +49,12 @@ import me.toptas.fancyshowcase.internal.FocusedView
 import me.toptas.fancyshowcase.internal.Presenter
 import me.toptas.fancyshowcase.internal.Properties
 import me.toptas.fancyshowcase.internal.SharedPrefImpl
+import me.toptas.fancyshowcase.internal.getStatusBarHeight
 import me.toptas.fancyshowcase.listener.AnimationListener
 import me.toptas.fancyshowcase.listener.DismissListener
 import me.toptas.fancyshowcase.listener.OnQueueListener
 import me.toptas.fancyshowcase.listener.OnViewInflateListener
 import kotlin.math.hypot
-import kotlin.math.pow
-import kotlin.math.sqrt
 
 /**
  * FancyShowCaseView class
@@ -65,15 +63,8 @@ import kotlin.math.sqrt
 class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, @AttrRes defStyleAttr: Int = 0)
     : FrameLayout(context, attrs, defStyleAttr) {
 
-
-    /**
-     * Builder parameters
-     */
-    var focusCalculator: Calculator? = null
-
     private lateinit var activity: Activity
     private lateinit var presenter: Presenter
-    private var clickableCalculator: Calculator? = null
     private var props = Properties()
     private var androidProps = AndroidProperties()
 
@@ -82,6 +73,22 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
     private var mCenterY: Int = 0
     private var mRoot: ViewGroup? = null
     private var fancyImageView: FancyImageView? = null
+
+    val focusCenterX: Int
+        get() = presenter.circleCenterX
+
+    val focusCenterY: Int
+        get() = presenter.circleCenterY
+
+    val focusWidth: Int
+        get() = presenter.focusWidth
+
+    val focusHeight: Int
+        get() = presenter.focusHeight
+
+    val focusShape: FocusShape
+        get() = presenter.focusShape
+
     var queueListener: OnQueueListener? = null
 
 
@@ -103,20 +110,8 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
         presenter.show { focus() }
     }
 
-    internal fun focus() {
-        focusCalculator = Calculator(activity,
-                props.focusShape,
-                props.focusedView,
-                props.focusCircleRadiusFactor,
-                props.fitSystemWindows)
-
-        clickableCalculator = Calculator(activity,
-                props.focusShape,
-                androidProps.clickableView,
-                props.focusCircleRadiusFactor,
-                props.fitSystemWindows)
-
-
+    private fun focus() {
+        presenter.calculations()
         mRoot = activity.rootView()
         mRoot?.postDelayed(Runnable {
             if (activity.isFinishing) {
@@ -136,7 +131,7 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
 
                 setCalculatorParams()
 
-                addView(FancyImageView.instance(activity, props, focusCalculator!!))
+                addView(FancyImageView.instance(activity, props, presenter))
 
                 inflateContent()
 
@@ -148,18 +143,11 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
     }
 
     private fun setCalculatorParams() {
-        focusCalculator?.apply {
-            if (hasFocus()) {
-                mCenterX = circleCenterX
-                mCenterY = circleCenterY
-            }
-            if (props.focusRectangleWidth > 0 && props.focusRectangleHeight > 0) {
-                setRectPosition(props.focusPositionX, props.focusPositionY, props.focusRectangleWidth, props.focusRectangleHeight)
-            }
-            if (props.focusCircleRadius > 0) {
-                setCirclePosition(props.focusPositionX, props.focusPositionY, props.focusCircleRadius)
-            }
+        if (presenter.hasFocus) {
+            mCenterX = presenter.circleCenterX
+            mCenterY = presenter.circleCenterY
         }
+        presenter.setFocusPositions()
     }
 
 
@@ -175,12 +163,12 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
         setOnTouchListener(OnTouchListener { _, event ->
             if (event.actionMasked == MotionEvent.ACTION_DOWN) {
                 when {
-                    props.enableTouchOnFocusedView && isWithinZone(event, focusCalculator) -> {
+                    props.enableTouchOnFocusedView && presenter.isWithinZone(event.x, event.y, props.focusedView!!) -> {
                         // Check if there is a clickable view within the focusable view
                         // Let the touch event pass through to clickable zone only if clicking within, otherwise return true to ignore event
                         // If there is no clickable view we let through the click to the focusable view
-                        androidProps.clickableView?.let {
-                            return@OnTouchListener !isWithinZone(event, clickableCalculator)
+                        props.clickableView?.let {
+                            return@OnTouchListener !presenter.isWithinZone(event.x, event.y, it)
                         } ?: return@OnTouchListener false
                     }
                     props.closeOnTouch -> hide()
@@ -188,46 +176,6 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
             }
             true
         })
-    }
-
-    /**
-     * Check whether the event is within the provided zone that was already computed with the provided calculator
-     *
-     * @param event         The event from onTouch callback
-     * @param calculator    The calculator that holds the zone's position
-     */
-    private fun isWithinZone(event: MotionEvent, calculator: Calculator?): Boolean {
-        var isWithin = false
-        val x = event.x
-        val y = event.y
-        val focusCenterX = calculator?.circleCenterX ?: 0
-        val focusCenterY = calculator?.circleCenterY ?: 0
-        val focusWidth = calculator?.focusWidth ?: 0
-        val focusHeight = calculator?.focusHeight ?: 0
-        val focusRadius =
-                if (FocusShape.CIRCLE == props.focusShape)
-                    calculator?.circleRadius(0, 1.0) ?: 0f
-                else 0f
-
-        when (props.focusShape) {
-            FocusShape.CIRCLE -> {
-                val distance = sqrt(
-                        (focusCenterX - x).toDouble().pow(2.0) + Math.pow((focusCenterY - y).toDouble(), 2.0))
-
-                isWithin = Math.abs(distance) < focusRadius
-            }
-            FocusShape.ROUNDED_RECTANGLE -> {
-                val rect = Rect()
-                val left = focusCenterX - focusWidth / 2
-                val right = focusCenterX + focusWidth / 2
-                val top = focusCenterY - focusHeight / 2
-                val bottom = focusCenterY + focusHeight / 2
-                rect.set(left, top, right, bottom)
-                isWithin = rect.contains(x.toInt(), y.toInt())
-            }
-        }
-
-        return isWithin
     }
 
     /**
@@ -294,7 +242,7 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
                 textView.gravity = props.titleGravity
                 if (props.fitSystemWindows) {
                     val params = textView.layoutParams as RelativeLayout.LayoutParams
-                    params.setMargins(0, Calculator.getStatusBarHeight(context), 0, 0)
+                    params.setMargins(0, getStatusBarHeight(context), 0, 0)
                 }
                 if (androidProps.spannedTitle != null) {
                     textView.text = androidProps.spannedTitle
@@ -303,7 +251,14 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
                 }
 
                 if (props.autoPosText) {
-                    focusCalculator?.calcAutoTextPosition(textView)
+                    val pos = presenter.calcAutoTextPosition()
+                    val params = textView.layoutParams as RelativeLayout.LayoutParams
+                    params.apply {
+                        topMargin = pos.topMargin
+                        bottomMargin = pos.bottomMargin
+                        height = pos.height
+                    }
+                    textView.layoutParams = params
                 }
             }
         })
@@ -442,7 +397,7 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
          * @param view view to focus
          * @return Builder
          */
-        fun clickableOn(view: View) = apply { androidProps.clickableView = FocusedView(view) }
+        fun clickableOn(view: View) = apply { props.clickableView = FocusedView(view) }
 
         /**
          * @param view view to focus

@@ -258,11 +258,10 @@ class MainActivity : BaseActivity() {
                         override fun onViewInflated(view: View) {
                             val image = (view as RelativeLayout).findViewById<ImageView>(R.id.iv_custom_view)
                             val params = image.layoutParams as RelativeLayout.LayoutParams
-                            val calculator = mFancyShowCaseView!!.focusCalculator!!
 
                             image.post {
-                                params.leftMargin = calculator.circleCenterX - image.width / 2
-                                params.topMargin = calculator.circleCenterY - calculator.focusHeight - image.height
+                                params.leftMargin = mFancyShowCaseView!!.focusCenterX - image.width / 2
+                                params.topMargin = mFancyShowCaseView!!.focusCenterY - mFancyShowCaseView!!.focusHeight - image.height
                                 image.layoutParams = params
                             }
 

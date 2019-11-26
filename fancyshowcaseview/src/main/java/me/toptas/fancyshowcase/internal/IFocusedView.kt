@@ -3,23 +3,24 @@ package me.toptas.fancyshowcase.internal
 import android.view.View
 import me.toptas.fancyshowcase.ext.globalLayoutListener
 
-interface IFocusedView {
+internal interface IFocusedView {
     fun width(): Int
     fun height(): Int
-    fun getLocationInWindow(viewPoint: IntArray)
+    fun getLocationInWindow(viewPoint: IntArray): IntArray
     fun waitForLayout(onLayout: () -> Unit)
 
     fun cantFocus() = width() == 0 && height() == 0
 }
 
-class FocusedView(private val view: View) : IFocusedView {
+internal class FocusedView(private val view: View) : IFocusedView {
 
     override fun width() = view.width
 
     override fun height() = view.height
 
-    override fun getLocationInWindow(viewPoint: IntArray) {
+    override fun getLocationInWindow(viewPoint: IntArray): IntArray {
         view.getLocationInWindow(viewPoint)
+        return viewPoint
     }
 
     override fun waitForLayout(onLayout: () -> Unit) {
@@ -29,3 +30,7 @@ class FocusedView(private val view: View) : IFocusedView {
     fun view() = view
 
 }
+
+internal data class CircleCenter(var x: Int, var y: Int)
+
+internal data class AutoTextPosition(var bottomMargin: Int = 0, var topMargin: Int = 0, var height: Int = 0)

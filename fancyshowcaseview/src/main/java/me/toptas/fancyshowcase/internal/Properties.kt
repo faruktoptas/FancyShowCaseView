@@ -44,12 +44,12 @@ internal data class Properties(
         var fancyImageView: FancyImageView? = null,
         var dismissListener: DismissListener? = null,
         var queueListener: OnQueueListener? = null,
-        var focusedView: IFocusedView? = null
+        var focusedView: IFocusedView? = null,
+        var clickableView: IFocusedView? = null
 )
 
 internal data class AndroidProperties(
         var spannedTitle: Spanned? = null,
-        var clickableView: IFocusedView? = null,
         var mRoot: ViewGroup? = null,
         var enterAnimation: Animation? = FadeInAnimation(),
         var exitAnimation: Animation? = FadeOutAnimation()
