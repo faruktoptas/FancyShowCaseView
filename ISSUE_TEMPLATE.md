@@ -1,6 +1,4 @@
-## Issue title 
-
-### Steps to reproduce the problem:
+### Screenshot
 
 ### How you show/hide FancyShowCaseView (in Activity or Fragment, in which method)
 
@@ -14,6 +12,5 @@ btn_simple.setOnClickListener {
             .show()
 }
 ```
-### Your layout.xml file if the focus is wrong
 
-### Specifications (Android version, Device etc.):
+### Your layout.xml file if the focus is wrong

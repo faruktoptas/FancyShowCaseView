@@ -9,6 +9,7 @@ import kotlin.math.hypot
 import kotlin.math.pow
 import kotlin.math.sqrt
 
+internal var DISABLE_ANIMATIONS_FOR_TESTING = false
 
 internal class Presenter(private val pref: SharedPref,
                          private val device: DeviceParams,

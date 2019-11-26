@@ -25,8 +25,8 @@ import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.filters.LargeTest
 import com.example.espressorobot.robot
-import me.toptas.fancyshowcase.internal.FancyImageView
 import me.toptas.fancyshowcase.FancyShowCaseView
+import me.toptas.fancyshowcase.internal.FancyImageView.Companion.DISABLE_ANIMATIONS_FOR_TESTING
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
@@ -42,7 +42,7 @@ class FancyShowCaseViewTest {
 
     @Before
     fun before() {
-        FancyImageView.DISABLE_ANIMATIONS_FOR_TESTING = true
+        DISABLE_ANIMATIONS_FOR_TESTING = true
     }
 
     @Test
