@@ -20,10 +20,13 @@ import android.graphics.Color
 import androidx.test.rule.ActivityTestRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import android.view.Gravity
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.filters.LargeTest
 import com.example.espressorobot.robot
-import me.toptas.fancyshowcase.Calculator
 import me.toptas.fancyshowcase.FancyShowCaseView
+import me.toptas.fancyshowcase.internal.FancyImageView.Companion.DISABLE_ANIMATIONS_FOR_TESTING
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
@@ -39,7 +42,7 @@ class FancyShowCaseViewTest {
 
     @Before
     fun before() {
-        Calculator.DISABLE_ANIMATIONS_FOR_TESTING = true
+        DISABLE_ANIMATIONS_FOR_TESTING = true
     }
 
     @Test
@@ -126,13 +129,25 @@ class FancyShowCaseViewTest {
     @Test
     fun customView() {
         robot {
+            swipeUp(R.id.scrollView)
             clickButton(R.id.btn_custom_view)
-            checkFancyShowCase()
             isVisible(R.id.iv_custom_view)
-            matchText(R.id.tv_custom_view, "My Custom view")
             clickButton(R.id.btn_action_1)
         }
     }
+
+    fun sleep(millis: Long = 500) = apply {
+        Thread.sleep(millis)
+    }
+
+    private fun swipeDown(id: Int) {
+        onView(withId(id)).perform(ViewActions.swipeDown())
+    }
+
+    private fun swipeUp(id: Int) {
+        onView(withId(id)).perform(ViewActions.swipeUp())
+    }
+
 
 /*    @Test
     fun enterAnimation() {
