@@ -41,8 +41,8 @@ import me.toptas.fancyshowcase.ext.circularExitAnimation
 import me.toptas.fancyshowcase.ext.globalLayoutListener
 import me.toptas.fancyshowcase.ext.rootView
 import me.toptas.fancyshowcase.internal.AndroidProperties
+import me.toptas.fancyshowcase.internal.AnimationPresenter
 import me.toptas.fancyshowcase.internal.DeviceParamsImpl
-import me.toptas.fancyshowcase.internal.FadeInAnimation
 import me.toptas.fancyshowcase.internal.FadeOutAnimation
 import me.toptas.fancyshowcase.internal.FancyImageView
 import me.toptas.fancyshowcase.internal.FocusedView
@@ -65,6 +65,7 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
 
     private lateinit var activity: Activity
     private lateinit var presenter: Presenter
+    private lateinit var animationPresenter: AnimationPresenter
     private var props = Properties()
     private var androidProps = AndroidProperties()
 
@@ -96,7 +97,9 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
         props = _props
         activity = _activity
         androidProps = _androidProps
-        presenter = Presenter(preferences(activity), DeviceParamsImpl(activity, this), props)
+        val deviceParams = DeviceParamsImpl(activity, this)
+        presenter = Presenter(preferences(activity), deviceParams, props)
+        animationPresenter = AnimationPresenter(androidProps, deviceParams)
 
         presenter.initialize()
         mCenterX = presenter.centerX
@@ -180,15 +183,12 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
 
     /**
      * Starts enter animation of FancyShowCaseView
-     */
+     */ @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private fun startEnterAnimation() {
-        if (androidProps.enterAnimation != null) {
-            if (androidProps.enterAnimation is FadeInAnimation && shouldShowCircularAnimation()) {
-                doCircularEnterAnimation()
-            } else {
-                startAnimation(androidProps.enterAnimation)
-            }
-        }
+        animationPresenter.enterAnimation(
+                { doCircularEnterAnimation() },
+                { animation -> startAnimation(animation) }
+        )
     }
 
     /**
