@@ -96,6 +96,7 @@ class FancyShowCaseViewTest {
     @Test
     fun focusBorderSize() {
         robot {
+            swipeUp(R.id.scrollView)
             clickButton(R.id.btn_focus_rect_color)
             checkFancyShowCase()
         }
