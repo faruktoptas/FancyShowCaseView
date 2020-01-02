@@ -45,6 +45,7 @@ internal class Presenter(private val pref: SharedPref,
     fun show(onShow: () -> Unit/*, waitForLayout: () -> Unit*/) {
         if (pref.isShownBefore(props.fancyId)) {
             props.dismissListener?.onSkipped(props.fancyId)
+            props.queueListener?.onNext()
             return
         }
         // if view is not laid out get, width/height values in onGlobalLayout
