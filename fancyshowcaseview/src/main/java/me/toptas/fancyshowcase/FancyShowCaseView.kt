@@ -92,13 +92,16 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
 
     var queueListener: OnQueueListener? = null
 
+    private inner class QueueListenerProxy : OnQueueListener {
+        override fun onNext() = queueListener?.onNext() ?: Unit
+    }
 
     private constructor(_activity: Activity, _props: Properties, _androidProps: AndroidProperties) : this(_activity) {
         props = _props
         activity = _activity
         androidProps = _androidProps
         val deviceParams = DeviceParamsImpl(activity, this)
-        presenter = Presenter(preferences(activity), deviceParams, props)
+        presenter = Presenter(preferences(activity), deviceParams, props.copy(queueListener = QueueListenerProxy()))
         animationPresenter = AnimationPresenter(androidProps, deviceParams)
 
         presenter.initialize()
