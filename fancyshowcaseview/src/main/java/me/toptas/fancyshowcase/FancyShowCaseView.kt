@@ -90,8 +90,11 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
     val focusShape: FocusShape
         get() = presenter.focusShape
 
-    var queueListener: OnQueueListener? = null
-
+    var queueListener: OnQueueListener?
+        set(value) {
+            props.queueListener = value
+        }
+        get() = props.queueListener
 
     private constructor(_activity: Activity, _props: Properties, _androidProps: AndroidProperties) : this(_activity) {
         props = _props
