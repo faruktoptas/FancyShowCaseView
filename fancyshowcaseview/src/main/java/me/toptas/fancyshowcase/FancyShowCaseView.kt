@@ -296,13 +296,14 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
         }
     }
 
-    /**
-     * Saves the FancyShowCaseView id to SharedPreferences that is shown once
-     */
+
     private fun writeShown() {
         presenter.writeShown(props.fancyId)
     }
 
+    /**
+     * Returns true if FancyShowCaseView is shown once
+     */
     fun isShownBefore() = if (props.fancyId != null) isShownBefore(context, props.fancyId!!) else false
 
 
@@ -526,7 +527,9 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
          */
         fun disableFocusAnimation() = apply { props.focusAnimationEnabled = false }
 
-
+        /**
+         * Focus animation max value. Bigger value makes larger focus area
+         */
         fun focusAnimationMaxValue(focusAnimationMaxValue: Int) = apply {
             props.focusAnimationMaxValue = focusAnimationMaxValue
         }
@@ -580,6 +583,9 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
         fun resetAllShowOnce(context: Context) = preferences(context).resetAll()
 
 
+        /**
+         * Returns true if FancyShowCaseView with given id is shown once
+         */
         @JvmStatic
         fun isShownBefore(context: Context, id: String) = SharedPrefImpl(context).isShownBefore(id)
 

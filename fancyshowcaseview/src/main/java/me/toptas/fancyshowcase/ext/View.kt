@@ -20,7 +20,7 @@ internal fun View.globalLayoutListener(onLayout: () -> Unit) {
 
 internal class AnimationEndListener(private val animationEnd: () -> Unit) : Animation.AnimationListener {
     override fun onAnimationRepeat(p0: Animation?) {
-
+        // No-op
     }
 
     override fun onAnimationEnd(p0: Animation?) {
@@ -28,7 +28,7 @@ internal class AnimationEndListener(private val animationEnd: () -> Unit) : Anim
     }
 
     override fun onAnimationStart(p0: Animation?) {
-
+        // No-op
     }
 
 }

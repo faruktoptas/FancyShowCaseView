@@ -15,11 +15,13 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito
 
+/**
+ * Unit tests for Presenter
+ */
 class PresenterTest {
 
     private val pref: SharedPref = mock()
     private val device: DeviceParams = mock()
-
     private val props = Properties()
 
     @Before
