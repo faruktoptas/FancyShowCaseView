@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package me.toptas.fancyshowcase
+package me.toptas.fancyshowcase.internal
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -27,31 +28,43 @@ import android.graphics.PorterDuffXfermode
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
+import android.view.ViewGroup
+import android.widget.FrameLayout
+import androidx.annotation.VisibleForTesting
 import androidx.appcompat.widget.AppCompatImageView
+import me.toptas.fancyshowcase.FocusShape
 
 /**
  * ImageView with focus area animation
  */
 
-internal class FancyImageView : AppCompatImageView {
+class FancyImageView : AppCompatImageView {
 
-    private lateinit var calculator: Calculator
+    private lateinit var presenter: Presenter
     private lateinit var backgroundPaint: Paint
     private lateinit var erasePaint: Paint
-    private lateinit var circleBorderPaint: Paint
+    private var circleBorderPaint: Paint? = null
     private lateinit var path: Path
     private lateinit var rectF: RectF
 
     private var bitmap: Bitmap? = null
-    private val focusBorderColor = Color.TRANSPARENT
-    private var bgColor = Color.TRANSPARENT
-    private var focusBorderSize: Int = 0
+    var bgColor = Color.TRANSPARENT
+    var focusBorderColor = Color.TRANSPARENT
+        set(value) {
+            field = value
+            circleBorderPaint?.color = focusBorderColor
+        }
+    var focusBorderSize: Int = 0
+        set(value) {
+            field = value
+            circleBorderPaint?.strokeWidth = field.toFloat()
+        }
 
     private var animCounter = 0
     private var step = 1
     private var animMoveFactor = 1.0
-    private var focusAnimationMaxValue: Int = 0
-    private var focusAnimationStep: Int = 0
+    var focusAnimationMaxValue: Int = 0
+    var focusAnimationStep: Int = 0
 
     var roundRectRadius = 20
     var focusAnimationEnabled = true
@@ -100,30 +113,9 @@ internal class FancyImageView : AppCompatImageView {
         rectF = RectF()
     }
 
-    /**
-     * Setting parameters for background an animation
-     *
-     * @param _backgroundColor background color
-     * @param _calculator      calculator object for calculations
-     */
-    fun setParameters(_backgroundColor: Int, _calculator: Calculator) {
-        bgColor = _backgroundColor
+    internal fun setPresenter(_presenter: Presenter) {
         animMoveFactor = 1.0
-        calculator = _calculator
-    }
-
-    /**
-     * Setting parameters for focus border
-     *
-     * @param focusBorderColor
-     * @param _focusBorderSize
-     */
-    fun setBorderParameters(focusBorderColor: Int, _focusBorderSize: Int) {
-        focusBorderSize = _focusBorderSize
-        circleBorderPaint.apply {
-            color = focusBorderColor
-            strokeWidth = focusBorderSize.toFloat()
-        }
+        presenter = _presenter
     }
 
 
@@ -140,13 +132,13 @@ internal class FancyImageView : AppCompatImageView {
             }
         }
         canvas.drawBitmap(bitmap!!, 0f, 0f, backgroundPaint)
-        if (calculator.hasFocus()) {
-            if (calculator.focusShape == FocusShape.CIRCLE) {
+        if (presenter.hasFocus) {
+            if (presenter.focusShape == FocusShape.CIRCLE) {
                 drawCircle(canvas)
             } else {
                 drawRoundedRectangle(canvas)
             }
-            if (focusAnimationEnabled && !Calculator.DISABLE_ANIMATIONS_FOR_TESTING) {
+            if (focusAnimationEnabled && !DISABLE_ANIMATIONS_FOR_TESTING) {
                 if (animCounter == focusAnimationMaxValue) {
                     step = -1 * focusAnimationStep
                 } else if (animCounter == 0) {
@@ -164,15 +156,15 @@ internal class FancyImageView : AppCompatImageView {
      * @param canvas canvas to draw
      */
     private fun drawCircle(canvas: Canvas) {
-        canvas.drawCircle(calculator.circleCenterX.toFloat(), calculator.circleCenterY.toFloat(),
-                calculator.circleRadius(animCounter, animMoveFactor), erasePaint)
+        canvas.drawCircle(presenter.circleCenterX.toFloat(), presenter.circleCenterY.toFloat(),
+                presenter.circleRadius(animCounter, animMoveFactor), erasePaint)
 
         if (focusBorderSize > 0) {
             path.apply {
                 reset()
-                moveTo(calculator.circleCenterX.toFloat(), calculator.circleCenterY.toFloat())
-                addCircle(calculator.circleCenterX.toFloat(), calculator.circleCenterY.toFloat(),
-                        calculator.circleRadius(animCounter, animMoveFactor), Path.Direction.CW)
+                moveTo(presenter.circleCenterX.toFloat(), presenter.circleCenterY.toFloat())
+                addCircle(presenter.circleCenterX.toFloat(), presenter.circleCenterY.toFloat(),
+                        presenter.circleRadius(animCounter, animMoveFactor), Path.Direction.CW)
                 canvas.drawPath(this, circleBorderPaint)
             }
         }
@@ -184,10 +176,10 @@ internal class FancyImageView : AppCompatImageView {
      * @param canvas canvas to draw
      */
     private fun drawRoundedRectangle(canvas: Canvas) {
-        val left = calculator.roundRectLeft(animCounter, animMoveFactor)
-        val top = calculator.roundRectTop(animCounter, animMoveFactor)
-        val right = calculator.roundRectRight(animCounter, animMoveFactor)
-        val bottom = calculator.roundRectBottom(animCounter, animMoveFactor)
+        val left = presenter.roundRectLeft(animCounter, animMoveFactor)
+        val top = presenter.roundRectTop(animCounter, animMoveFactor)
+        val right = presenter.roundRectRight(animCounter, animMoveFactor)
+        val bottom = presenter.roundRectBottom(animCounter, animMoveFactor)
 
         rectF.apply {
             set(left, top, right, bottom)
@@ -196,17 +188,13 @@ internal class FancyImageView : AppCompatImageView {
         if (focusBorderSize > 0) {
             path.apply {
                 reset()
-                moveTo(calculator.circleCenterX.toFloat(), calculator.circleCenterY.toFloat())
+                moveTo(presenter.circleCenterX.toFloat(), presenter.circleCenterY.toFloat())
                 addRoundRect(rectF, roundRectRadius.toFloat(), roundRectRadius.toFloat(), Path.Direction.CW)
                 canvas.drawPath(this, circleBorderPaint)
             }
         }
     }
 
-    fun setFocusAnimationParameters(maxValue: Int, step: Int) {
-        focusAnimationMaxValue = maxValue
-        focusAnimationStep = step
-    }
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
@@ -218,5 +206,24 @@ internal class FancyImageView : AppCompatImageView {
 
     companion object {
         private const val DEFAULT_ANIM_COUNTER = 20
+
+        @VisibleForTesting
+        var DISABLE_ANIMATIONS_FOR_TESTING = false
+
+        internal fun instance(activity: Activity, props: Properties, pre: Presenter) =
+                FancyImageView(activity).apply {
+                    setPresenter(pre)
+                    bgColor = props.backgroundColor
+                    focusAnimationMaxValue = props.focusAnimationMaxValue
+                    focusAnimationStep = props.focusAnimationStep
+                    focusAnimationEnabled = props.focusAnimationEnabled
+                    focusBorderColor = props.focusBorderColor
+                    focusBorderSize = props.focusBorderSize
+                    roundRectRadius = props.roundRectRadius
+
+                    layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.MATCH_PARENT)
+
+                }
     }
 }

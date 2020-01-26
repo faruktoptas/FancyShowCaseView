@@ -1,4 +1,4 @@
-package me.toptas.fancyshowcase
+package me.toptas.fancyshowcase.internal
 
 import android.view.animation.AlphaAnimation
 

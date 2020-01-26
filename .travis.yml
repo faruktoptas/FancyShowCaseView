@@ -20,6 +20,7 @@ before_script:
 - chmod +x gradlew
 
 script:
+    - ./gradlew test
     - ./gradlew assembleDebug
 
 
