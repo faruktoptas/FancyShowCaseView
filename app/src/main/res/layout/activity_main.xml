@@ -66,6 +66,12 @@
             android:orientation="horizontal">
 
             <Button
+                android:id="@+id/btn_title_typeface"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Title Typeface" />
+
+            <Button
                 android:id="@+id/btn_title_size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
