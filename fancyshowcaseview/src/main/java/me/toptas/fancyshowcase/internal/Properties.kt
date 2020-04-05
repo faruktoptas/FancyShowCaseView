@@ -1,5 +1,6 @@
 package me.toptas.fancyshowcase.internal
 
+import android.graphics.Typeface
 import android.text.Spanned
 import android.view.ViewGroup
 import android.view.animation.Animation
@@ -45,7 +46,8 @@ internal data class Properties(
         var dismissListener: DismissListener? = null,
         var queueListener: OnQueueListener? = null,
         var focusedView: IFocusedView? = null,
-        var clickableView: IFocusedView? = null
+        var clickableView: IFocusedView? = null,
+        var typeface: Typeface? = null
 )
 
 internal data class AndroidProperties(
