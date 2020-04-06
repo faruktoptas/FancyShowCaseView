@@ -130,6 +130,7 @@ class FancyShowCaseViewTest {
     fun customView() {
         robot {
             swipeUp(R.id.scrollView)
+            sleep()
             clickButton(R.id.btn_custom_view)
             isVisible(R.id.iv_custom_view)
             clickButton(R.id.btn_action_1)
