@@ -19,6 +19,7 @@ package me.toptas.fancyshowcase
 import android.annotation.TargetApi
 import android.app.Activity
 import android.content.Context
+import android.graphics.Typeface
 import android.os.Build
 import android.text.Spanned
 import android.util.AttributeSet
@@ -239,6 +240,9 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
                 } else {
                     textView.setTextAppearance(activity, props.titleStyle)
                 }
+                androidProps.typeface?.let {
+                    textView.typeface = it
+                }
                 if (props.titleSize != -1) {
                     textView.setTextSize(props.titleSizeUnit, props.titleSize.toFloat())
                 }
@@ -348,6 +352,14 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
         fun title(title: Spanned) = apply {
             androidProps.spannedTitle = title
             props.title = null
+        }
+
+        /**
+         * @param typeface title typeface
+         * @return Builder
+         */
+        fun typeface(typeface: Typeface?) = apply {
+            androidProps.typeface = typeface
         }
 
         /**

@@ -1,5 +1,6 @@
 package me.toptas.fancyshowcase.internal
 
+import android.graphics.Typeface
 import android.text.Spanned
 import android.view.ViewGroup
 import android.view.animation.Animation
@@ -52,5 +53,6 @@ internal data class AndroidProperties(
         var spannedTitle: Spanned? = null,
         var mRoot: ViewGroup? = null,
         var enterAnimation: Animation? = FadeInAnimation(),
-        var exitAnimation: Animation? = FadeOutAnimation()
+        var exitAnimation: Animation? = FadeOutAnimation(),
+        var typeface: Typeface? = null
 )
