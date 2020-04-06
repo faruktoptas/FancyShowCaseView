@@ -240,7 +240,7 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
                 } else {
                     textView.setTextAppearance(activity, props.titleStyle)
                 }
-                props.typeface?.let {
+                androidProps.typeface?.let {
                     textView.typeface = it
                 }
                 if (props.titleSize != -1) {
@@ -359,7 +359,7 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
          * @return Builder
          */
         fun typeface(typeface: Typeface?) = apply {
-            props.typeface = typeface
+            androidProps.typeface = typeface
         }
 
         /**
