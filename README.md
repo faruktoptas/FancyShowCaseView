@@ -4,6 +4,7 @@
 <p align="center">
         <a href="https://travis-ci.org/faruktoptas/FancyShowCaseView"><img src="https://travis-ci.org/faruktoptas/FancyShowCaseView.svg?branch=master" alt="Status"/></a>
         <a href="https://bintray.com/faruktoptas/fancyshowcaseview/fancyshowcaseview"><img src="https://api.bintray.com/packages/faruktoptas/fancyshowcaseview/fancyshowcaseview/images/download.svg" alt="Download"/></a>
+        <a href="https://www.codacy.com/manual/faruktoptas/FancyShowCaseView?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=faruktoptas/FancyShowCaseView&amp;utm_campaign=Badge_Grade"><img src="https://app.codacy.com/project/badge/Grade/47050961b2d947d3a58292f50d74e110" alt=""/></a>
         <a href="https://android-arsenal.com/details/1/5440"><img src="https://img.shields.io/badge/Android%20Arsenal-FancyShowCaseView-brightgreen.svg?style=flat" alt=""/></a>
         <a href="https://android-arsenal.com/api?level=10"><img src="https://img.shields.io/badge/API-14%2B-blue.svg?style=flat" alt=""/></a>
         <a href="https://gitter.im/faruktoptas/FancyShowCaseView?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge"><img src="https://badges.gitter.im/faruktoptas/FancyShowCaseView.svg" alt=""/></a>

@@ -31,27 +31,8 @@ import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.Toast
-import kotlinx.android.synthetic.main.activity_main.btn_anim
-import kotlinx.android.synthetic.main.activity_main.btn_another_activity
-import kotlinx.android.synthetic.main.activity_main.btn_background_color
-import kotlinx.android.synthetic.main.activity_main.btn_border_color
-import kotlinx.android.synthetic.main.activity_main.btn_custom_queue
-import kotlinx.android.synthetic.main.activity_main.btn_custom_view
-import kotlinx.android.synthetic.main.activity_main.btn_custom_view2
-import kotlinx.android.synthetic.main.activity_main.btn_focus
-import kotlinx.android.synthetic.main.activity_main.btn_focus2
-import kotlinx.android.synthetic.main.activity_main.btn_focus_delay
-import kotlinx.android.synthetic.main.activity_main.btn_focus_dismiss_on_focus_area
-import kotlinx.android.synthetic.main.activity_main.btn_focus_rect_color
-import kotlinx.android.synthetic.main.activity_main.btn_no_anim
-import kotlinx.android.synthetic.main.activity_main.btn_queue
-import kotlinx.android.synthetic.main.activity_main.btn_rect_position
-import kotlinx.android.synthetic.main.activity_main.btn_recycler_view
-import kotlinx.android.synthetic.main.activity_main.btn_rounded_rect
-import kotlinx.android.synthetic.main.activity_main.btn_rounded_rect_dismiss_on_focus_area
-import kotlinx.android.synthetic.main.activity_main.btn_simple
-import kotlinx.android.synthetic.main.activity_main.btn_spanned
-import kotlinx.android.synthetic.main.activity_main.btn_title_size
+import androidx.core.content.res.ResourcesCompat
+import kotlinx.android.synthetic.main.activity_main.*
 import me.toptas.fancyshowcase.FancyShowCaseView
 import me.toptas.fancyshowcase.FocusShape
 import me.toptas.fancyshowcase.listener.DismissListener
@@ -106,6 +87,18 @@ class MainActivity : BaseActivity() {
                     .focusOn(it)
                     .title("Title size")
                     .titleSize(48, TypedValue.COMPLEX_UNIT_SP)
+                    .build()
+                    .show()
+        }
+
+        // Set title typeface
+        btn_title_typeface.setOnClickListener {
+            val typeface =
+                    ResourcesCompat.getFont(this, R.font.pacifico_regular)
+            FancyShowCaseView.Builder(this)
+                    .focusOn(it)
+                    .title("Title typeface")
+                    .typeface(typeface)
                     .build()
                     .show()
         }
