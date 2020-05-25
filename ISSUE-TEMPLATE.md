@@ -1,6 +1,6 @@
 ### Used FancyShowCaseView version
 
-### Screenshot if there is something wrong with ui.
+### Screenshot if there is something wrong with ui
 
 ### How you show/hide FancyShowCaseView (in Activity or Fragment, in which method)
 
