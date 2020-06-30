@@ -29,8 +29,8 @@ fancyShowCaseView.focusShape
 
 1.2.1 (06-08-2019)
 ----------------------------
-*   New: #155 Disable enter/exit animations by setting null
-*   Fix: #154 roundRectRadius can't be set 0
+*   New: Disable enter/exit animations by setting null [#155](https://github.com/faruktoptas/FancyShowCaseView/issues/155)
+*   Fix: roundRectRadius can't be set 0 [#154](https://github.com/faruktoptas/FancyShowCaseView/issues/154)
 
 1.2.0 (23-07-2019)
 ----------------------------
