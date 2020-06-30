@@ -1,8 +1,12 @@
-## 1.3.0
-*   Builder parameters move to Properties data class
-*   Move logic part to a separate Presenter class with a testable way
-*   Add unit tests to Presenter
-*   Remove Calculator class
+Change Log
+==========
+
+1.3.0 (26-01-2020)
+----------------------------
+*   New: Builder parameters move to Properties data class
+*   New: Move logic part to a separate Presenter class with a testable way
+*   New: Add unit tests to Presenter
+*   New: Remove Calculator class
 
 ### API Changes
 Old:
@@ -23,13 +27,11 @@ fancyShowCaseView.focusHeight
 fancyShowCaseView.focusShape
 ```
 
-## 1.2.1
+1.2.1 (06-08-2019)
+----------------------------
+*   New: #155 Disable enter/exit animations by setting null
+*   Fix: #154 roundRectRadius can't be set 0
 
-### Bug Fixes
-*   Fix #154 roundRectRadius can't be set 0
-### Features and Improvements
-*   Fix #155 Disable enter/exit animations by setting null
-
-## 1.2.0
-### Features and Improvements
-*   Migrated to androidx. This release and all future releases are only compatible with projects that have been migrated to androidx.
+1.2.0 (23-07-2019)
+----------------------------
+*   New: Migrated to androidx. This release and all future releases are only compatible with projects that have been migrated to androidx.
