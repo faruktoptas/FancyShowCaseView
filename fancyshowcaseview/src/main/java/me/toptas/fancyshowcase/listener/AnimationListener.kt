@@ -21,7 +21,14 @@ package me.toptas.fancyshowcase.listener
  */
 
 interface AnimationListener {
+
+    /**
+     * Triggers after default (not custom) enter animation finishes
+     */
     fun onEnterAnimationEnd()
 
+    /**
+     * Triggers after default (not custom) exit animation finishes
+     */
     fun onExitAnimationEnd()
 }

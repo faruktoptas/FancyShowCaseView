@@ -170,11 +170,6 @@ class FancyImageView : AppCompatImageView {
         }
     }
 
-    /**
-     * Draws focus rounded rectangle
-     *
-     * @param canvas canvas to draw
-     */
     private fun drawRoundedRectangle(canvas: Canvas) {
         val left = presenter.roundRectLeft(animCounter, animMoveFactor)
         val top = presenter.roundRectTop(animCounter, animMoveFactor)
