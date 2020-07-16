@@ -69,7 +69,7 @@ class FancyImageView : AppCompatImageView {
     var roundRectRadius = 20
     var focusAnimationEnabled = true
         set(value) {
-            animCounter = if (value) DEFAULT_ANIM_COUNTER else 0
+            animCounter = if (value) DEFAULT_ANIM_COUNTER.coerceAtMost(focusAnimationMaxValue) else 0
             field = value
         }
 
@@ -139,9 +139,9 @@ class FancyImageView : AppCompatImageView {
                 drawRoundedRectangle(canvas)
             }
             if (focusAnimationEnabled && !DISABLE_ANIMATIONS_FOR_TESTING) {
-                if (animCounter == focusAnimationMaxValue) {
+                if (animCounter >= focusAnimationMaxValue) {
                     step = -1 * focusAnimationStep
-                } else if (animCounter == 0) {
+                } else if (animCounter <= 0) {
                     step = focusAnimationStep
                 }
                 animCounter += step
