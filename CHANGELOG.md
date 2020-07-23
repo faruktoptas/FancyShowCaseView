@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+1.3.1 (24-07-2020)
+----------------------------
+*   Fix: Wrong focus for scaled views. [#201](https://github.com/faruktoptas/FancyShowCaseView/issues/201)
+*   Fix: Animations won't "turn" unless parameters match. [#197](https://github.com/faruktoptas/FancyShowCaseView/issues/197)
+*   New: Add custom typeface support. [#179](https://github.com/faruktoptas/FancyShowCaseView/issues/179)
+
 1.3.0 (26-01-2020)
 ----------------------------
 *   New: Builder parameters move to Properties data class
