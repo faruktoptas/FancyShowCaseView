@@ -14,9 +14,9 @@ internal interface IFocusedView {
 
 internal class FocusedView(private val view: View) : IFocusedView {
 
-    override fun width() = view.width
+    override fun width() = (view.scaleX * view.width.toFloat()).toInt()
 
-    override fun height() = view.height
+    override fun height() = (view.scaleY * view.height.toFloat()).toInt()
 
     override fun getLocationInWindow(viewPoint: IntArray): IntArray {
         view.getLocationInWindow(viewPoint)
