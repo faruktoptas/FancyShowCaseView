@@ -296,6 +296,14 @@ class MainActivity : BaseActivity() {
             startActivity(Intent(this, RecyclerViewActivity::class.java))
         }
 
+        btn_scaled_view.setOnClickListener {
+            FancyShowCaseView.Builder(this)
+                    .focusOn(it)
+                    .title("Focus on Scaled View")
+                    .build()
+                    .show()
+        }
+
         btn_focus_delay.setOnClickListener {
             FancyShowCaseView.Builder(this)
                     .title("Focus with delay")
