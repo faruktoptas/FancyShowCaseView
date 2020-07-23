@@ -236,5 +236,15 @@
             android:layout_marginTop="@dimen/default_margin"
             android:text="Using with RecyclerView" />
 
+        <Button
+            android:id="@+id/btn_scaled_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/double_margin"
+            android:layout_marginBottom="@dimen/double_margin"
+            android:scaleX="1.5"
+            android:scaleY="1.5"
+            android:text="Scaled Button" />
+
     </LinearLayout>
 </ScrollView>
