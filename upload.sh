@@ -1,3 +1,3 @@
 #!/bin/bash
 
-./gradlew install;./gradlew bintrayUpload
+./gradlew clean install;./gradlew bintrayUpload
