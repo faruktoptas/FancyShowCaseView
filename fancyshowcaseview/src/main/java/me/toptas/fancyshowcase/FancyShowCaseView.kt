@@ -185,9 +185,6 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
         })
     }
 
-    /**
-     * Starts enter animation of FancyShowCaseView
-     */ @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private fun startEnterAnimation() {
         animationPresenter.enterAnimation(
                 { doCircularEnterAnimation() },
