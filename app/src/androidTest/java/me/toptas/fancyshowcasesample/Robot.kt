@@ -28,6 +28,7 @@ import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import android.view.Gravity
+import android.widget.RelativeLayout
 import android.widget.TextView
 import me.toptas.fancyshowcase.FancyShowCaseView
 import me.toptas.fancyshowcasesample.R
@@ -70,7 +71,7 @@ class Robot {
     }
 
     fun checkTextGravity(activity: Activity, gravity: Int) {
-        Assert.assertTrue(activity.findViewById<TextView>(R.id.fscv_title).gravity == gravity)
+        Assert.assertTrue(activity.findViewById<RelativeLayout>(R.id.fcsv_title_container).gravity == gravity)
     }
 
     fun checkTextSize(activity: Activity, size: Int) {
