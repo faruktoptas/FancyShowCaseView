@@ -234,6 +234,7 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
         inflateCustomView(R.layout.fancy_showcase_view_layout_title, object : OnViewInflateListener {
             override fun onViewInflated(view: View) {
                 val textView = view.findViewById<View>(R.id.fscv_title) as TextView
+                val textContainer = view.findViewById<RelativeLayout>(R.id.fcsv_title_container)
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     textView.setTextAppearance(props.titleStyle)
@@ -246,7 +247,7 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
                 if (props.titleSize != -1) {
                     textView.setTextSize(props.titleSizeUnit, props.titleSize.toFloat())
                 }
-                textView.gravity = props.titleGravity
+                textContainer.gravity = props.titleGravity
                 if (props.fitSystemWindows) {
                     val params = textView.layoutParams as RelativeLayout.LayoutParams
                     params.setMargins(0, getStatusBarHeight(context), 0, 0)
