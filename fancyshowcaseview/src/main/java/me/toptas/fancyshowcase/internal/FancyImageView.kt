@@ -150,11 +150,6 @@ class FancyImageView : AppCompatImageView {
         }
     }
 
-    /**
-     * Draws focus circle
-     *
-     * @param canvas canvas to draw
-     */
     private fun drawCircle(canvas: Canvas) {
         canvas.drawCircle(presenter.circleCenterX.toFloat(), presenter.circleCenterY.toFloat(),
                 presenter.circleRadius(animCounter, animMoveFactor), erasePaint)
