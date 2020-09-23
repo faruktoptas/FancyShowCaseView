@@ -32,7 +32,7 @@
 
 ## Download
 ```gradle
-implementation 'me.toptas.fancyshowcase:fancyshowcaseview:1.3.2'
+implementation 'me.toptas.fancyshowcase:fancyshowcaseview:1.3.3'
 ```
 
 ## Download (For non-androidx projects)
