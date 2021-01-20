@@ -434,6 +434,12 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
         fun focusCircleRadiusFactor(factor: Double) = apply { props.focusCircleRadiusFactor = factor }
 
         /**
+         * @param factor focus rectangle size factor (default value = 1)
+         * @return Builder
+         */
+        fun focusRectSizeFactor(factor: Double) = apply { props.focusRectangleSizeFactor = factor }
+
+        /**
          * @param layoutResource custom view layout resource
          * @param listener       inflate listener for custom view
          * @return Builder

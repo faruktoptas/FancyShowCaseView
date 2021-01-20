@@ -105,23 +105,31 @@ internal class Presenter(private val pref: SharedPref,
         return (viewRadius + animCounter * animMoveFactor).toFloat()
     }
 
+    private fun roundRectWidthFactorAdd(): Double {
+        return focusWidth * props.focusRectangleSizeFactor - focusWidth;
+    }
+
+    private fun roundRectHeightFactorAdd(): Double{
+        return(focusHeight * props.focusRectangleSizeFactor - focusHeight)
+    }
+
     fun roundRectLeft(animCounter: Int, animMoveFactor: Double): Float {
-        return (circleCenterX.toDouble() - (focusWidth / 2).toDouble() - animCounter * animMoveFactor).toFloat()
+        return (circleCenterX.toDouble() - (focusWidth / 2).toDouble() - roundRectWidthFactorAdd() / 2 - animCounter * animMoveFactor).toFloat()
     }
 
 
     fun roundRectTop(animCounter: Int, animMoveFactor: Double): Float {
-        return (circleCenterY.toDouble() - (focusHeight / 2).toDouble() - animCounter * animMoveFactor).toFloat()
+        return (circleCenterY.toDouble() - (focusHeight / 2).toDouble() - roundRectHeightFactorAdd() / 2 - animCounter * animMoveFactor).toFloat()
     }
 
 
     fun roundRectRight(animCounter: Int, animMoveFactor: Double): Float {
-        return (circleCenterX.toDouble() + (focusWidth / 2).toDouble() + animCounter * animMoveFactor).toFloat()
+        return (circleCenterX.toDouble() + (focusWidth / 2).toDouble() + roundRectWidthFactorAdd() / 2 + animCounter * animMoveFactor).toFloat()
     }
 
 
     fun roundRectBottom(animCounter: Int, animMoveFactor: Double): Float {
-        return (circleCenterY.toDouble() + (focusHeight / 2).toDouble() + animCounter * animMoveFactor).toFloat()
+        return (circleCenterY.toDouble() + (focusHeight / 2).toDouble() + roundRectHeightFactorAdd() / 2 + animCounter * animMoveFactor).toFloat()
     }
 
     fun getCircleCenter(view: IFocusedView): CircleCenter {
