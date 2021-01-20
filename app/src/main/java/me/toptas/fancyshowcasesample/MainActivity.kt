@@ -159,6 +159,18 @@ class MainActivity : BaseActivity() {
                     .show()
         }
 
+        //Shows FancyShowCaseView with focusRectSizeFactor 1.5 and roundRectRadius 60
+        btn_larger_rect.setOnClickListener {
+            FancyShowCaseView.Builder(this)
+                    .focusOn(it)
+                    .focusShape(FocusShape.ROUNDED_RECTANGLE)
+                    .roundRectRadius(60)
+                    .focusRectSizeFactor(1.5)
+                    .title("Focus on View with larger rounded rectangle")
+                    .build()
+                    .show()
+        }
+
         //Shows FancyShowCaseView at specific position (round rectangle shape)
         btn_rect_position.setOnClickListener {
             FancyShowCaseView.Builder(this)
