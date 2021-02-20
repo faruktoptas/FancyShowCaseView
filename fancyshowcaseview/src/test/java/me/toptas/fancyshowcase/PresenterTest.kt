@@ -24,6 +24,9 @@ class PresenterTest {
     private val device: DeviceParams = mock()
     private val props = Properties()
 
+    /**
+     * Set initial device values
+     */
     @Before
     fun setup() {
         whenever(device.currentBackgroundColor()).thenReturn(100)
@@ -32,6 +35,9 @@ class PresenterTest {
         whenever(device.getStatusBarHeight()).thenReturn(80)
     }
 
+    /**
+     * Check initial styles & properties
+     */
     @Test
     fun testInitialValues() {
         val presenter = Presenter(pref, device, props)
@@ -44,6 +50,9 @@ class PresenterTest {
         assert(presenter.centerY == 960)
     }
 
+    /**
+     * Default background color
+     */
     @Test
     fun testDefaultBgColor() {
         props.backgroundColor = 200
@@ -52,6 +61,9 @@ class PresenterTest {
         assert(props.backgroundColor == 200)
     }
 
+    /**
+     * Title gravity
+     */
     @Test
     fun testGravity() {
         val presenter = Presenter(pref, device, props)
@@ -61,6 +73,9 @@ class PresenterTest {
         assert(props.titleGravity == Gravity.TOP)
     }
 
+    /**
+     * Title style
+     */
     @Test
     fun testTitleStyle() {
         val presenter = Presenter(pref, device, props)
@@ -70,6 +85,9 @@ class PresenterTest {
         assert(props.titleStyle == 101)
     }
 
+    /**
+     * If view with same id show before, don't show again
+     */
     @Test
     fun testNotShownBefore() {
         whenever(pref.isShownBefore(anyVararg())).thenReturn(false)
@@ -86,6 +104,9 @@ class PresenterTest {
         assert(onShowTriggered)
     }
 
+    /**
+     * Wait for laid out if try to show before laid out
+     */
     @Test
     fun testViewNotLaidOut() {
         whenever(pref.isShownBefore(anyVararg())).thenReturn(false)
@@ -103,6 +124,9 @@ class PresenterTest {
         assert(!onShowTriggered)
     }
 
+    /**
+     * Test dismissListener triggers if shown before
+     */
     @Test
     fun testShownBefore() {
         whenever(pref.isShownBefore(anyVararg())).thenReturn(true)
@@ -120,8 +144,11 @@ class PresenterTest {
     }
 
 
+    /**
+     * Test dismissListener triggers if shown before
+     */
     @Test
-    fun testFocus() {
+    fun `test dismissListener onSkipped is not called if not shown before`() {
         whenever(pref.isShownBefore(anyVararg())).thenReturn(false)
         props.focusedView = mock()
         props.dismissListener = mock()
@@ -136,6 +163,9 @@ class PresenterTest {
         assert(onShowTriggered)
     }
 
+    /**
+     * Test calculated height before focus
+     */
     @Test
     fun testCalculationsWithoutFocus() {
         val presenter = Presenter(pref, device, props)
@@ -149,6 +179,9 @@ class PresenterTest {
         assert(presenter.bitmapHeight == 1920)
     }
 
+    /**
+     * Test calculated values
+     */
     @Test
     fun testCalculationsWithFocus() {
         val presenter = Presenter(pref, device, props)
@@ -164,6 +197,9 @@ class PresenterTest {
         assert(presenter.circleCenterY == 120)
     }
 
+    /**
+     * Test calculated values for abobe 19 devices
+     */
     @Test
     fun testCalculationsWithFocus2() {
         val presenter = Presenter(pref, device, props)
@@ -180,6 +216,9 @@ class PresenterTest {
         assert(presenter.circleCenterY == 200)
     }
 
+    /**
+     * Set pref
+     */
     @Test
     fun testWriteShown() {
         val presenter = Presenter(pref, device, props)
@@ -187,6 +226,9 @@ class PresenterTest {
         verify(pref).writeShown("id")
     }
 
+    /**
+     * Circle focus position
+     */
     @Test
     fun testFocusPositionsCircle() {
         val presenter = Presenter(pref, device, props)
@@ -202,6 +244,9 @@ class PresenterTest {
         assert(presenter.hasFocus)
     }
 
+    /**
+     * Rectangle focus position
+     */
     @Test
     fun testFocusPositionsRectangle() {
         val presenter = Presenter(pref, device, props)
@@ -221,6 +266,9 @@ class PresenterTest {
 
     }
 
+    /**
+     * Auto text position calculations below
+     */
     @Test
     fun testAutoTextPositionBelow() {
         val presenter = Presenter(pref, device, props)
@@ -238,6 +286,9 @@ class PresenterTest {
         assert(pos.height == 1770)
     }
 
+    /**
+     * Auto text position calculations above
+     */
     @Test
     fun testAutoTextPositionAbove() {
         val presenter = Presenter(pref, device, props)
@@ -256,6 +307,9 @@ class PresenterTest {
         assert(pos.height == 1200)
     }
 
+    /**
+     * Click in the focused zone
+     */
     @Test
     fun testClickWithinZoneCircle() {
         val presenter = Presenter(pref, device, props)
