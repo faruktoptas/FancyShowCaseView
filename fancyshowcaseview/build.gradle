@@ -1,33 +1,8 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'com.jfrog.bintray'
 apply plugin: 'com.github.dcendents.android-maven'
 
-ext {
-
-    bintrayRepo = "fancyshowcaseview"
-    bintrayName = "fancyshowcaseview"
-
-    publishedGroupId = 'me.toptas.fancyshowcase'
-    libraryName = 'fancyshowcaseview'
-    artifact = 'fancyshowcaseview'
-
-    libraryVersion = "$version_name"
-
-    libraryDescription = 'An easy-to-use customisable show case view with circular reveal animation.'
-
-    siteUrl = 'https://github.com/faruktoptas/FancyShowCaseView'
-    gitUrl = 'https://github.com/faruktoptas/FancyShowCaseView'
-
-    developerId = 'faruktoptas'
-    developerName = 'Faruk Toptas'
-    developerEmail = 'faruktoptas@gmail.com'
-
-    licenseName = 'The Apache Software License, Version 2.0'
-    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-    allLicenses = ["Apache-2.0"]
-}
-
+group = 'com.github.faruktoptas'
 
 android {
     compileSdkVersion compile_sdk_version
@@ -69,7 +44,8 @@ repositories {
     mavenCentral()
 }
 
-if (project.rootProject.file('local.properties').exists()) {
-    apply from: 'https://raw.githubusercontent.com/wajahatkarim3/JCenter-Gradle-Scripts/master/install.gradle'
-    apply from: 'https://raw.githubusercontent.com/wajahatkarim3/JCenter-Gradle-Scripts/master/bintray.gradle'
+tasks.withType(Test) {
+    testLogging {
+        events "started", "passed", "skipped", "failed"
+    }
 }
