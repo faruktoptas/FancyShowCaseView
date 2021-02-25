@@ -1,7 +1,7 @@
 ![FancyShowCaseView](https://user-images.githubusercontent.com/1595227/56747421-9aafc580-6786-11e9-9344-e3216f7aa660.png)
 <p align="center">An easy-to-use customizable show case view with circular reveal animation.</p>
 <p align="center">
-        <a href="https://travis-ci.org/faruktoptas/FancyShowCaseView"><img src="https://travis-ci.org/faruktoptas/FancyShowCaseView.svg?branch=master" alt="Status"/></a>
+        <a href="https://github.com/faruktoptas/FancyShowCaseView/actions"><img src="https://github.com/faruktoptas/FancyShowCaseView/workflows/build/badge.svg" alt="Status"/></a>
         <a href="https://jitpack.io/#faruktoptas/FancyShowCaseView"><img src="https://jitpack.io/v/faruktoptas/FancyShowCaseView.svg" alt="Download"/></a>
         <a href="https://www.codacy.com/manual/faruktoptas/FancyShowCaseView?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=faruktoptas/FancyShowCaseView&amp;utm_campaign=Badge_Grade"><img src="https://app.codacy.com/project/badge/Grade/47050961b2d947d3a58292f50d74e110" alt=""/></a>
         <a href="https://android-arsenal.com/details/1/5440"><img src="https://img.shields.io/badge/Android%20Arsenal-FancyShowCaseView-brightgreen.svg?style=flat" alt=""/></a>
