@@ -17,6 +17,7 @@
 package me.toptas.fancyshowcasesample
 
 import android.os.Bundle
+import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -44,8 +45,42 @@ class SecondActivity : BaseActivity() {
                 toolbar.visibility = View.VISIBLE
             }
         }
+
+        btn_vcleft.setOnClickListener {
+            showShowCase(Gravity.LEFT)
+        }
+        btn_vcright.setOnClickListener {
+            showShowCase(Gravity.RIGHT)
+        }
+        btn_hctop.setOnClickListener {
+            showShowCase(Gravity.TOP or Gravity.CENTER_HORIZONTAL)
+        }
+        btn_hcbottom.setOnClickListener {
+            showShowCase(Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL)
+        }
+
+        btn_topleft.setOnClickListener {
+            showShowCase(Gravity.TOP or Gravity.LEFT)
+        }
+        btn_bottomright.setOnClickListener {
+            showShowCase(Gravity.BOTTOM or Gravity.RIGHT)
+        }
+        btn_topright.setOnClickListener {
+            showShowCase(Gravity.TOP or Gravity.RIGHT)
+        }
+        btn_bottomleft.setOnClickListener {
+            showShowCase(Gravity.BOTTOM or Gravity.LEFT)
+        }
     }
 
+    private fun showShowCase(gravity: Int){
+        FancyShowCaseView.Builder(this)
+                .title("Long text, Long text, Long text, Long text, Long text, Long text, Long text")
+                .titleGravity(gravity)
+                .fitSystemWindows(true)
+                .build()
+                .show()
+    }
 
     private fun focusOnButton() {
         FancyShowCaseView.Builder(this@SecondActivity)
