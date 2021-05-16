@@ -60,16 +60,16 @@ class FancyImageView : AppCompatImageView {
             circleBorderPaint?.strokeWidth = field.toFloat()
         }
 
-    private var animCounter = 0
-    private var step = 1
+    private var animCounter = 0.0
+    private var step = 1.0
     private var animMoveFactor = 1.0
-    var focusAnimationMaxValue: Int = 0
-    var focusAnimationStep: Int = 0
+    var focusAnimationMaxValue: Double = 0.0
+    var focusAnimationStep: Double = 0.0
 
     var roundRectRadius = 20
     var focusAnimationEnabled = true
         set(value) {
-            animCounter = if (value) DEFAULT_ANIM_COUNTER.coerceAtMost(focusAnimationMaxValue) else 0
+            animCounter = if (value) DEFAULT_ANIM_COUNTER.coerceAtMost(focusAnimationMaxValue) else 0.0
             field = value
         }
 
@@ -195,7 +195,7 @@ class FancyImageView : AppCompatImageView {
     }
 
     companion object {
-        private const val DEFAULT_ANIM_COUNTER = 20
+        private const val DEFAULT_ANIM_COUNTER = 20.0
 
         @VisibleForTesting
         var DISABLE_ANIMATIONS_FOR_TESTING = false
