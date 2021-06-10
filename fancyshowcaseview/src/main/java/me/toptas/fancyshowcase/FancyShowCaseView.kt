@@ -544,14 +544,14 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
         /**
          * Focus animation max value. Bigger value makes larger focus area
          */
-        fun focusAnimationMaxValue(focusAnimationMaxValue: Int) = apply {
+        fun focusAnimationMaxValue(focusAnimationMaxValue: Double) = apply {
             props.focusAnimationMaxValue = focusAnimationMaxValue
         }
 
         /**
          * Step for focus animation. Default value is 1.
          */
-        fun focusAnimationStep(focusAnimationStep: Int) = apply { props.focusAnimationStep = focusAnimationStep }
+        fun focusAnimationStep(focusAnimationStep: Double) = apply { props.focusAnimationStep = focusAnimationStep }
 
         /**
          * Shows the FancyShowCaseView after a delay.

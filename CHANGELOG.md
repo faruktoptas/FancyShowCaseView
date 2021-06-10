@@ -1,6 +1,21 @@
 Change Log
 ==========
 
+1.3.6 (24-07-2020)
+----------------------------
+*   Fix: Make focus animation step double
+
+### API Changes
+Old:
+```kotlin
+focusAnimationStep(Int)
+```
+
+New:
+```kotlin
+focusAnimationStep(Double)
+```
+
 1.3.1 (24-07-2020)
 ----------------------------
 *   Fix: Wrong focus for scaled views. [#201](https://github.com/faruktoptas/FancyShowCaseView/issues/201)

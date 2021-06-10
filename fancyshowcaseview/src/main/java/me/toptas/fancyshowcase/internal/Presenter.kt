@@ -101,26 +101,26 @@ internal class Presenter(private val pref: SharedPref,
         hasFocus = true
     }
 
-    fun circleRadius(animCounter: Int, animMoveFactor: Double): Float {
+    fun circleRadius(animCounter: Double, animMoveFactor: Double): Float {
         return (viewRadius + animCounter * animMoveFactor).toFloat()
     }
 
-    fun roundRectLeft(animCounter: Int, animMoveFactor: Double): Float {
+    fun roundRectLeft(animCounter: Double, animMoveFactor: Double): Float {
         return (circleCenterX.toDouble() - (focusWidth / 2).toDouble() - animCounter * animMoveFactor).toFloat()
     }
 
 
-    fun roundRectTop(animCounter: Int, animMoveFactor: Double): Float {
+    fun roundRectTop(animCounter: Double, animMoveFactor: Double): Float {
         return (circleCenterY.toDouble() - (focusHeight / 2).toDouble() - animCounter * animMoveFactor).toFloat()
     }
 
 
-    fun roundRectRight(animCounter: Int, animMoveFactor: Double): Float {
+    fun roundRectRight(animCounter: Double, animMoveFactor: Double): Float {
         return (circleCenterX.toDouble() + (focusWidth / 2).toDouble() + animCounter * animMoveFactor).toFloat()
     }
 
 
-    fun roundRectBottom(animCounter: Int, animMoveFactor: Double): Float {
+    fun roundRectBottom(animCounter: Double, animMoveFactor: Double): Float {
         return (circleCenterY.toDouble() + (focusHeight / 2).toDouble() + animCounter * animMoveFactor).toFloat()
     }
 
@@ -151,7 +151,7 @@ internal class Presenter(private val pref: SharedPref,
         val focusHeight = clickableView.height()
         val focusRadius =
                 if (FocusShape.CIRCLE == props.focusShape)
-                    circleRadius(0, 1.0)
+                    circleRadius(0.0, 1.0)
                 else 0f
 
         when (props.focusShape) {
@@ -185,8 +185,8 @@ internal class Presenter(private val pref: SharedPref,
     }
 
     fun calcAutoTextPosition(): AutoTextPosition {
-        val top = roundRectTop(0, 0.0)
-        val bottom = roundRectBottom(0, 0.0)
+        val top = roundRectTop(0.0, 0.0)
+        val bottom = roundRectBottom(0.0, 0.0)
 
         val spaceAbove = top.toInt()
         val spaceBelow = bitmapHeight - bottom.toInt()
