@@ -160,7 +160,7 @@ class FancyImageView : AppCompatImageView {
                 moveTo(presenter.circleCenterX.toFloat(), presenter.circleCenterY.toFloat())
                 addCircle(presenter.circleCenterX.toFloat(), presenter.circleCenterY.toFloat(),
                         presenter.circleRadius(animCounter, animMoveFactor), Path.Direction.CW)
-                canvas.drawPath(this, circleBorderPaint)
+                canvas.drawPath(this, circleBorderPaint!!)
             }
         }
     }
@@ -180,7 +180,7 @@ class FancyImageView : AppCompatImageView {
                 reset()
                 moveTo(presenter.circleCenterX.toFloat(), presenter.circleCenterY.toFloat())
                 addRoundRect(rectF, roundRectRadius.toFloat(), roundRectRadius.toFloat(), Path.Direction.CW)
-                canvas.drawPath(this, circleBorderPaint)
+                canvas.drawPath(this, circleBorderPaint!!)
             }
         }
     }
