@@ -158,11 +158,16 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
                 when {
                     props.enableTouchOnFocusedView && presenter.isWithinZone(event.x, event.y, props.focusedView!!) -> {
                         // Check if there is a clickable view within the focusable view
-                        // Let the touch event pass through to clickable zone only if clicking within, otherwise return true to ignore event
-                        // If there is no clickable view we let through the click to the focusable view
                         props.clickableView?.let {
-                            return@OnTouchListener !presenter.isWithinZone(event.x, event.y, it)
-                        } ?: return@OnTouchListener false
+                            // Let the touch event pass through to clickable zone only if clicking within,
+                            // otherwise return true to ignore event
+                            val result = presenter.isWithinZone(event.x, event.y, it)
+                            if(result)
+                                hide()
+                            return@OnTouchListener !result
+                        } ?:
+                        // If there is no clickable view we let through the click to the focusable view
+                        return@OnTouchListener false
                     }
                     props.closeOnTouch -> hide()
                 }
