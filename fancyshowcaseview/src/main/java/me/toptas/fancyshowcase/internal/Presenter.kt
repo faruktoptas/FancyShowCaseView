@@ -62,8 +62,8 @@ internal class Presenter(private val pref: SharedPref,
         bitmapWidth = deviceWidth
         bitmapHeight = deviceHeight - if (props.fitSystemWindows) 0 else device.getStatusBarHeight()
         if (props.focusedView != null) {
-            focusWidth = props.focusedView!!.width()
-            focusHeight = props.focusedView!!.height()
+            focusWidth = (props.focusedView!!.width()*props.focusRectSizeFactor).toInt()
+            focusHeight = (props.focusedView!!.height()*props.focusRectSizeFactor).toInt()
             props.focusedView?.apply {
                 val center = getCircleCenter(this)
                 circleCenterX = center.x
