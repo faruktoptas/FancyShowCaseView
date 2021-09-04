@@ -242,6 +242,34 @@ class MainActivity : BaseActivity() {
             })
         }
 
+        //Shows a FancyShowCaseView with custom enter, exit animations 2
+
+        btn_anim2.setOnClickListener {
+            val enterAnimation = AnimationUtils.loadAnimation(this, R.anim.slid_in_bottom)
+            val exitAnimation = AnimationUtils.loadAnimation(this, R.anim.slid_out_top)
+
+            val fancyShowCaseView = FancyShowCaseView.Builder(this)
+                    .focusOn(it)
+                    .title("Custom enter and exit animations 2.")
+                    .enterAnimation(enterAnimation)
+                    .exitAnimation(exitAnimation)
+                    .build()
+            fancyShowCaseView.show()
+            exitAnimation.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationStart(animation: Animation) {
+
+                }
+
+                override fun onAnimationEnd(animation: Animation) {
+                    fancyShowCaseView.removeView()
+                }
+
+                override fun onAnimationRepeat(animation: Animation) {
+
+                }
+            })
+        }
+
         //Shows a FancyShowCaseView view custom view inflation
         btn_custom_view.setOnClickListener {
             mFancyShowCaseView = FancyShowCaseView.Builder(this)

@@ -183,6 +183,13 @@
                 android:layout_marginTop="@dimen/default_margin"
                 android:text="Custom\nAnimation" />
 
+            <Button
+                android:id="@+id/btn_anim2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_margin"
+                android:text="Custom\nAnimation2" />
+
 
         </LinearLayout>
 
