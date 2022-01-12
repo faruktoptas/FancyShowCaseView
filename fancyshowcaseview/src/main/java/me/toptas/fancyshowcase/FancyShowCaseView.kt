@@ -16,6 +16,7 @@
 
 package me.toptas.fancyshowcase
 
+import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Activity
 import android.content.Context
@@ -166,6 +167,7 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun setupTouchListener() {
         setOnTouchListener(OnTouchListener { _, event ->
             if (event.actionMasked == MotionEvent.ACTION_DOWN) {
@@ -431,6 +433,12 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
          * @return Builder
          */
         fun focusCircleRadiusFactor(factor: Double) = apply { props.focusCircleRadiusFactor = factor }
+
+        /**
+         * @param factor focus rectangle size factor (default value = 1)
+         * @return Builder
+         */
+        fun focusRectSizeFactor(factor: Double) = apply { props.focusRectSizeFactor = factor }
 
         /**
          * @param layoutResource custom view layout resource

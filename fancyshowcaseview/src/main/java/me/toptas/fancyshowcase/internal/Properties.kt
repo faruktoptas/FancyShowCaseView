@@ -14,6 +14,7 @@ internal data class Properties(
         var title: String? = null,
         var fancyId: String? = null,
         var focusCircleRadiusFactor: Double = 1.0,
+        var focusRectSizeFactor: Double = 1.0,
         var backgroundColor: Int = 0,
         var focusBorderColor: Int = 0,
         var titleGravity: Int = -1,

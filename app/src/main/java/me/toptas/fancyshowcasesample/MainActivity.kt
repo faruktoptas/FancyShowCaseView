@@ -139,6 +139,7 @@ class MainActivity : BaseActivity() {
                 FancyShowCaseView.Builder(this)
                         .focusOn(it)
                         .focusShape(FocusShape.ROUNDED_RECTANGLE)
+                        .focusRectSizeFactor(1.5)
                         .roundRectRadius(90)
                         .enableTouchOnFocusedView(true)
                         .title("Focus on View \n(dismiss on focus area)")
@@ -164,6 +165,7 @@ class MainActivity : BaseActivity() {
             FancyShowCaseView.Builder(this)
                     .title("Focus on larger view")
                     .focusRectAtPosition(260, 85, 480, 80)
+                    .focusRectSizeFactor(1.5)
                     .roundRectRadius(60)
                     .dismissListener(object : DismissListener {
                         override fun onDismiss(id: String?) {
