@@ -24,7 +24,6 @@
                                    tools:openDrawer="start">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
 
         android:layout_height="match_parent">
@@ -65,6 +64,80 @@
                 android:layout_height="wrap_content"
                 android:text="Toggle Toolbar" />
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:text="Title text Gravity"
+                android:textAllCaps="false"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_vcleft"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="V.C. LEFT" />
+
+                <Button
+                    android:id="@+id/btn_vcright"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="V.C. RIGHT" />
+
+                <Button
+                    android:id="@+id/btn_hctop"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="H.C. TOP" />
+
+                <Button
+                    android:id="@+id/btn_hcbottom"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="H.C. BOTTOM" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_topleft"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TOP LEFT" />
+
+                <Button
+                    android:id="@+id/btn_bottomleft"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="BOT. LEFT" />
+
+                <Button
+                    android:id="@+id/btn_topright"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TOP RIGHT" />
+
+                <Button
+                    android:id="@+id/btn_bottomright"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="BOT. RIGHT" />
+
+            </LinearLayout>
 
         </LinearLayout>
 

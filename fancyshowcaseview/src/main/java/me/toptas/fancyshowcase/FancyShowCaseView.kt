@@ -36,22 +36,8 @@ import androidx.annotation.AttrRes
 import androidx.annotation.LayoutRes
 import androidx.annotation.RequiresApi
 import androidx.annotation.StyleRes
-import me.toptas.fancyshowcase.ext.AnimationEndListener
-import me.toptas.fancyshowcase.ext.attachedShowCase
-import me.toptas.fancyshowcase.ext.circularEnterAnimation
-import me.toptas.fancyshowcase.ext.circularExitAnimation
-import me.toptas.fancyshowcase.ext.globalLayoutListener
-import me.toptas.fancyshowcase.ext.rootView
-import me.toptas.fancyshowcase.internal.AndroidProperties
-import me.toptas.fancyshowcase.internal.AnimationPresenter
-import me.toptas.fancyshowcase.internal.DeviceParamsImpl
-import me.toptas.fancyshowcase.internal.FadeOutAnimation
-import me.toptas.fancyshowcase.internal.FancyImageView
-import me.toptas.fancyshowcase.internal.FocusedView
-import me.toptas.fancyshowcase.internal.Presenter
-import me.toptas.fancyshowcase.internal.Properties
-import me.toptas.fancyshowcase.internal.SharedPrefImpl
-import me.toptas.fancyshowcase.internal.getStatusBarHeight
+import me.toptas.fancyshowcase.ext.*
+import me.toptas.fancyshowcase.internal.*
 import me.toptas.fancyshowcase.listener.AnimationListener
 import me.toptas.fancyshowcase.listener.DismissListener
 import me.toptas.fancyshowcase.listener.OnQueueListener
@@ -174,11 +160,16 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
                 when {
                     props.enableTouchOnFocusedView && presenter.isWithinZone(event.x, event.y, props.focusedView!!) -> {
                         // Check if there is a clickable view within the focusable view
-                        // Let the touch event pass through to clickable zone only if clicking within, otherwise return true to ignore event
-                        // If there is no clickable view we let through the click to the focusable view
                         props.clickableView?.let {
-                            return@OnTouchListener !presenter.isWithinZone(event.x, event.y, it)
-                        } ?: return@OnTouchListener false
+                            // Let the touch event pass through to clickable zone only if clicking within,
+                            // otherwise return true to ignore event
+                            val result = presenter.isWithinZone(event.x, event.y, it)
+                            if(result)
+                                hide()
+                            return@OnTouchListener !result
+                        } ?:
+                        // If there is no clickable view we let through the click to the focusable view
+                        return@OnTouchListener false
                     }
                     props.closeOnTouch -> hide()
                 }
@@ -247,7 +238,7 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
                 if (props.titleSize != -1) {
                     textView.setTextSize(props.titleSizeUnit, props.titleSize.toFloat())
                 }
-                textContainer.gravity = props.titleGravity
+                takeIf { props.titleGravity !=-1}?.let {textView.gravity = props.titleGravity}
                 if (props.fitSystemWindows) {
                     val params = textView.layoutParams as RelativeLayout.LayoutParams
                     params.setMargins(0, getStatusBarHeight(context), 0, 0)
@@ -365,7 +356,7 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
 
         /**
          * @param style        title text style
-         * @param titleGravity title gravity
+         * @param titleGravity title align for text box
          * @return Builder
          */
         fun titleStyle(@StyleRes style: Int, titleGravity: Int) = apply {
@@ -374,20 +365,7 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
         }
 
         /**
-         * @param focusBorderColor Border color for focus shape
-         * @return Builder
-         */
-        fun focusBorderColor(focusBorderColor: Int) = apply { props.focusBorderColor = focusBorderColor }
-
-        /**
-         * @param focusBorderSize Border size for focus shape
-         * @return Builder
-         */
-        fun focusBorderSize(focusBorderSize: Int) = apply { props.focusBorderSize = focusBorderSize }
-
-
-        /**
-         * @param titleGravity title gravity
+         * @param titleGravity title gravity inside container
          * @return Builder
          */
         fun titleGravity(titleGravity: Int) = apply { props.titleGravity = titleGravity }
@@ -403,6 +381,18 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
             props.titleSize = titleSize
             props.titleSizeUnit = unit
         }
+
+        /**
+         * @param focusBorderColor Border color for focus shape
+         * @return Builder
+         */
+        fun focusBorderColor(focusBorderColor: Int) = apply { props.focusBorderColor = focusBorderColor }
+
+        /**
+         * @param focusBorderSize Border size for focus shape
+         * @return Builder
+         */
+        fun focusBorderSize(focusBorderSize: Int) = apply { props.focusBorderSize = focusBorderSize }
 
         /**
          * @param id unique identifier for FancyShowCaseView
