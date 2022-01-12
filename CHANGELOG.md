@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+1.3.7 (12-01-2022)
+----------------------------
+*   New: Added focusRectSizeFactor
+
 1.3.6 (24-07-2020)
 ----------------------------
 *   Fix: Make focus animation step double
