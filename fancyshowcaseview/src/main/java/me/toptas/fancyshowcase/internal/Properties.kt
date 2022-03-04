@@ -23,6 +23,7 @@ internal data class Properties(
         var titleSizeUnit: Int = -1,
         var customViewRes: Int = 0,
         var focusBorderSize: Int = 0,
+        var dashedLineInfo: DashInfo? = null,
         var roundRectRadius: Int = 20,
         var closeOnTouch: Boolean = true,
         var enableTouchOnFocusedView: Boolean = false,
@@ -57,3 +58,5 @@ internal data class AndroidProperties(
         var exitAnimation: Animation? = FadeOutAnimation(),
         var typeface: Typeface? = null
 )
+
+data class DashInfo(val intervalOnSize: Float, val intervalOffSize: Float)

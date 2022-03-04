@@ -156,6 +156,27 @@
             android:layout_marginTop="@dimen/default_margin"
             android:text="A button with rect border color" />
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_focus_dashed_rect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_margin"
+            android:text="Dashed Rect Border" />
+
+        <Button
+            android:id="@+id/btn_focus_dashed_circle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_margin"
+            android:text="Dashed Circle Border" />
+    </LinearLayout>
+
         <Button
             android:id="@+id/btn_focus_delay"
             android:layout_width="wrap_content"
