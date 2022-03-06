@@ -44,6 +44,7 @@ import me.toptas.fancyshowcase.ext.globalLayoutListener
 import me.toptas.fancyshowcase.ext.rootView
 import me.toptas.fancyshowcase.internal.AndroidProperties
 import me.toptas.fancyshowcase.internal.AnimationPresenter
+import me.toptas.fancyshowcase.internal.DashInfo
 import me.toptas.fancyshowcase.internal.DeviceParamsImpl
 import me.toptas.fancyshowcase.internal.FadeOutAnimation
 import me.toptas.fancyshowcase.internal.FancyImageView
@@ -385,6 +386,14 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
          */
         fun focusBorderSize(focusBorderSize: Int) = apply { props.focusBorderSize = focusBorderSize }
 
+        /**
+         * @param intervalOnSize size of the dashed part of the line
+         * @param intervalOffSize size of the blank part of the line
+         * @return Builder
+         */
+        fun focusDashedBorder(intervalOnSize: Float, intervalOffSize: Float) = apply {
+            props.dashedLineInfo = DashInfo(intervalOnSize, intervalOffSize)
+        }
 
         /**
          * @param titleGravity title gravity

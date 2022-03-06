@@ -194,6 +194,36 @@ class MainActivity : BaseActivity() {
                     .show()
         }
 
+        //Shows a FancyShowCaseView that has dashed rectangle border
+        btn_focus_dashed_rect.setOnClickListener {
+            FancyShowCaseView.Builder(this)
+                    .focusOn(it)
+                    .title("Focus with dashed line")
+                    .focusShape(FocusShape.ROUNDED_RECTANGLE)
+                    .roundRectRadius(50)
+                    .focusBorderSize(10)
+                    .focusDashedBorder(10.0f, 10.0f)
+                    .focusBorderColor(Color.RED)
+                    .titleStyle(0, Gravity.TOP)
+                    .build()
+                    .show()
+        }
+
+        //Shows a FancyShowCaseView that has dashed circle border
+        btn_focus_dashed_circle.setOnClickListener {
+            FancyShowCaseView.Builder(this)
+                    .focusOn(it)
+                    .title("Focus with dashed line")
+                    .focusShape(FocusShape.CIRCLE)
+                    .roundRectRadius(50)
+                    .focusBorderSize(10)
+                    .focusDashedBorder(10.0f, 10.0f)
+                    .focusBorderColor(Color.RED)
+                    .titleStyle(0, Gravity.TOP)
+                    .build()
+                    .show()
+        }
+
         //Shows a FancyShowCaseView with background color and title style
         btn_background_color.setOnClickListener {
             FancyShowCaseView.Builder(this)

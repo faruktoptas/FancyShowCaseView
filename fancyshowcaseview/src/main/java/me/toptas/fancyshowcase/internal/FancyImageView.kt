@@ -26,6 +26,7 @@ import android.graphics.Path
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
 import android.graphics.RectF
+import android.graphics.DashPathEffect
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
@@ -58,6 +59,18 @@ class FancyImageView : AppCompatImageView {
         set(value) {
             field = value
             circleBorderPaint?.strokeWidth = field.toFloat()
+        }
+
+    private var dashedLineInfo: DashInfo? = null
+        set(value) {
+            field = value
+            value?.let { dashInfo ->
+                circleBorderPaint?.pathEffect =
+                    DashPathEffect(
+                        floatArrayOf(dashInfo.intervalOnSize, dashInfo.intervalOffSize),
+                        1f
+                    )
+            }
         }
 
     private var animCounter = 0.0
@@ -210,6 +223,7 @@ class FancyImageView : AppCompatImageView {
                     focusBorderColor = props.focusBorderColor
                     focusBorderSize = props.focusBorderSize
                     roundRectRadius = props.roundRectRadius
+                    dashedLineInfo = props.dashedLineInfo
 
                     layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                             ViewGroup.LayoutParams.MATCH_PARENT)
