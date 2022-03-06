@@ -59,4 +59,4 @@ internal data class AndroidProperties(
         var typeface: Typeface? = null
 )
 
-data class DashInfo(val intervalOnSize: Float, val intervalOffSize: Float)
+internal data class DashInfo(val intervalOnSize: Float, val intervalOffSize: Float)
