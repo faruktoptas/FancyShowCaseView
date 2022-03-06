@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+1.3.9 (06-03-2022)
+----------------------------
+*   New: Added focusDashedBorder
+
 1.3.8 (12-01-2022)
 ----------------------------
 *   New: Added focusRectSizeFactor
