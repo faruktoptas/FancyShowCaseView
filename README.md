@@ -44,7 +44,7 @@ allprojects {
 Then, add the library to your module `build.gradle`
 ```gradle
 dependencies {
-    implementation 'com.github.faruktoptas:FancyShowCaseView:1.3.5'
+    implementation 'com.github.faruktoptas:FancyShowCaseView:1.3.9'
 }
 ```
 
@@ -57,21 +57,53 @@ new FancyShowCaseView.Builder(this)
         .show();
 ```
 
+## Supported Properties
+
+| Command | Description |
+| --- | --- |
+| `focusOn` |  |
+| `title` |  |
+| `typeface` |  |
+| `titleStyle` |  |
+| `titleGravity` |  |
+| `titleSize` |  |
+| `enableAutoTextPosition` | Center text position vertically. |
+| `backgroundColor` |  |
+| `fitSystemWindows` |  |
+| `focusShape` |  |
+| `focusBorderColor` |  |
+| `focusBorderSize` |  |
+| `focusDashedBorder` |  |
+| `roundRectRadius` |  |
+| `showOnce` |  |
+| `clickableOn` |  |
+| `focusCircleRadiusFactor` |  |
+| `focusRectSizeFactor` |  |
+| `customView` |  |
+| `closeOnTouch` |  |
+| `enableTouchOnFocusedView` |  |
+| `enterAnimation` |  |
+| `exitAnimation` |  |
+| `animationListener` |  |
+| `disableFocusAnimation` |  |
+| `focusAnimationMaxValue` | Focus animation max value. Bigger value makes larger focus area. |
+| `focusAnimationStep` | Step for focus animation. Default value is 1. |
+| `focusRectAtPosition` |  |
+| `focusCircleAtPosition` |  |
+| `dismissListener` |  |
+| `delay` | Shows the FancyShowCaseView after a delay. |
+
 Please see [wiki](https://github.com/faruktoptas/FancyShowCaseView/wiki) for more samples.  
 
 ## Already in use in following apps
 (feel free to send me new projects)
 
 *   [News - Newspaper & Magazine](https://play.google.com/store/apps/details?id=com.moblino.countrynews)
-*   [XMusic Pro](https://play.google.com/store/apps/details?id=com.riseapps.xmusic)
-*   [Muqabla -Free Online Live Quiz Game Show](https://play.google.com/store/apps/details?id=com.es.triv)
 *   [NN Senin Mobilin](https://play.google.com/store/apps/details?id=com.eteration.ing.mobile.android)
 *   [Umíme česky](https://play.google.com/store/apps/details?id=cz.muni.fi.umimecesky)
-*   [Get Off Your Phone](https://play.google.com/store/apps/details?id=com.nephi.getoffyourphone)
 *   [DHIS2 Capture](https://play.google.com/store/apps/details?id=com.dhis2)
 *   [Travel Weather - Forecast plan for your trip](https://play.google.com/store/apps/details?id=pozzo.apps.travelweather)
 *   [muSync for Spotify](https://play.google.com/store/apps/details?id=com.kloczl.musync.android)
-*   [GPT Numara Sorgulama](https://play.google.com/store/apps/details?id=com.saykoweb.arkadannekadartanyorsun)
 
 ## Sample App
  [Latest Release](https://github.com/faruktoptas/FancyShowCaseView/releases)
