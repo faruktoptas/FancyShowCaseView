@@ -62,8 +62,7 @@ class MainActivity : BaseActivity() {
         btn_focus.setOnClickListener {
             FancyShowCaseView.Builder(this)
                     .focusOn(it)
-                    .title("Focus on View only once")
-                    .showOnce("id0")
+                    .title("Circle Focus on View")
                     .build()
                     .show()
         }
@@ -341,6 +340,15 @@ class MainActivity : BaseActivity() {
                     .title("Focus with delay")
                     .focusOn(it)
                     .delay(1000)
+                    .build()
+                    .show()
+        }
+
+        btn_show_once.setOnClickListener {
+            FancyShowCaseView.Builder(this)
+                    .focusOn(it)
+                    .title("Clean storage to see this again")
+                    .showOnce("id0")
                     .build()
                     .show()
         }

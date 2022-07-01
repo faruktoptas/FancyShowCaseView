@@ -177,12 +177,26 @@
             android:text="Dashed Circle Border" />
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal">
+
         <Button
             android:id="@+id/btn_focus_delay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/default_margin"
             android:text="Delayed" />
+
+        <Button
+            android:id="@+id/btn_show_once"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_margin"
+            android:text="Show once" />
+    </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
