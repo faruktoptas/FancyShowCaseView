@@ -77,6 +77,7 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
     private var mCenterY: Int = 0
     private var mRoot: ViewGroup? = null
     private var fancyImageView: FancyImageView? = null
+    private var isHiding = false
 
     val focusCenterX: Int
         get() = presenter.circleCenterX
@@ -200,6 +201,9 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
      * Hides FancyShowCaseView with animation
      */
     fun hide() {
+        if(isHiding) return
+        isHiding = true
+
         if (androidProps.exitAnimation != null) {
             if (androidProps.exitAnimation is FadeOutAnimation && shouldShowCircularAnimation()) {
                 doCircularExitAnimation()
@@ -324,6 +328,7 @@ class FancyShowCaseView @JvmOverloads constructor(context: Context, attrs: Attri
         mRoot?.removeView(this)
         props.dismissListener?.onDismiss(props.fancyId)
         queueListener?.onNext()
+        isHiding = false
     }
 
     private fun shouldShowCircularAnimation(): Boolean {
