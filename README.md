@@ -61,21 +61,21 @@ new FancyShowCaseView.Builder(this)
 
 | Command | Description |
 | --- | --- |
-| `focusOn` |  |
-| `title` |  |
-| `typeface` |  |
-| `titleStyle` |  |
-| `titleGravity` |  |
-| `titleSize` |  |
+| `focusOn` | The view to be focused. |
+| `title` | The title text to be displayed.  |
+| `typeface` | The custom typeface for the title text. |
+| `titleStyle` | The text style for the title. (style defined in xml file) |
+| `titleGravity` | The gravity (alignment) of the title within the view (e.g., start, center, end). |
+| `titleSize` | The size of the title text, typically in sp units. |
 | `enableAutoTextPosition` | Center text position vertically. |
-| `backgroundColor` |  |
-| `fitSystemWindows` |  |
-| `focusShape` |  |
-| `focusBorderColor` |  |
-| `focusBorderSize` |  |
+| `backgroundColor` | The background color of the view, typically in hexadecimal or resource ID format. |
+| `fitSystemWindows` | This should be set to true, if your root view has this property set to true. |
+| `focusShape` | The shape of the focus area (e.g., rounded rectangle, circle). |
+| `focusBorderColor` | The color of the border around the focus area. |
+| `focusBorderSize` | The thickness of the border around the focus area (px) |
 | `focusDashedBorder` |  |
-| `roundRectRadius` |  |
-| `showOnce` |  |
+| `roundRectRadius` | The radius for rounded corners when the focus shape is a rectangle with rounded edges. Use 0 for rectangle shape. |
+| `showOnce` | Determines if the focus should be shown only once. |
 | `clickableOn` |  |
 | `focusCircleRadiusFactor` |  |
 | `focusRectSizeFactor` |  |
