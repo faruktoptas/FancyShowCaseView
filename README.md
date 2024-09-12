@@ -79,7 +79,7 @@ new FancyShowCaseView.Builder(this)
 | `clickableOn` |  |
 | `focusCircleRadiusFactor` |  |
 | `focusRectSizeFactor` |  |
-| `customView` |  |
+| `customView` | Use a fully customized view. If custom view used, title and title properties (titleStyle, titleGravity etc.) will be ignored. |
 | `closeOnTouch` |  |
 | `enableTouchOnFocusedView` |  |
 | `enterAnimation` |  |
