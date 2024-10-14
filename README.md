@@ -73,15 +73,15 @@ new FancyShowCaseView.Builder(this)
 | `focusShape` | The shape of the focus area (e.g., rounded rectangle, circle). |
 | `focusBorderColor` | The color of the border around the focus area. |
 | `focusBorderSize` | The thickness of the border around the focus area (px) |
-| `focusDashedBorder` |  |
+| `focusDashedBorder` | Makes focus border dashed |
 | `roundRectRadius` | The radius for rounded corners when the focus shape is a rectangle with rounded edges. Use 0 for rectangle shape. |
 | `showOnce` | Determines if the focus should be shown only once. |
-| `clickableOn` |  |
-| `focusCircleRadiusFactor` |  |
-| `focusRectSizeFactor` |  |
+| `clickableOn` | Let the touch event pass through to clickable view zone only if clicking within |
+| `focusCircleRadiusFactor` | Circle radius factor. Default value is 1. Bigger value makes bigger circle. |
+| `focusRectSizeFactor` | Focus rectangle size factor. Default value is 1. Bigger value makes bigger rectangle. |
 | `customView` | Use a fully customized view. If custom view used, title and title properties (titleStyle, titleGravity etc.) will be ignored. |
-| `closeOnTouch` |  |
-| `enableTouchOnFocusedView` |  |
+| `closeOnTouch` | Closes the FancyShowCaseView when touching it. |
+| `enableTouchOnFocusedView` | Enables touching the focused view. Default value is false. |
 | `enterAnimation` |  |
 | `exitAnimation` |  |
 | `animationListener` |  |
