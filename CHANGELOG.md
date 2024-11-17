@@ -1,6 +1,9 @@
 Change Log
 ==========
 
+## 1.4.0 (17-11-2024)
+* Update target sdk level to 34
+
 1.3.9 (06-03-2022)
 ----------------------------
 *   New: Added focusDashedBorder
