@@ -5,6 +5,7 @@ apply plugin: 'kotlin-android'
 group = 'com.github.faruktoptas'
 
 android {
+    namespace 'me.toptas.fancyshowcase'
     compileSdkVersion compile_sdk_version
 
     defaultConfig {

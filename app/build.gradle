@@ -19,6 +19,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
+    namespace 'me.toptas.fancyshowcasesample'
     compileSdkVersion compile_sdk_version
 
     defaultConfig {

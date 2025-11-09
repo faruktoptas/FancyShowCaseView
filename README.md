@@ -44,7 +44,7 @@ allprojects {
 Then, add the library to your module `build.gradle`
 ```gradle
 dependencies {
-    implementation 'com.github.faruktoptas:FancyShowCaseView:1.4.0'
+    implementation 'com.github.faruktoptas:FancyShowCaseView:1.5.0'
 }
 ```
 
