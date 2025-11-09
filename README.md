@@ -82,15 +82,15 @@ new FancyShowCaseView.Builder(this)
 | `customView` | Use a fully customized view. If custom view used, title and title properties (titleStyle, titleGravity etc.) will be ignored. |
 | `closeOnTouch` | Closes the FancyShowCaseView when touching it. |
 | `enableTouchOnFocusedView` | Enables touching the focused view. Default value is false. |
-| `enterAnimation` |  |
-| `exitAnimation` |  |
-| `animationListener` |  |
-| `disableFocusAnimation` |  |
+| `enterAnimation` | Custom animation to use when the FancyShowCaseView appears. |
+| `exitAnimation` | Custom animation to use when the FancyShowCaseView disappears. |
+| `animationListener` | Listener that triggers when enter/exit animations finish. |
+| `disableFocusAnimation` | Disables the pulsing focus animation. |
 | `focusAnimationMaxValue` | Focus animation max value. Bigger value makes larger focus area. |
 | `focusAnimationStep` | Step for focus animation. Default value is 1. |
-| `focusRectAtPosition` |  |
-| `focusCircleAtPosition` |  |
-| `dismissListener` |  |
+| `focusRectAtPosition` | Focus a rectangle at a specific position (x, y, width, height). |
+| `focusCircleAtPosition` | Focus a circle at a specific position (x, y, radius). |
+| `dismissListener` | Listener that triggers when the FancyShowCaseView is dismissed or skipped. |
 | `delay` | Shows the FancyShowCaseView after a delay. |
 
 Please see [wiki](https://github.com/faruktoptas/FancyShowCaseView/wiki) for more samples.  
