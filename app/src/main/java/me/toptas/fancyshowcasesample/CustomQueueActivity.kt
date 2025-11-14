@@ -20,14 +20,15 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 
-import kotlinx.android.synthetic.main.activity_queue.*
 import me.toptas.fancyshowcase.FancyShowCaseQueue
 import me.toptas.fancyshowcase.FancyShowCaseView
 import me.toptas.fancyshowcase.listener.DismissListener
 import me.toptas.fancyshowcase.listener.OnViewInflateListener
+import me.toptas.fancyshowcasesample.databinding.ActivityQueueBinding
 
 class CustomQueueActivity : BaseActivity() {
 
+    private lateinit var binding: ActivityQueueBinding
     private lateinit var queue: FancyShowCaseQueue
 
     private var mClickListener: View.OnClickListener = View.OnClickListener {
@@ -48,11 +49,12 @@ class CustomQueueActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_queue)
+        binding = ActivityQueueBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         val fancyShowCaseView1 = FancyShowCaseView.Builder(this)
                 .title("First Queue Item")
-                .focusOn(btn_queue_1)
+                .focusOn(binding.btnQueue1)
                 .customView(R.layout.layout_my_custom_view, object : OnViewInflateListener {
                     override fun onViewInflated(view: View) {
                         view.findViewById<View>(R.id.btn_action_1).setOnClickListener(mClickListener)
@@ -64,7 +66,7 @@ class CustomQueueActivity : BaseActivity() {
 
         val fancyShowCaseView2 = FancyShowCaseView.Builder(this)
                 .title("Second Queue Item")
-                .focusOn(btn_queue_2)
+                .focusOn(binding.btnQueue2)
                 .customView(R.layout.layout_my_custom_view, object : OnViewInflateListener {
                     override fun onViewInflated(view: View) {
                         view.findViewById<View>(R.id.btn_action_1).setOnClickListener(mClickListener)
@@ -76,7 +78,7 @@ class CustomQueueActivity : BaseActivity() {
 
         val fancyShowCaseView3 = FancyShowCaseView.Builder(this)
                 .title("Third Queue Item")
-                .focusOn(btn_queue_3!!)
+                .focusOn(binding.btnQueue3)
                 .customView(R.layout.layout_my_custom_view, object : OnViewInflateListener {
                     override fun onViewInflated(view: View) {
                         view.findViewById<View>(R.id.btn_action_1).setOnClickListener(mClickListener)

@@ -5,6 +5,7 @@ apply plugin: 'kotlin-android'
 group = 'com.github.faruktoptas'
 
 android {
+    namespace 'me.toptas.fancyshowcase'
     compileSdkVersion compile_sdk_version
 
     defaultConfig {
@@ -21,6 +22,13 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
     }
 }
 

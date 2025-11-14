@@ -22,25 +22,26 @@ import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.TextView
 
-import kotlinx.android.synthetic.main.activity_main.*
 import me.toptas.fancyshowcase.FancyShowCaseQueue
 import me.toptas.fancyshowcase.FancyShowCaseView
 import me.toptas.fancyshowcase.listener.OnViewInflateListener
+import me.toptas.fancyshowcasesample.databinding.ActivityAnimatedBinding
 
 
 class AnimatedActivity : BaseActivity() {
 
-
+    private lateinit var binding: ActivityAnimatedBinding
     private lateinit var queue: FancyShowCaseQueue
     private lateinit var fancyView: FancyShowCaseView
     private lateinit var fancyView2: FancyShowCaseView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_animated)
+        binding = ActivityAnimatedBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         fancyView = FancyShowCaseView.Builder(this)
-                .focusOn(btn_focus)
+                .focusOn(binding.btnFocus)
                 .customView(R.layout.layout_animated_view, object : OnViewInflateListener {
                     override fun onViewInflated(view: View) {
                         setAnimatedContent(view, fancyView)
@@ -49,7 +50,7 @@ class AnimatedActivity : BaseActivity() {
                 .build()
 
         fancyView2 = FancyShowCaseView.Builder(this)
-                .focusOn(btn_focus2)
+                .focusOn(binding.btnFocus2)
                 .customView(R.layout.layout_animated_view, object : OnViewInflateListener {
                     override fun onViewInflated(view: View) {
                         setAnimatedContent(view, fancyView2)
@@ -57,7 +58,7 @@ class AnimatedActivity : BaseActivity() {
                 })
                 .build()
 
-        btn_focus.setOnClickListener {
+        binding.btnFocus.setOnClickListener {
             queue = FancyShowCaseQueue().apply {
                 add(fancyView)
                 add(fancyView2)
