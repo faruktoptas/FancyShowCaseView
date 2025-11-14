@@ -32,14 +32,15 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
-import kotlinx.android.synthetic.main.activity_main.*
 import me.toptas.fancyshowcase.FancyShowCaseView
 import me.toptas.fancyshowcase.FocusShape
 import me.toptas.fancyshowcase.listener.DismissListener
 import me.toptas.fancyshowcase.listener.OnViewInflateListener
+import me.toptas.fancyshowcasesample.databinding.ActivityMainBinding
 
 class MainActivity : BaseActivity() {
 
+    private lateinit var binding: ActivityMainBinding
     private var mFancyShowCaseView: FancyShowCaseView? = null
 
     private var mClickListener: View.OnClickListener = View.OnClickListener {
@@ -49,9 +50,10 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        btn_simple.setOnClickListener {
+        binding.btnSimple.setOnClickListener {
             FancyShowCaseView.Builder(this)
                     .title("No Focus")
                     .build()
@@ -59,7 +61,7 @@ class MainActivity : BaseActivity() {
         }
 
         //Shows a FancyShowCaseView that focus on a vie
-        btn_focus.setOnClickListener {
+        binding.btnFocus.setOnClickListener {
             FancyShowCaseView.Builder(this)
                     .focusOn(it)
                     .title("Circle Focus on View")
@@ -69,7 +71,7 @@ class MainActivity : BaseActivity() {
 
         // Set title with spanned
         val spanned: Spanned = Html.fromHtml("<font color='#ff0000'>Spanned</font>")
-        btn_spanned.setOnClickListener {
+        binding.btnSpanned.setOnClickListener {
             FancyShowCaseView.Builder(this)
                     .focusOn(it)
                     .title(spanned)
@@ -81,7 +83,7 @@ class MainActivity : BaseActivity() {
         }
 
         // Set title size
-        btn_title_size.setOnClickListener {
+        binding.btnTitleSize.setOnClickListener {
             FancyShowCaseView.Builder(this)
                     .focusOn(it)
                     .title("Title size")
@@ -91,7 +93,7 @@ class MainActivity : BaseActivity() {
         }
 
         // Set title typeface
-        btn_title_typeface.setOnClickListener {
+        binding.btnTitleTypeface.setOnClickListener {
             val typeface =
                     ResourcesCompat.getFont(this, R.font.pacifico_regular)
             FancyShowCaseView.Builder(this)
@@ -103,7 +105,7 @@ class MainActivity : BaseActivity() {
         }
 
         //Shows a FancyShowCaseView with rounded rect focus shape
-        btn_rounded_rect.setOnClickListener {
+        binding.btnRoundedRect.setOnClickListener {
             FancyShowCaseView.Builder(this)
                     .focusOn(it)
                     .focusShape(FocusShape.ROUNDED_RECTANGLE)
@@ -115,7 +117,7 @@ class MainActivity : BaseActivity() {
 
 
         //Shows a FancyShowCaseView that focus on a view
-        btn_focus_dismiss_on_focus_area.setOnClickListener {
+        binding.btnFocusDismissOnFocusArea.setOnClickListener {
             if (FancyShowCaseView.isVisible(this)) {
                 Toast.makeText(this, "Clickable button", Toast.LENGTH_SHORT).show()
                 FancyShowCaseView.hideCurrent(this)
@@ -130,7 +132,7 @@ class MainActivity : BaseActivity() {
         }
 
         //Shows a FancyShowCaseView with rounded rect focus shape
-        btn_rounded_rect_dismiss_on_focus_area.setOnClickListener {
+        binding.btnRoundedRectDismissOnFocusArea.setOnClickListener {
             if (FancyShowCaseView.isVisible(this)) {
                 Toast.makeText(this, "Clickable button", Toast.LENGTH_SHORT).show()
                 FancyShowCaseView.hideCurrent(this)
@@ -148,7 +150,7 @@ class MainActivity : BaseActivity() {
         }
 
         //Shows FancyShowCaseView with focusCircleRadiusFactor 1.5 and title gravity
-        btn_focus2.setOnClickListener {
+        binding.btnFocus2.setOnClickListener {
             FancyShowCaseView.Builder(this)
                     .focusOn(it)
                     .focusCircleRadiusFactor(1.5)
@@ -160,7 +162,7 @@ class MainActivity : BaseActivity() {
         }
 
         //Shows FancyShowCaseView at specific position (round rectangle shape)
-        btn_rect_position.setOnClickListener {
+        binding.btnRectPosition.setOnClickListener {
             FancyShowCaseView.Builder(this)
                     .title("Focus on larger view")
                     .focusRectAtPosition(260, 85, 480, 80)
@@ -180,7 +182,7 @@ class MainActivity : BaseActivity() {
         }
 
         //Shows a FancyShowCaseView that focuses on a larger view
-        btn_focus_rect_color.setOnClickListener {
+        binding.btnFocusRectColor.setOnClickListener {
             FancyShowCaseView.Builder(this)
                     .focusOn(it)
                     .title("Focus on larger view")
@@ -194,7 +196,7 @@ class MainActivity : BaseActivity() {
         }
 
         //Shows a FancyShowCaseView that has dashed rectangle border
-        btn_focus_dashed_rect.setOnClickListener {
+        binding.btnFocusDashedRect.setOnClickListener {
             FancyShowCaseView.Builder(this)
                     .focusOn(it)
                     .title("Focus with dashed line")
@@ -209,7 +211,7 @@ class MainActivity : BaseActivity() {
         }
 
         //Shows a FancyShowCaseView that has dashed circle border
-        btn_focus_dashed_circle.setOnClickListener {
+        binding.btnFocusDashedCircle.setOnClickListener {
             FancyShowCaseView.Builder(this)
                     .focusOn(it)
                     .title("Focus with dashed line")
@@ -224,7 +226,7 @@ class MainActivity : BaseActivity() {
         }
 
         //Shows a FancyShowCaseView with background color and title style
-        btn_background_color.setOnClickListener {
+        binding.btnBackgroundColor.setOnClickListener {
             FancyShowCaseView.Builder(this)
                     .focusOn(it)
                     .backgroundColor(Color.parseColor("#AAff0000"))
@@ -235,7 +237,7 @@ class MainActivity : BaseActivity() {
         }
 
         //Shows a FancyShowCaseView with border color
-        btn_border_color.setOnClickListener {
+        binding.btnBorderColor.setOnClickListener {
             FancyShowCaseView.Builder(this)
                     .focusOn(it)
                     .title("Focus border color can be changed")
@@ -247,7 +249,7 @@ class MainActivity : BaseActivity() {
         }
 
         //Shows a FancyShowCaseView with custom enter, exit animations
-        btn_anim.setOnClickListener {
+        binding.btnAnim.setOnClickListener {
             val enterAnimation = AnimationUtils.loadAnimation(this, R.anim.slide_in_top)
             val exitAnimation = AnimationUtils.loadAnimation(this, R.anim.slide_out_bottom)
 
@@ -274,7 +276,7 @@ class MainActivity : BaseActivity() {
         }
 
         //Shows a FancyShowCaseView view custom view inflation
-        btn_custom_view.setOnClickListener {
+        binding.btnCustomView.setOnClickListener {
             mFancyShowCaseView = FancyShowCaseView.Builder(this)
                     .focusOn(it)
                     .enableTouchOnFocusedView(true)
@@ -298,11 +300,11 @@ class MainActivity : BaseActivity() {
 
         }
 
-        btn_custom_view2.setOnClickListener {
+        binding.btnCustomView2.setOnClickListener {
             startActivity(Intent(this, AnimatedActivity::class.java))
         }
 
-        btn_no_anim.setOnClickListener {
+        binding.btnNoAnim.setOnClickListener {
             mFancyShowCaseView = FancyShowCaseView.Builder(this)
                     .focusOn(it)
                     .disableFocusAnimation()
@@ -311,23 +313,23 @@ class MainActivity : BaseActivity() {
 
         }
 
-        btn_queue.setOnClickListener {
+        binding.btnQueue.setOnClickListener {
             startActivity(Intent(this, QueueActivity::class.java))
         }
 
-        btn_custom_queue.setOnClickListener {
+        binding.btnCustomQueue.setOnClickListener {
             startActivity(Intent(this, CustomQueueActivity::class.java))
         }
 
-        btn_another_activity.setOnClickListener {
+        binding.btnAnotherActivity.setOnClickListener {
             startActivity(Intent(this, SecondActivity::class.java))
         }
 
-        btn_recycler_view.setOnClickListener {
+        binding.btnRecyclerView.setOnClickListener {
             startActivity(Intent(this, RecyclerViewActivity::class.java))
         }
 
-        btn_scaled_view.setOnClickListener {
+        binding.btnScaledView.setOnClickListener {
             FancyShowCaseView.Builder(this)
                     .focusOn(it)
                     .title("Focus on Scaled View")
@@ -335,7 +337,7 @@ class MainActivity : BaseActivity() {
                     .show()
         }
 
-        btn_focus_delay.setOnClickListener {
+        binding.btnFocusDelay.setOnClickListener {
             FancyShowCaseView.Builder(this)
                     .title("Focus with delay")
                     .focusOn(it)
@@ -344,7 +346,7 @@ class MainActivity : BaseActivity() {
                     .show()
         }
 
-        btn_show_once.setOnClickListener {
+        binding.btnShowOnce.setOnClickListener {
             FancyShowCaseView.Builder(this)
                     .focusOn(it)
                     .title("Clean storage to see this again")

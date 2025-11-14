@@ -19,31 +19,34 @@ package me.toptas.fancyshowcasesample
 import android.os.Bundle
 import android.widget.Toast
 
-import kotlinx.android.synthetic.main.activity_queue.*
 import me.toptas.fancyshowcase.FancyShowCaseQueue
 import me.toptas.fancyshowcase.FancyShowCaseView
 import me.toptas.fancyshowcase.listener.OnCompleteListener
+import me.toptas.fancyshowcasesample.databinding.ActivityQueueBinding
 
 
 class QueueActivity : BaseActivity() {
 
+    private lateinit var binding: ActivityQueueBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_queue)
+        binding = ActivityQueueBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         val fancyShowCaseView1 = FancyShowCaseView.Builder(this)
                 .title("First Queue Item")
-                .focusOn(btn_queue_1)
+                .focusOn(binding.btnQueue1)
                 .build()
 
         val fancyShowCaseView2 = FancyShowCaseView.Builder(this)
                 .title("Second Queue Item")
-                .focusOn(btn_queue_2)
+                .focusOn(binding.btnQueue2)
                 .build()
 
         val fancyShowCaseView3 = FancyShowCaseView.Builder(this)
                 .title("Third Queue Item")
-                .focusOn(btn_queue_3)
+                .focusOn(binding.btnQueue3)
                 .build()
 
         val queue = FancyShowCaseQueue()

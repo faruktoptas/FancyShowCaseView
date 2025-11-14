@@ -21,27 +21,30 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 
-import kotlinx.android.synthetic.main.activity_second.*
 import me.toptas.fancyshowcase.FancyShowCaseView
+import me.toptas.fancyshowcasesample.databinding.ActivitySecondBinding
 
 class SecondActivity : BaseActivity() {
 
+    private lateinit var binding: ActivitySecondBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_second)
-        setSupportActionBar(toolbar)
+        binding = ActivitySecondBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
 
         focusOnButton()
 
-        button1.setOnClickListener {
+        binding.button1.setOnClickListener {
             focusOnButton()
         }
 
-        button2.setOnClickListener {
-            if (toolbar.visibility == View.VISIBLE) {
-                toolbar.visibility = View.GONE
+        binding.button2.setOnClickListener {
+            if (binding.toolbar.visibility == View.VISIBLE) {
+                binding.toolbar.visibility = View.GONE
             } else {
-                toolbar.visibility = View.VISIBLE
+                binding.toolbar.visibility = View.VISIBLE
             }
         }
     }
@@ -49,7 +52,7 @@ class SecondActivity : BaseActivity() {
 
     private fun focusOnButton() {
         FancyShowCaseView.Builder(this@SecondActivity)
-                .focusOn(button1)
+                .focusOn(binding.button1)
                 .title("Focus a view")
                 .fitSystemWindows(true)
                 .build()

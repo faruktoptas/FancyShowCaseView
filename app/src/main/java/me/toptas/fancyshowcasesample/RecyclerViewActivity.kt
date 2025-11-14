@@ -19,18 +19,21 @@ package me.toptas.fancyshowcasesample
 import android.os.Bundle
 import android.view.View
 import java.util.ArrayList
-import kotlinx.android.synthetic.main.activity_recycler_view.*
 import me.toptas.fancyshowcase.FancyShowCaseView
 import android.os.Build
 import android.view.ViewTreeObserver
 import androidx.recyclerview.widget.LinearLayoutManager
+import me.toptas.fancyshowcasesample.databinding.ActivityRecyclerViewBinding
 
 
 class RecyclerViewActivity : BaseActivity() {
 
+    private lateinit var binding: ActivityRecyclerViewBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_recycler_view)
+        binding = ActivityRecyclerViewBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         val modelList = ArrayList<MyModel>()
         for (i in 0..24) {
@@ -43,19 +46,19 @@ class RecyclerViewActivity : BaseActivity() {
             focus(v)
         })
 
-        recyclerView.adapter = adapter
+        binding.recyclerView.adapter = adapter
 
-        recyclerView.layoutManager = layoutManager
+        binding.recyclerView.layoutManager = layoutManager
 
-        recyclerView.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+        binding.recyclerView.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
-                val width = recyclerView.width
-                val height = recyclerView.height
+                val width = binding.recyclerView.width
+                val height = binding.recyclerView.height
                 if (width > 0 && height > 0) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                        recyclerView.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                        binding.recyclerView.viewTreeObserver.removeOnGlobalLayoutListener(this)
                     } else {
-                        recyclerView.viewTreeObserver.removeGlobalOnLayoutListener(this)
+                        binding.recyclerView.viewTreeObserver.removeGlobalOnLayoutListener(this)
                     }
                 }
 
